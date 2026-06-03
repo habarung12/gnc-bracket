@@ -41,7 +41,7 @@
       --row-h:    26px;
       --card-w:   162px;
       --col-gap:  44px;
-      --slot:     52px;     /* base slot height for R1 */
+      --slot:     82px;     /* base slot height for R1: meta(18) + 2rows(26×2) + borders(2) + gap(10) */
     }
 
     html, body {
@@ -124,6 +124,8 @@
     .tab-btn.t-lb .tab-count { background: var(--lb-dim); color: var(--lb); }
     .tab-btn.t-gf .tab-count { background: var(--gf-dim); color: var(--gf); }
     .tab-btn.t-all .tab-count { background: rgba(255,255,255,.06); color: var(--text-2); }
+    .tab-btn.t-full { color: var(--text-2); }
+    .tab-btn.t-full.active { color: var(--text); }
 
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
@@ -346,7 +348,7 @@
     <button class="tab-btn t-ub active" data-tab="ub">Верхняя сетка <span class="tab-count">15</span></button>
     <button class="tab-btn t-lb" data-tab="lb">Нижняя сетка <span class="tab-count">13</span></button>
     <button class="tab-btn t-gf" data-tab="gf">Гранд-финал <span class="tab-count">1</span></button>
-    <button class="tab-btn t-all" data-tab="all">Все матчи <span class="tab-count">29</span></button>
+    <button class="tab-btn t-full" data-tab="full">Полная сетка</button>
   </div>
 
   <!-- TAB: UPPER BRACKET -->
@@ -378,8 +380,39 @@
     </div>
   </div>
 
-  <!-- TAB: ALL MATCHES -->
-  <div class="tab-panel" id="tab-all">
+  <!-- TAB: FULL BRACKET -->
+  <div class="tab-panel" id="tab-full">
+    <div class="section-header" style="margin-bottom:10px">
+      <span class="section-pill ub">Верхняя сетка</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="bracket-scroll" style="margin-bottom:28px">
+      <div class="bracket-wrap" id="ub-wrap-full">
+        <svg class="connectors-svg" id="ub-svg-full"></svg>
+      </div>
+    </div>
+    <div class="section-header" style="margin-bottom:10px">
+      <span class="section-pill lb">Нижняя сетка</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="bracket-scroll" style="margin-bottom:28px">
+      <div class="bracket-wrap" id="lb-wrap-full">
+        <svg class="connectors-svg" id="lb-svg-full"></svg>
+      </div>
+    </div>
+    <div class="section-header" style="margin-bottom:10px">
+      <span class="section-pill gf">Гранд-финал</span>
+      <div class="section-line"></div>
+    </div>
+    <div id="gf-wrap-full"></div>
+  </div>
+
+  <!-- ALL MATCHES — below tabs, always visible -->
+  <div style="margin-top:40px">
+    <div class="section-header" style="margin-bottom:12px">
+      <span class="section-pill" style="background:rgba(255,255,255,.05);color:var(--text-2);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border-radius:5px;">Все матчи</span>
+      <div class="section-line"></div>
+    </div>
     <div class="schedule-wrap">
       <table>
         <thead>
@@ -602,7 +635,7 @@ document.getElementById('modal-bg').addEventListener('click', e => { if (e.targe
 /* ═══════════════════════════════════════════
    BRACKET RENDERER
 ═══════════════════════════════════════════ */
-const SLOT = 52;   // px per match slot in R1
+const SLOT = 82;   // px per match slot in R1: meta(18)+rows(52)+borders(2)+gap(10)
 const COL_W = 162; // match card width
 const COL_GAP = 44; // gap between columns (for connectors)
 
@@ -749,8 +782,8 @@ function drawConnectors(svg, colPositions, wrap, type) {
 /* ═══════════════════════════════════════════
    GRAND FINAL (simple, no connector needed)
 ═══════════════════════════════════════════ */
-function renderGF() {
-  const wrap = document.getElementById('gf-wrap');
+function renderGF(containerId) {
+  const wrap = document.getElementById(containerId);
   GF.forEach(m => {
     const card = buildCard(m, 'gf');
     card.style.width = '260px';
@@ -804,7 +837,10 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 ═══════════════════════════════════════════ */
 renderBracket(UB, 'ub-wrap', 'ub-svg', 'ub');
 renderBracket(LB, 'lb-wrap', 'lb-svg', 'lb');
-renderGF();
+renderBracket(UB, 'ub-wrap-full', 'ub-svg-full', 'ub');
+renderBracket(LB, 'lb-wrap-full', 'lb-svg-full', 'lb');
+renderGF('gf-wrap');
+renderGF('gf-wrap-full');
 renderSchedule();
 </script>
 </body>
