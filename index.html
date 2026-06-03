@@ -202,21 +202,107 @@
     .team-name-text { flex: 1; padding: 0 6px; font-size: 11.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-2); transition: color .1s; min-width: 0; }
     .score-cell { width: 26px; flex-shrink: 0; text-align: center; font-size: 12px; font-weight: 700; color: var(--text-2); border-left: 1px solid var(--border-2); height: 100%; display: flex; align-items: center; justify-content: center; }
 
-    /* ── FROM-UB DROP BADGE ── */
+    /* ── FROM-UB DROP BADGE (compact cards) ── */
     .src-badge {
       flex-shrink: 0; font-size: 8px; font-weight: 700; letter-spacing: .05em;
       padding: 1px 4px; border-radius: 3px; margin-right: 4px;
       background: rgba(245,158,11,.15); color: rgba(245,158,11,.7);
       border: 1px solid rgba(245,158,11,.2); white-space: nowrap;
     }
-    /* inject round label above first match of each "drop-in" group */
-    .lb-drop-label {
-      font-size: 9px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
-      color: rgba(245,158,11,.55); padding: 2px 7px 1px;
-      border-top: 1px solid rgba(245,158,11,.12);
-      background: rgba(245,158,11,.04);
-      white-space: nowrap;
+
+    /* ══════════════════════════════════
+       LB FULL-SIZE CARD
+    ══════════════════════════════════ */
+    .lbf-card {
+      width: 210px; flex-shrink: 0;
+      border-radius: 10px;
+      border: 1.5px solid rgba(245,158,11,.55);
+      background: var(--bg-card);
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(0,0,0,.38);
+      transition: border-color .15s, box-shadow .15s;
     }
+    .lbf-card:hover {
+      border-color: rgba(245,158,11,.85);
+      box-shadow: 0 6px 24px rgba(0,0,0,.55);
+    }
+
+    /* header */
+    .lbf-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 5px 9px 5px 8px;
+      background: rgba(245,158,11,.07);
+      border-bottom: 1px solid rgba(245,158,11,.12);
+    }
+    .lbf-badge {
+      font-size: 8.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      color: rgba(245,158,11,.7);
+    }
+    .lbf-meta { display: flex; align-items: center; gap: 6px; }
+    .lbf-id { font-size: 9px; font-weight: 600; color: var(--text-3); }
+    .lbf-bo { font-size: 9px; color: var(--text-3); }
+
+    /* team rows */
+    .lbf-row {
+      display: flex; align-items: center; height: 32px;
+      cursor: pointer; transition: background .1s; position: relative;
+    }
+    .lbf-row + .lbf-row { border-top: 1px solid rgba(255,255,255,.04); }
+    .lbf-row:hover { background: rgba(255,255,255,.05); }
+    .lbf-row:hover .lbf-name { color: var(--text); }
+
+    .lbf-slot {
+      font-size: 8.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+      color: var(--text-3); width: 36px; flex-shrink: 0;
+      padding-left: 8px; border-right: 1px solid rgba(255,255,255,.04);
+      height: 100%; display: flex; align-items: center;
+    }
+    .lbf-ub-src {
+      flex-shrink: 0; font-size: 7.5px; font-weight: 700;
+      padding: 1px 3px; border-radius: 2px; margin: 0 3px;
+      background: rgba(245,158,11,.13); color: rgba(245,158,11,.65);
+      border: 1px solid rgba(245,158,11,.18);
+    }
+    .lbf-name {
+      flex: 1; min-width: 0; padding: 0 5px;
+      font-size: 12px; font-weight: 600; color: var(--text-2);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      transition: color .1s;
+    }
+    .lbf-score {
+      width: 28px; flex-shrink: 0; text-align: center;
+      font-size: 13px; font-weight: 800; color: var(--text-2);
+      border-left: 1px solid rgba(255,255,255,.05);
+      height: 100%; display: flex; align-items: center; justify-content: center;
+    }
+
+    /* winner / loser */
+    .lbf-row.winner { background: rgba(245,158,11,.09); }
+    .lbf-row.winner .lbf-name  { color: #fde68a; font-weight: 700; }
+    .lbf-row.winner .lbf-score { color: #fbbf24; }
+    .lbf-row.loser  .lbf-name  { color: var(--text-3); }
+    .lbf-row.loser  .lbf-score { color: var(--text-3); }
+    .lbf-row.pending .lbf-name { color: var(--text-3); font-style: italic; }
+
+    /* team highlight */
+    .lbf-row.team-lit { background: rgba(255,255,255,.07) !important; }
+    .lbf-row.team-lit .lbf-name { color: var(--text) !important; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 2px; }
+
+    /* footer */
+    .lbf-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 4px 9px 4px 8px;
+      border-top: 1px solid rgba(245,158,11,.1);
+      background: rgba(0,0,0,.18);
+    }
+    .lbf-time { font-size: 9px; color: var(--text-3); letter-spacing: .03em; }
+    .lbf-stream {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 9px; font-weight: 600; color: #9147ff;
+      text-decoration: none; transition: color .12s;
+    }
+    .lbf-stream:hover { color: #bf94ff; }
+    .lbf-stream-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 
     /* GF winner row */
     .gf-card .team-row.winner { background: rgba(56,189,248,.1); }
@@ -633,11 +719,65 @@ function buildCard(m, type) {
 }
 
 /* ═══════════════════════════════════════════
+   LB FULL-SIZE CARD BUILDER
+═══════════════════════════════════════════ */
+function buildCardLB(m) {
+  const w = winner(m);
+  const stA = w === 'a' ? 'winner' : w === 'b' ? 'loser' : 'pending';
+  const stB = w === 'b' ? 'winner' : w === 'a' ? 'loser' : 'pending';
+
+  const el = document.createElement('div');
+  el.className = 'lbf-card';
+  el.dataset.matchId = m.id;
+
+  // Header
+  const hdr = document.createElement('div');
+  hdr.className = 'lbf-header';
+  hdr.innerHTML = `
+    <span class="lbf-badge">↓ Нижняя сетка</span>
+    <span class="lbf-meta">
+      <span class="lbf-bo">Bo${m.bo}</span>
+      <span class="lbf-id">#${m.id}</span>
+      ${m.stream ? `<a class="lbf-stream" href="https://twitch.tv/${m.stream}" target="_blank" rel="noopener" title="${m.stream}"><span class="lbf-stream-dot"></span>${m.stream}</a>` : ''}
+    </span>`;
+  el.appendChild(hdr);
+
+  // Team rows
+  [['a', stA, m.a, m.aSrc, m.sa], ['b', stB, m.b, m.bSrc, m.sb]].forEach(([side, state, name, src, score]) => {
+    const row = document.createElement('div');
+    row.className = `lbf-row ${state}`;
+    row.dataset.team = name || '';
+    const slotLabel = side === 'a' ? 'СЛ А' : 'СЛ Б';
+    const ubBadge = src === 'ub' ? `<span class="lbf-ub-src">↓UB</span>` : '';
+    row.innerHTML = `
+      <span class="lbf-slot">${slotLabel}</span>
+      ${ubBadge}
+      <span class="lbf-name">${name || 'TBD'}</span>
+      <span class="lbf-score">${w ? score : '·'}</span>`;
+    row.addEventListener('mouseenter', () => highlightTeam(name, true));
+    row.addEventListener('mouseleave', () => highlightTeam(name, false));
+    if (name && ROSTERS[name]) row.addEventListener('click', e => { e.stopPropagation(); showRoster(name); });
+    el.appendChild(row);
+  });
+
+  // Footer
+  const dt = new Date(m.time);
+  const timeStr = dt.toLocaleString('ru-RU', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', timeZone:'Europe/Moscow' }).replace(',', ' |');
+  const ftr = document.createElement('div');
+  ftr.className = 'lbf-footer';
+  ftr.innerHTML = `<span class="lbf-time">${timeStr}</span>`;
+  el.appendChild(ftr);
+
+  return el;
+}
+
+/* ═══════════════════════════════════════════
    TEAM HIGHLIGHT
 ═══════════════════════════════════════════ */
 function highlightTeam(name, on) {
   if (!name) return;
-  document.querySelectorAll(`.team-row[data-team="${CSS.escape(name)}"]`).forEach(r => {
+  const esc = CSS.escape(name);
+  document.querySelectorAll(`.team-row[data-team="${esc}"], .lbf-row[data-team="${esc}"]`).forEach(r => {
     r.classList.toggle('team-lit', on);
   });
 }
@@ -663,11 +803,12 @@ document.getElementById('modal-bg').addEventListener('click', e => { if (e.targe
 /* ═══════════════════════════════════════════
    BRACKET RENDERER
 ═══════════════════════════════════════════ */
-const SLOT = 82;   // px per match slot in R1: meta(18)+rows(52)+borders(2)+gap(10)
-const COL_W = 162; // match card width
 const COL_GAP = 44; // gap between columns (for connectors)
 
-function renderBracket(rounds, wrapId, svgId, type) {
+function renderBracket(rounds, wrapId, svgId, type, opts = {}) {
+  const SLOT  = opts.slot  || 82;
+  const COL_W = opts.cardW || 162;
+
   const wrap = document.getElementById(wrapId);
   const svg  = document.getElementById(svgId);
 
@@ -717,7 +858,7 @@ function renderBracket(rounds, wrapId, svgId, type) {
       slot.style.display = 'flex';
       slot.style.alignItems = 'center';
 
-      const card = buildCard(m, type);
+      const card = type === 'lb' ? buildCardLB(m) : buildCard(m, type);
       slot.appendChild(card);
       matchesEl.appendChild(slot);
       matchEls.push({ card, slotTop: top, slotH });
@@ -741,16 +882,18 @@ function renderBracket(rounds, wrapId, svgId, type) {
 
   // After layout, draw SVG connectors
   // We need to wait for layout to be applied
-  setTimeout(() => drawConnectors(svg, colPositions, wrap, type), 0);
+  setTimeout(() => drawConnectors(svg, colPositions, type, COL_W), 0);
 }
 
-function drawConnectors(svg, colPositions, wrap, type) {
+function drawConnectors(svg, colPositions, type, COL_W) {
   const LABEL_H = 28;
 
   // Compute dimensions mathematically (works even if tab is hidden)
   const lastCol = colPositions[colPositions.length - 1];
   const totalW = lastCol.x + COL_W;
-  const totalH = LABEL_H + colPositions[0].matchEls.length * SLOT;
+  // totalH from stored slot data (SLOT not available here)
+  const r1 = colPositions[0].matchEls;
+  const totalH = LABEL_H + r1.reduce((sum, el) => sum + el.slotH, 0);
 
   svg.style.width  = totalW + 'px';
   svg.style.height = totalH + 'px';
@@ -902,10 +1045,11 @@ function enableDragScroll(el) {
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
+const LB_OPTS = { slot: 122, cardW: 210 };
 renderBracket(UB, 'ub-wrap', 'ub-svg', 'ub');
-renderBracket(LB, 'lb-wrap', 'lb-svg', 'lb');
+renderBracket(LB, 'lb-wrap', 'lb-svg', 'lb', LB_OPTS);
 renderBracket(UB, 'ub-wrap-full', 'ub-svg-full', 'ub');
-renderBracket(LB, 'lb-wrap-full', 'lb-svg-full', 'lb');
+renderBracket(LB, 'lb-wrap-full', 'lb-svg-full', 'lb', LB_OPTS);
 renderGF('gf-wrap');
 renderGF('gf-wrap-full');
 renderSchedule();
