@@ -11,36 +11,37 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:          #070707;
-      --bg-2:        #0d0d0d;
-      --bg-card:     #0a0a0a;
-      --border:      #27272a;
-      --border-soft: #1c1c1f;
-      --text:        #f4f4f5;
-      --text-2:      #a1a1aa;
-      --text-3:      #52525b;
-      --accent:      #00bb7f;
-      --accent-glow: rgba(0,187,127,.18);
+      --bg:       #080808;
+      --bg-2:     #111113;
+      --bg-card:  #0e0e10;
+      --border:   #242428;
+      --border-2: #1a1a1d;
+      --text:     #f0f0f2;
+      --text-2:   #8a8a96;
+      --text-3:   #46464e;
+      --accent:   #00bb7f;
+      --accent-d: #009965;
 
-      --ub-color:    #10b981;
-      --ub-bg:       rgba(5,46,22,.55);
-      --ub-border:   rgba(16,185,129,.75);
+      --ub:       #10b981;
+      --ub-dim:   rgba(16,185,129,.12);
+      --ub-line:  rgba(16,185,129,.35);
 
-      --lb-color:    #f59e0b;
-      --lb-bg:       rgba(41,17,0,.55);
-      --lb-border:   rgba(245,158,11,.75);
+      --lb:       #f59e0b;
+      --lb-dim:   rgba(245,158,11,.10);
+      --lb-line:  rgba(245,158,11,.3);
 
-      --gf-color:    #38bdf8;
-      --gf-bg:       rgba(3,22,41,.55);
-      --gf-border:   rgba(56,189,248,.75);
+      --gf:       #38bdf8;
+      --gf-dim:   rgba(56,189,248,.10);
+      --gf-line:  rgba(56,189,248,.3);
 
-      --win-bg:      rgba(5,46,22,.4);
-      --lose-bg:     transparent;
-      --win-text:    #d1fae5;
-      --lose-text:   #71717a;
+      --win-bg:   rgba(16,185,129,.09);
+      --win-text: #d1fae5;
+      --lose-text:#52525b;
 
-      --radius:      12px;
-      --radius-sm:   8px;
+      --row-h:    26px;
+      --card-w:   162px;
+      --col-gap:  44px;
+      --slot:     52px;     /* base slot height for R1 */
     }
 
     html, body {
@@ -48,656 +49,763 @@
       background: var(--bg);
       color: var(--text);
       font-family: 'Inter', system-ui, sans-serif;
-      font-size: 14px;
-      line-height: 1.5;
+      font-size: 13px;
+      line-height: 1.4;
       -webkit-font-smoothing: antialiased;
     }
-
-    /* dot grid background */
-    body {
-      background-image: radial-gradient(circle, rgba(255,255,255,.045) 1px, transparent 1px);
-      background-size: 20px 20px;
-    }
-
-    /* ambient glow */
+    body { background-image: radial-gradient(circle, rgba(255,255,255,.035) 1px, transparent 1px); background-size: 22px 22px; }
     .glow {
-      pointer-events: none;
-      position: fixed;
+      pointer-events: none; position: fixed;
       top: -35vw; right: -25vw;
-      width: 80vw; height: 80vw;
-      border-radius: 50%;
-      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      width: 72vw; height: 72vw; border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,187,127,.12) 0%, transparent 70%);
       z-index: 0;
     }
 
     /* ── HEADER ── */
     header {
       position: sticky; top: 0; z-index: 50;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      background: rgba(7,7,7,.85);
-      border-bottom: 1px solid var(--border-soft);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      background: rgba(8,8,8,.88); border-bottom: 1px solid var(--border-2);
     }
     .header-inner {
-      max-width: 1400px; margin: 0 auto;
+      max-width: 1500px; margin: 0 auto;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 20px; height: 56px;
+      padding: 0 20px; height: 52px;
     }
-    .logo {
-      display: flex; align-items: center; gap: 10px;
-      text-decoration: none; color: var(--text);
-      font-weight: 800; font-size: 15px; letter-spacing: -.3px;
-    }
-    .logo img { height: 28px; width: auto; object-fit: contain; }
-    .logo-text { color: var(--text); }
-    .logo-text span { color: var(--accent); }
-    nav { display: flex; align-items: center; gap: 4px; }
-    nav a {
-      padding: 5px 12px; border-radius: 8px;
-      text-decoration: none; font-size: 13px; font-weight: 500;
-      color: var(--text-2); transition: color .15s, background .15s;
-    }
+    .logo { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--text); font-weight: 800; font-size: 14px; letter-spacing: -.2px; }
+    .logo img { height: 26px; width: auto; object-fit: contain; }
+    .logo-gnc { color: var(--text); }
+    .logo-ow  { color: var(--accent); }
+    nav { display: flex; align-items: center; gap: 2px; }
+    nav a { padding: 5px 11px; border-radius: 7px; text-decoration: none; font-size: 12.5px; font-weight: 500; color: var(--text-2); transition: color .12s, background .12s; }
     nav a:hover { color: var(--text); background: rgba(255,255,255,.05); }
-    nav a.active { color: var(--text); background: rgba(255,255,255,.07); }
+    nav a.active { color: var(--text); background: rgba(255,255,255,.06); }
 
-    /* ── PAGE ── */
-    main {
-      position: relative; z-index: 1;
-      max-width: 1400px; margin: 0 auto;
-      padding: 32px 20px 64px;
-    }
+    /* ── MAIN ── */
+    main { position: relative; z-index: 1; max-width: 1500px; margin: 0 auto; padding: 28px 20px 72px; }
 
     /* ── PAGE HEADER ── */
-    .page-header {
-      display: flex; align-items: flex-start; justify-content: space-between;
-      gap: 16px; margin-bottom: 32px; flex-wrap: wrap;
-    }
-    .tournament-meta { display: flex; flex-direction: column; gap: 6px; }
-    .tournament-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 3px 10px; border-radius: 999px;
-      background: rgba(0,187,127,.12); border: 1px solid rgba(0,187,127,.25);
-      color: #6ee7b7; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
-      width: fit-content;
-    }
-    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
-    .tournament-name {
-      font-size: 26px; font-weight: 900; letter-spacing: -.6px;
-      color: var(--text);
-    }
-    .tournament-name span { color: var(--accent); }
-    .tournament-sub { font-size: 13px; color: var(--text-3); }
+    .page-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 22px; }
+    .tournament-badge { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 999px; background: rgba(0,187,127,.1); border: 1px solid rgba(0,187,127,.22); color: #6ee7b7; font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; margin-bottom: 6px; }
+    .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+    .tournament-name { font-size: 22px; font-weight: 900; letter-spacing: -.5px; line-height: 1.1; }
+    .tournament-name em { font-style: normal; color: var(--accent); }
+    .tournament-sub { margin-top: 4px; font-size: 12px; color: var(--text-3); }
+    .meta-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .meta-pill { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-2); display: flex; flex-direction: column; gap: 1px; }
+    .meta-pill-label { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--text-3); }
+    .meta-pill-val { font-size: 14px; font-weight: 700; color: var(--text); }
+    .meta-pill-val.green { color: #34d399; }
 
-    .meta-cards { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start; }
-    .meta-card {
-      padding: 10px 16px; border-radius: var(--radius-sm);
-      border: 1px solid var(--border); background: var(--bg-2);
-      display: flex; flex-direction: column; gap: 2px;
-    }
-    .meta-card-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-3); }
-    .meta-card-value { font-size: 15px; font-weight: 700; color: var(--text); }
-    .meta-card-value.green { color: #34d399; }
+    /* ── PODIUM ── */
+    .podium { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 26px; }
+    .podium-card { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-2); flex: 1; min-width: 180px; max-width: 280px; }
+    .podium-card.p1 { border-color: rgba(250,204,21,.3); background: rgba(15,12,0,.7); }
+    .podium-card.p2 { border-color: rgba(148,163,184,.2); }
+    .podium-card.p3 { border-color: rgba(180,83,9,.25); background: rgba(12,5,0,.7); }
+    .podium-place { font-size: 20px; }
+    .podium-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); }
+    .podium-team { font-size: 14px; font-weight: 800; color: var(--text); }
 
-    /* ── WINNER PODIUM ── */
-    .podium-section { margin-bottom: 32px; }
-    .podium-row { display: flex; gap: 12px; flex-wrap: wrap; }
-    .podium-card {
-      padding: 14px 20px; border-radius: var(--radius);
-      border: 1px solid var(--border); background: var(--bg-2);
-      display: flex; align-items: center; gap: 14px;
-      flex: 1; min-width: 220px; max-width: 340px;
+    /* ── TABS ── */
+    .tabs { display: flex; gap: 4px; margin-bottom: 18px; border-bottom: 1px solid var(--border-2); padding-bottom: 0; }
+    .tab-btn {
+      padding: 8px 16px; border-radius: 8px 8px 0 0; border: none;
+      background: transparent; color: var(--text-2); font-size: 12.5px; font-weight: 600;
+      cursor: pointer; transition: color .12s, background .12s;
+      position: relative; top: 1px;
+      border: 1px solid transparent; border-bottom: none;
     }
-    .podium-card.first { border-color: rgba(250,204,21,.4); background: rgba(20,18,0,.6); }
-    .podium-card.second { border-color: rgba(148,163,184,.3); background: rgba(10,12,16,.6); }
-    .podium-card.third { border-color: rgba(180,83,9,.3); background: rgba(20,8,0,.6); }
-    .podium-place { font-size: 22px; min-width: 28px; }
-    .podium-info { display: flex; flex-direction: column; gap: 1px; }
-    .podium-place-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-3); }
-    .podium-team { font-size: 15px; font-weight: 800; color: var(--text); }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--text); background: var(--bg-2); border-color: var(--border); }
+    .tab-btn .tab-count { font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 4px; margin-left: 5px; }
+    .tab-btn.t-ub .tab-count { background: var(--ub-dim); color: var(--ub); }
+    .tab-btn.t-lb .tab-count { background: var(--lb-dim); color: var(--lb); }
+    .tab-btn.t-gf .tab-count { background: var(--gf-dim); color: var(--gf); }
+    .tab-btn.t-all .tab-count { background: rgba(255,255,255,.06); color: var(--text-2); }
 
-    /* ── BRACKET SECTION ── */
-    .bracket-section { margin-bottom: 40px; }
-    .bracket-section-header {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 16px;
-    }
-    .bracket-section-label {
-      font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-      padding: 4px 10px; border-radius: 6px;
-    }
-    .bracket-section-label.upper { color: var(--ub-color); background: var(--ub-bg); border: 1px solid rgba(16,185,129,.2); }
-    .bracket-section-label.lower { color: var(--lb-color); background: var(--lb-bg); border: 1px solid rgba(245,158,11,.2); }
-    .bracket-section-label.grand-final { color: var(--gf-color); background: var(--gf-bg); border: 1px solid rgba(56,189,248,.2); }
-    .bracket-section-divider { flex: 1; height: 1px; background: var(--border-soft); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
 
-    /* ── BRACKET GRID ── */
-    .bracket-scroll { overflow-x: auto; padding-bottom: 8px; }
-    .bracket-rounds {
-      display: flex; gap: 0; min-width: max-content;
-    }
+    /* ── SECTION HEADER ── */
+    .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .section-pill { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; padding: 3px 9px; border-radius: 5px; }
+    .section-pill.ub { color: var(--ub); background: var(--ub-dim); }
+    .section-pill.lb { color: var(--lb); background: var(--lb-dim); }
+    .section-pill.gf { color: var(--gf); background: var(--gf-dim); }
+    .section-line { flex: 1; height: 1px; background: var(--border-2); }
+
+    /* ── BRACKET SCROLL AREA ── */
+    .bracket-scroll { overflow-x: auto; overflow-y: visible; padding-bottom: 12px; }
+    .bracket-wrap { position: relative; display: inline-flex; flex-direction: row; align-items: flex-start; gap: 0; padding: 16px 0 16px; }
 
     /* ── ROUND COLUMN ── */
-    .round-col {
-      display: flex; flex-direction: column;
-      gap: 0; position: relative;
-    }
-    .round-header {
-      font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-      color: var(--text-3); text-align: center;
-      padding: 6px 16px 10px;
-      white-space: nowrap;
-    }
-    .round-matches { display: flex; flex-direction: column; gap: 0; flex: 1; }
+    .round-col { display: flex; flex-direction: column; position: relative; }
+    .round-label { font-size: 9.5px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--text-3); text-align: center; padding: 0 8px 10px; white-space: nowrap; }
+    .round-matches { position: relative; display: flex; flex-direction: column; }
 
-    /* ── MATCH WRAPPER (with connectors) ── */
-    .match-wrapper {
-      display: flex; align-items: center;
-      flex: 1;
-    }
-    .match-wrapper.with-connector { position: relative; }
-
-    .match-cell {
-      display: flex; align-items: center;
-      padding: 0 16px 0 0; position: relative;
-      width: 220px;
-    }
-    .match-cell:first-child { padding-left: 16px; }
-
-    /* connector lines */
-    .connector {
-      width: 24px; height: 100%; position: relative; flex-shrink: 0;
-    }
-    .connector::before,
-    .connector::after {
-      content: '';
-      position: absolute;
-      right: 0;
-      width: 12px;
-      border-right: 1px solid var(--border);
-    }
-    .connector::before {
-      top: 50%; bottom: 0;
-      border-top: 1px solid var(--border);
-      transform: translateY(-100%);
-    }
-    .connector::after {
-      top: 0; bottom: 50%;
-      border-bottom: 1px solid var(--border);
-      transform: translateY(100%);
-    }
-    .connector-in {
-      width: 16px; height: 2px;
-      background: var(--border);
-      flex-shrink: 0;
-    }
+    /* ── MATCH SLOT ── */
+    .match-slot { display: flex; align-items: center; }
 
     /* ── MATCH CARD ── */
     .match-card {
-      width: 192px; border-radius: var(--radius);
-      border: 1.5px solid var(--border);
+      width: var(--card-w);
+      border-radius: 7px;
+      border: 1px solid var(--border);
       background: var(--bg-card);
       overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0,0,0,.35);
+      flex-shrink: 0;
       transition: border-color .15s, box-shadow .15s;
-      cursor: default;
     }
-    .match-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.5); }
-    .match-card.upper { border-color: var(--ub-border); }
-    .match-card.lower { border-color: var(--lb-border); }
-    .match-card.grand-final { border-color: var(--gf-border); }
-    .match-card.tbd { border-color: var(--border); opacity: .6; }
+    .match-card:hover { border-color: rgba(255,255,255,.16); box-shadow: 0 2px 12px rgba(0,0,0,.4); }
+    .match-card.ub-card:hover { border-color: var(--ub-line); }
+    .match-card.lb-card:hover { border-color: var(--lb-line); }
+    .match-card.gf-card { border-color: var(--gf-line); }
+    .match-card.gf-card:hover { border-color: var(--gf); box-shadow: 0 0 16px rgba(56,189,248,.15); }
 
-    /* card top: match info */
-    .match-info {
-      padding: 4px 8px 3px;
-      display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 1px solid rgba(255,255,255,.04);
-    }
-    .match-id { font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); }
-    .match-bo { font-size: 9px; font-weight: 600; color: var(--text-3); }
-    .match-stream {
-      display: inline-flex; align-items: center; gap: 3px;
-      font-size: 9px; font-weight: 600; color: #9147ff;
-      text-decoration: none; transition: color .15s;
-    }
-    .match-stream:hover { color: #b280ff; }
-    .stream-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
-
-    /* team rows */
+    /* ── TEAM ROW ── */
     .team-row {
-      display: grid; grid-template-columns: 2rem 1fr;
-      align-items: center;
+      display: flex; align-items: center;
+      height: var(--row-h); cursor: pointer;
+      transition: background .1s;
+      position: relative;
     }
-    .team-row + .team-row {
-      border-top: 1px solid rgba(255,255,255,.04);
+    .team-row + .team-row { border-top: 1px solid var(--border-2); }
+    .team-row:hover { background: rgba(255,255,255,.05); }
+    .team-row:hover .team-name-text { color: var(--text); }
+
+    /* winner / loser states */
+    .team-row.winner { background: var(--win-bg); }
+    .team-row.winner .team-name-text { color: var(--win-text); font-weight: 600; }
+    .team-row.winner .score-cell { color: #6ee7b7; }
+    .team-row.loser .team-name-text { color: var(--lose-text); }
+    .team-row.loser .score-cell { color: var(--text-3); }
+    .team-row.pending .team-name-text { color: var(--text-3); font-style: italic; }
+
+    /* global team highlight (JS) */
+    .team-row.team-lit { background: rgba(255,255,255,.07) !important; }
+    .team-row.team-lit .team-name-text { color: var(--text) !important; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 2px; }
+
+    .team-name-text { flex: 1; padding: 0 7px; font-size: 11.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-2); transition: color .1s; }
+    .score-cell { width: 26px; flex-shrink: 0; text-align: center; font-size: 12px; font-weight: 700; color: var(--text-2); border-left: 1px solid var(--border-2); height: 100%; display: flex; align-items: center; justify-content: center; }
+
+    /* GF winner row */
+    .gf-card .team-row.winner { background: rgba(56,189,248,.1); }
+    .gf-card .team-row.winner .team-name-text { color: #e0f2fe; }
+    .gf-card .team-row.winner .score-cell { color: #7dd3fc; }
+
+    /* ── MATCH META BAR (top of card, subtle) ── */
+    .match-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 2px 6px 2px 7px; border-bottom: 1px solid var(--border-2);
+      background: rgba(0,0,0,.2);
     }
-    .team-score {
-      height: 100%; min-height: 30px;
+    .meta-id { font-size: 9px; font-weight: 600; letter-spacing: .06em; color: var(--text-3); }
+    .meta-right { display: flex; align-items: center; gap: 5px; }
+    .meta-bo { font-size: 9px; color: var(--text-3); }
+    .meta-stream { display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 600; color: #9147ff; text-decoration: none; transition: color .12s; }
+    .meta-stream:hover { color: #bf94ff; }
+    .meta-stream svg { width: 7px; height: 7px; }
+
+    /* ── SVG CONNECTORS ── */
+    .connectors-svg { position: absolute; top: 0; left: 0; pointer-events: none; overflow: visible; }
+    .conn-line { fill: none; stroke: var(--border); stroke-width: 1; }
+    .conn-line.ub { stroke: rgba(16,185,129,.22); }
+    .conn-line.lb { stroke: rgba(245,158,11,.18); }
+    .conn-line.gf { stroke: rgba(56,189,248,.22); }
+
+    /* ── TOOLTIP ── */
+    .tooltip {
+      position: fixed; z-index: 200;
+      background: #111115; border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 12px;
+      font-size: 11.5px; color: var(--text-2);
+      pointer-events: none; opacity: 0;
+      transition: opacity .1s;
+      box-shadow: 0 8px 24px rgba(0,0,0,.5);
+      max-width: 220px; line-height: 1.5;
+    }
+    .tooltip.show { opacity: 1; }
+    .tooltip-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .tooltip-label { color: var(--text-3); font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+    .tooltip-val { color: var(--text); font-weight: 600; }
+
+    /* ── ROSTER MODAL ── */
+    .modal-bg {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,.7); backdrop-filter: blur(6px);
       display: flex; align-items: center; justify-content: center;
-      font-family: 'Inter', monospace; font-size: 12px; font-weight: 900;
-      border-right: 1.5px solid rgba(255,255,255,.06);
+      opacity: 0; pointer-events: none; transition: opacity .18s;
     }
-    .team-name {
-      padding: 0 8px;
-      font-size: 11.5px; font-weight: 600;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    .modal-bg.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: #111115; border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px;
+      width: 340px; max-width: calc(100vw - 32px);
+      box-shadow: 0 24px 64px rgba(0,0,0,.6);
+      transform: translateY(8px); transition: transform .18s;
     }
+    .modal-bg.open .modal { transform: translateY(0); }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .modal-title { font-size: 16px; font-weight: 800; color: var(--text); }
+    .modal-close { background: none; border: none; cursor: pointer; color: var(--text-3); font-size: 18px; line-height: 1; padding: 2px 4px; border-radius: 4px; transition: color .12s, background .12s; }
+    .modal-close:hover { color: var(--text); background: rgba(255,255,255,.07); }
+    .modal-sub { font-size: 11px; color: var(--text-3); margin-bottom: 14px; }
+    .player-list { display: flex; flex-direction: column; gap: 4px; }
+    .player-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 12px; border-radius: 8px;
+      background: var(--bg-2); border: 1px solid var(--border-2);
+    }
+    .player-num { font-size: 10px; font-weight: 700; color: var(--text-3); width: 14px; flex-shrink: 0; }
+    .player-name { font-size: 13px; font-weight: 600; color: var(--text); }
 
-    /* winner / loser state */
-    .team-row.winner .team-score {
-      background: rgba(16,185,129,.15);
-      color: #6ee7b7;
-      border-right-color: rgba(16,185,129,.2);
-    }
-    .team-row.winner .team-name { color: var(--win-text); }
-    .team-row.loser .team-score { color: var(--text-3); }
-    .team-row.loser .team-name { color: var(--lose-text); }
-    .team-row.pending .team-score { color: var(--text-3); }
-    .team-row.pending .team-name { color: var(--text-3); font-style: italic; }
-
-    /* grand final card */
-    .match-card.grand-final .team-row.winner .team-score {
-      background: rgba(56,189,248,.15);
-      color: #7dd3fc;
-      border-right-color: rgba(56,189,248,.2);
-    }
-    .match-card.grand-final .team-row.winner .team-name { color: #e0f2fe; }
-
-    /* ── MATCH SCHEDULE TABLE ── */
-    .schedule-section { margin-top: 48px; }
-    .schedule-table-wrapper {
-      border-radius: var(--radius); border: 1px solid var(--border);
-      overflow: hidden;
-    }
+    /* ── SCHEDULE TABLE ── */
+    .schedule-wrap { border-radius: 10px; border: 1px solid var(--border); overflow: hidden; }
     table { width: 100%; border-collapse: collapse; }
     thead th {
-      background: var(--bg-2);
-      padding: 10px 14px; text-align: left;
-      font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      background: var(--bg-2); padding: 8px 12px; text-align: left;
+      font-size: 9.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
       color: var(--text-3); border-bottom: 1px solid var(--border);
     }
-    tbody tr { border-bottom: 1px solid var(--border-soft); transition: background .1s; }
+    tbody tr { border-bottom: 1px solid var(--border-2); transition: background .1s; }
     tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: rgba(255,255,255,.02); }
-    tbody td {
-      padding: 9px 14px; font-size: 12.5px; color: var(--text-2);
-      vertical-align: middle;
-    }
-    .td-teams {
-      font-weight: 600; color: var(--text);
-      display: flex; align-items: center; gap: 8px;
-    }
-    .td-teams .winner-name { color: #6ee7b7; }
-    .td-score {
-      font-family: 'Inter', monospace; font-weight: 700; font-size: 13px;
-      color: var(--text);
-    }
-    .td-bracket-badge {
-      display: inline-flex; padding: 2px 8px; border-radius: 5px;
-      font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
-    }
-    .td-bracket-badge.upper { background: var(--ub-bg); color: var(--ub-color); }
-    .td-bracket-badge.lower { background: var(--lb-bg); color: var(--lb-color); }
-    .td-bracket-badge.grand-final { background: var(--gf-bg); color: var(--gf-color); }
-    .td-stream a {
-      color: #9147ff; text-decoration: none; font-size: 11px; font-weight: 600;
-      display: inline-flex; align-items: center; gap: 4px; transition: color .15s;
-    }
-    .td-stream a:hover { color: #b280ff; }
-    .td-time { color: var(--text-3); white-space: nowrap; }
+    tbody tr:hover { background: rgba(255,255,255,.018); }
+    tbody td { padding: 7px 12px; font-size: 12px; color: var(--text-2); vertical-align: middle; }
+    .t-teams { font-weight: 600; color: var(--text); }
+    .t-win { color: #6ee7b7; }
+    .t-score { font-weight: 700; color: var(--text); font-size: 12.5px; }
+    .t-badge { display: inline-flex; padding: 1px 7px; border-radius: 4px; font-size: 9.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+    .t-badge.ub { background: var(--ub-dim); color: var(--ub); }
+    .t-badge.lb { background: var(--lb-dim); color: var(--lb); }
+    .t-badge.gf { background: var(--gf-dim); color: var(--gf); }
+    .t-stream a { color: #9147ff; text-decoration: none; font-size: 11px; font-weight: 600; }
+    .t-stream a:hover { color: #bf94ff; }
+    .t-time { color: var(--text-3); font-size: 11px; white-space: nowrap; }
 
     /* ── FOOTER ── */
-    footer {
-      position: relative; z-index: 1;
-      border-top: 1px solid var(--border-soft);
-      padding: 24px 20px;
-      text-align: center;
-      font-size: 12px; color: var(--text-3);
-    }
+    footer { position: relative; z-index: 1; border-top: 1px solid var(--border-2); padding: 20px; text-align: center; font-size: 11.5px; color: var(--text-3); }
     footer a { color: var(--accent); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 640px) {
-      .page-header { flex-direction: column; }
-      .tournament-name { font-size: 20px; }
-      nav a span { display: none; }
-      .meta-cards { gap: 8px; }
-    }
   </style>
 </head>
 <body>
-  <div class="glow"></div>
+<div class="glow"></div>
 
-  <header>
-    <div class="header-inner">
-      <a class="logo" href="https://gncow.ru">
-        <img src="https://gncow.ru/uploads/ca6ddceb-4dca-403b-87f6-58e982a83936.png" alt="GNC" onerror="this.style.display='none'" />
-        <span class="logo-text">GNC<span>OW</span></span>
-      </a>
-      <nav>
-        <a href="https://gncow.ru/bracket" class="active"><span>Сетка</span></a>
-        <a href="https://gncow.ru/teams"><span>Команды</span></a>
-        <a href="https://gncow.ru/hall-of-fame"><span>Зал славы</span></a>
-        <a href="https://gncow.ru/rules"><span>Правила</span></a>
-      </nav>
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a class="logo" href="https://gncow.ru">
+      <img src="https://gncow.ru/uploads/ca6ddceb-4dca-403b-87f6-58e982a83936.png" alt="GNC" onerror="this.style.display='none'" />
+      <span class="logo-gnc">GNC</span><span class="logo-ow">OW</span>
+    </a>
+    <nav>
+      <a href="https://gncow.ru/bracket" class="active">Сетка</a>
+      <a href="https://gncow.ru/teams">Команды</a>
+      <a href="https://gncow.ru/hall-of-fame">Зал славы</a>
+      <a href="https://gncow.ru/rules">Правила</a>
+    </nav>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main>
+  <!-- Page header -->
+  <div class="page-top">
+    <div>
+      <div class="tournament-badge"><div class="badge-dot"></div> Турнир завершён</div>
+      <h1 class="tournament-name">GNC <em>SPRING</em> 2026</h1>
+      <p class="tournament-sub">2–3 мая 2026 · Double Elimination · Platinum+</p>
     </div>
-  </header>
-
-  <main>
-    <!-- Page header -->
-    <div class="page-header">
-      <div class="tournament-meta">
-        <div class="tournament-badge">
-          <div class="badge-dot"></div>
-          Турнир завершён
-        </div>
-        <h1 class="tournament-name">GNC <span>SPRING</span> 2026</h1>
-        <p class="tournament-sub">2–3 мая 2026 · Double Elimination · Platinum+</p>
-      </div>
-      <div class="meta-cards">
-        <div class="meta-card">
-          <span class="meta-card-label">Призовой фонд</span>
-          <span class="meta-card-value green">250 $</span>
-        </div>
-        <div class="meta-card">
-          <span class="meta-card-label">Команд</span>
-          <span class="meta-card-value">16</span>
-        </div>
-        <div class="meta-card">
-          <span class="meta-card-label">Формат</span>
-          <span class="meta-card-value">Bo3 / Bo5</span>
-        </div>
-        <div class="meta-card">
-          <span class="meta-card-label">Стрим</span>
-          <span class="meta-card-value"><a href="https://twitch.tv/gncow" style="color:var(--accent);text-decoration:none;">twitch.tv/gncow</a></span>
-        </div>
-      </div>
+    <div class="meta-row">
+      <div class="meta-pill"><span class="meta-pill-label">Призовой фонд</span><span class="meta-pill-val green">250 $</span></div>
+      <div class="meta-pill"><span class="meta-pill-label">Команд</span><span class="meta-pill-val">16</span></div>
+      <div class="meta-pill"><span class="meta-pill-label">Формат</span><span class="meta-pill-val">Bo3 / Bo5</span></div>
+      <div class="meta-pill"><span class="meta-pill-label">Стрим</span><span class="meta-pill-val"><a href="https://twitch.tv/gncow" style="color:var(--accent);text-decoration:none">twitch.tv/gncow</a></span></div>
     </div>
+  </div>
 
-    <!-- Podium -->
-    <div class="podium-section">
-      <div class="podium-row">
-        <div class="podium-card first">
-          <span class="podium-place">🥇</span>
-          <div class="podium-info">
-            <span class="podium-place-label">Чемпион</span>
-            <span class="podium-team">SirGay</span>
-          </div>
-        </div>
-        <div class="podium-card second">
-          <span class="podium-place">🥈</span>
-          <div class="podium-info">
-            <span class="podium-place-label">2 место</span>
-            <span class="podium-team">Anuiel</span>
-          </div>
-        </div>
-        <div class="podium-card third">
-          <span class="podium-place">🥉</span>
-          <div class="podium-info">
-            <span class="podium-place-label">3 место</span>
-            <span class="podium-team">Soldeek</span>
-          </div>
-        </div>
+  <!-- Podium -->
+  <div class="podium">
+    <div class="podium-card p1">
+      <span class="podium-place">🥇</span>
+      <div><div class="podium-label">Чемпион</div><div class="podium-team">SirGay</div></div>
+    </div>
+    <div class="podium-card p2">
+      <span class="podium-place">🥈</span>
+      <div><div class="podium-label">2 место</div><div class="podium-team">Anuiel</div></div>
+    </div>
+    <div class="podium-card p3">
+      <span class="podium-place">🥉</span>
+      <div><div class="podium-label">3 место</div><div class="podium-team">Soldeek</div></div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn t-ub active" data-tab="ub">Верхняя сетка <span class="tab-count">15</span></button>
+    <button class="tab-btn t-lb" data-tab="lb">Нижняя сетка <span class="tab-count">13</span></button>
+    <button class="tab-btn t-gf" data-tab="gf">Гранд-финал <span class="tab-count">1</span></button>
+    <button class="tab-btn t-all" data-tab="all">Все матчи <span class="tab-count">29</span></button>
+  </div>
+
+  <!-- TAB: UPPER BRACKET -->
+  <div class="tab-panel active" id="tab-ub">
+    <div class="bracket-scroll">
+      <div class="bracket-wrap" id="ub-wrap">
+        <svg class="connectors-svg" id="ub-svg"></svg>
       </div>
     </div>
+  </div>
 
-    <!-- ═══════════════ UPPER BRACKET ═══════════════ -->
-    <div class="bracket-section">
-      <div class="bracket-section-header">
-        <span class="bracket-section-label upper">Верхняя сетка</span>
-        <div class="bracket-section-divider"></div>
-      </div>
-      <div class="bracket-scroll">
-        <div class="bracket-rounds" id="upper-bracket"></div>
+  <!-- TAB: LOWER BRACKET -->
+  <div class="tab-panel" id="tab-lb">
+    <div class="bracket-scroll">
+      <div class="bracket-wrap" id="lb-wrap">
+        <svg class="connectors-svg" id="lb-svg"></svg>
       </div>
     </div>
+  </div>
 
-    <!-- ═══════════════ LOWER BRACKET ═══════════════ -->
-    <div class="bracket-section">
-      <div class="bracket-section-header">
-        <span class="bracket-section-label lower">Нижняя сетка</span>
-        <div class="bracket-section-divider"></div>
+  <!-- TAB: GRAND FINAL -->
+  <div class="tab-panel" id="tab-gf">
+    <div style="max-width:420px">
+      <div class="section-header">
+        <span class="section-pill gf">Гранд-финал · Bo5</span>
+        <div class="section-line"></div>
       </div>
-      <div class="bracket-scroll">
-        <div class="bracket-rounds" id="lower-bracket"></div>
-      </div>
+      <div id="gf-wrap"></div>
     </div>
+  </div>
 
-    <!-- ═══════════════ GRAND FINAL ═══════════════ -->
-    <div class="bracket-section">
-      <div class="bracket-section-header">
-        <span class="bracket-section-label grand-final">Гранд-финал</span>
-        <div class="bracket-section-divider"></div>
-      </div>
-      <div class="bracket-scroll">
-        <div class="bracket-rounds" id="grand-final-bracket"></div>
-      </div>
+  <!-- TAB: ALL MATCHES -->
+  <div class="tab-panel" id="tab-all">
+    <div class="schedule-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Время (МСК)</th>
+            <th>Сетка</th>
+            <th>Команда A</th>
+            <th>Счёт</th>
+            <th>Команда B</th>
+            <th>Формат</th>
+            <th>Стрим</th>
+          </tr>
+        </thead>
+        <tbody id="schedule-body"></tbody>
+      </table>
     </div>
+  </div>
+</main>
 
-    <!-- ═══════════════ SCHEDULE TABLE ═══════════════ -->
-    <div class="schedule-section">
-      <div class="bracket-section-header">
-        <span class="bracket-section-label upper" style="background:rgba(255,255,255,.04);color:var(--text-2);border-color:var(--border);">Все матчи</span>
-        <div class="bracket-section-divider"></div>
-      </div>
-      <div class="schedule-table-wrapper">
-        <table id="schedule-table">
-          <thead>
-            <tr>
-              <th>Время</th>
-              <th>Сетка</th>
-              <th>Матч</th>
-              <th>Счёт</th>
-              <th>Формат</th>
-              <th>Стрим</th>
-            </tr>
-          </thead>
-          <tbody id="schedule-body"></tbody>
-        </table>
-      </div>
+<footer>
+  GNC Overwatch Tournament · <a href="https://gncow.ru">gncow.ru</a> ·
+  <a href="https://discord.gg/gnc">Discord</a> ·
+  <a href="https://twitch.tv/gncow">Twitch</a>
+</footer>
+
+<!-- TOOLTIP -->
+<div class="tooltip" id="tooltip"></div>
+
+<!-- ROSTER MODAL -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-team-name"></span>
+      <button class="modal-close" id="modal-close">✕</button>
     </div>
-  </main>
+    <div class="modal-sub">Состав команды · GNCSPRING2026</div>
+    <div class="player-list" id="modal-players"></div>
+  </div>
+</div>
 
-  <footer>
-    <p>
-      GNC Overwatch Tournament · <a href="https://gncow.ru">gncow.ru</a> ·
-      <a href="https://discord.gg/gnc">Discord</a> ·
-      <a href="https://twitch.tv/gncow">Twitch</a>
-    </p>
-  </footer>
+<script>
+/* ═══════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════ */
+const ROSTERS = {
+  'SirGay':      ['SirGay', 'Котлетка', 'CraazzzyyFox', 'paw', 'ŊƗŊĔƇǝĿĿ'],
+  'Soldeek':     ['ItsSoldeek', 'rybr0n', 'Morsik', 'Ducky', 'varjo'],
+  'HOTMOMMY':    ['HOTMOMMY', 'Hinerein', 'asp1d', 'ContR1337', 'CJlaB9lHuH'],
+  'QuiltedVino': ['QuiltedVino', 'litnik', 'PabloPablo', 'dasha21cm', 'Wassuup'],
+  'МужФейсяо':   ['МужФейсяо', 'Seme4ka2', 'SexyPelmeni', 'Unknown', 'ANCKLAV'],
+  'ZORDMON':     ['ZORDMON', 'ПивнаяПанда', 'Tref', 'сестренка', 'Lynxx'],
+  'ЕдкийЕж':    ['Tiltxel', 'DeadINSIDE', 'SakuraKun', 'ЕдкийЕж', 'CramBoos'],
+  'Wisparian':   ['Wisparian', 'Fullopenn', 'HauauNipah', 'SerFim', 'AInCube'],
+  'Anuiel':      ['Anuiel', 'Mell', 'BadRequest', 'Backster', 'YukinoFukui'],
+  'Warrkan':     ['Warrkan', 'Linkup', 'Shadow', 'tsezoya', 'TiMSH'],
+  'AleXsoiD03':  ['AleXsoiD03', 'NECROSFAN01', 'ИграВкоторой', 'vanzvanz', 'zalupkina'],
+  'Baljaga':     ['Baljaga', 'Olivich', 'SkyFighter', 'Squirrel', 'mix'],
+  'RedVKill':    ['RedVKill', 'джессипикми', 'zlode1', 'Dapkap', 'Reincardy'],
+  'yaLucky':     ['yaLucky', 'Azrael', 'CrazyTiger', 'skliros', 'memeless'],
+  'WoodsFrank':  ['WoodsFrank', 'Tolgrn', 'lorerror', 'Ravel', 'Neyz1'],
+  'zMize':       ['zMize', 'GeneticalGun', 'W7sh', 'lttlgrmse', 'copilop'],
+};
 
-  <script>
-  /* ═══ DATA ═══ */
-  const BRACKET = {
-    upper: [
-      // Round 1 (UB R1)
-      { round: 1, roundLabel: 'UB Раунд 1', id: 1,  teamA: 'SirGay',       winsA: 2, teamB: 'HOTMOMMY',    winsB: 0, stream: 'https://twitch.tv/gncow',         bo: 3, time: '2026-05-02T11:00:00Z' },
-      { round: 1, roundLabel: 'UB Раунд 1', id: 4,  teamA: 'Soldeek',      winsA: 2, teamB: 'QuiltedVino', winsB: 0, stream: 'https://twitch.tv/its_soldeek',    bo: 3, time: '2026-05-02T11:00:00Z' },
-      { round: 1, roundLabel: 'UB Раунд 1', id: 9,  teamA: 'МужФейсяо',    winsA: 2, teamB: 'ZORDMON',     winsB: 1, stream: null,                               bo: 3, time: '2026-05-02T11:00:00Z' },
-      { round: 1, roundLabel: 'UB Раунд 1', id: 10, teamA: 'ЕдкийЕж',      winsA: 0, teamB: 'Wisparian',   winsB: 2, stream: 'https://twitch.tv/wispar1an',      bo: 3, time: '2026-05-02T11:00:00Z' },
-      { round: 1, roundLabel: 'UB Раунд 1', id: 11, teamA: 'Anuiel',        winsA: 2, teamB: 'Warrkan',     winsB: 0, stream: 'https://twitch.tv/tsezoya',        bo: 3, time: '2026-05-02T11:05:00Z' },
-      { round: 1, roundLabel: 'UB Раунд 1', id: 14, teamA: 'AleXsoiD03',   winsA: 2, teamB: 'Baljaga',     winsB: 0, stream: 'https://twitch.tv/igravkotoroy',   bo: 3, time: '2026-05-02T11:00:00Z' },
-      { round: 1, roundLabel: 'UB Раунд 1', id: 17, teamA: 'WoodsFrank',   winsA: 2, teamB: 'RedVKill',    winsB: 0, stream: 'https://twitch.tv/redvkill',       bo: 3, time: '2026-05-02T11:00:00Z' },
-      { round: 1, roundLabel: 'UB Раунд 1', id: 23, teamA: 'zMize',        winsA: 2, teamB: 'yaLucky',     winsB: 0, stream: null,                               bo: 3, time: '2026-05-02T11:00:00Z' },
-      // Round 2 (UB R2)
-      { round: 2, roundLabel: 'UB Раунд 2', id: 13, teamA: 'SirGay',       winsA: 2, teamB: 'Soldeek',     winsB: 0, stream: 'https://twitch.tv/its_soldeek',    bo: 3, time: '2026-05-02T12:00:00Z' },
-      { round: 2, roundLabel: 'UB Раунд 2', id: 15, teamA: 'МужФейсяо',    winsA: 0, teamB: 'Wisparian',   winsB: 2, stream: 'https://twitch.tv/wispar1an',      bo: 3, time: '2026-05-02T12:00:00Z' },
-      { round: 2, roundLabel: 'UB Раунд 2', id: 18, teamA: 'Anuiel',        winsA: 2, teamB: 'AleXsoiD03', winsB: 0, stream: 'https://twitch.tv/igravkotoroy',   bo: 3, time: '2026-05-02T12:00:00Z' },
-      { round: 2, roundLabel: 'UB Раунд 2', id: 26, teamA: 'WoodsFrank',   winsA: 0, teamB: 'zMize',       winsB: 2, stream: null,                               bo: 3, time: '2026-05-02T12:00:00Z' },
-      // Round 3 (UB SF)
-      { round: 3, roundLabel: 'UB Полуфинал', id: 27, teamA: 'SirGay',     winsA: 2, teamB: 'Wisparian',   winsB: 1, stream: 'https://twitch.tv/wispar1an',      bo: 3, time: '2026-05-02T13:00:00Z' },
-      { round: 3, roundLabel: 'UB Полуфинал', id: 28, teamA: 'Anuiel',      winsA: 2, teamB: 'zMize',       winsB: 0, stream: null,                               bo: 3, time: '2026-05-02T13:00:00Z' },
-      // Upper Final
-      { round: 4, roundLabel: 'UB Финал',   id: 38, teamA: 'SirGay',       winsA: 0, teamB: 'Anuiel',      winsB: 2, stream: null,                               bo: 3, time: '2026-05-03T12:00:00Z' },
-    ],
-    lower: [
-      // LB R1
-      { round: 1, roundLabel: 'LB Раунд 1', id: 21, teamA: 'HOTMOMMY',    winsA: 0, teamB: 'QuiltedVino', winsB: 2, stream: null,                               bo: 3, time: '2026-05-02T12:00:00Z' },
-      { round: 1, roundLabel: 'LB Раунд 1', id: 24, teamA: 'ZORDMON',     winsA: 2, teamB: 'ЕдкийЕж',    winsB: 0, stream: 'https://twitch.tv/kelperx7',       bo: 3, time: '2026-05-02T12:00:00Z' },
-      { round: 1, roundLabel: 'LB Раунд 1', id: 25, teamA: 'Warrkan',     winsA: 1, teamB: 'Baljaga',     winsB: 2, stream: 'https://twitch.tv/link_up99',      bo: 3, time: '2026-05-02T12:00:00Z' },
-      { round: 1, roundLabel: 'LB Раунд 1', id: 31, teamA: 'RedVKill',    winsA: 1, teamB: 'yaLucky',     winsB: 2, stream: 'https://twitch.tv/redvkill',       bo: 3, time: '2026-05-02T12:00:00Z' },
-      // LB R2
-      { round: 2, roundLabel: 'LB Раунд 2', id: 35, teamA: 'yaLucky',     winsA: 1, teamB: 'Soldeek',     winsB: 2, stream: 'https://twitch.tv/its_soldeek',    bo: 3, time: '2026-05-02T13:00:00Z' },
-      { round: 2, roundLabel: 'LB Раунд 2', id: 34, teamA: 'Baljaga',     winsA: 0, teamB: 'МужФейсяо',  winsB: 2, stream: null,                               bo: 3, time: '2026-05-02T13:00:00Z' },
-      { round: 2, roundLabel: 'LB Раунд 2', id: 33, teamA: 'ZORDMON',     winsA: 2, teamB: 'AleXsoiD03', winsB: 0, stream: null,                               bo: 3, time: '2026-05-02T13:00:00Z' },
-      { round: 2, roundLabel: 'LB Раунд 2', id: 32, teamA: 'WoodsFrank',  winsA: 1, teamB: 'QuiltedVino', winsB: 2, stream: 'https://twitch.tv/wispar1an',      bo: 3, time: '2026-05-02T13:00:00Z' },
-      // LB R3
-      { round: 3, roundLabel: 'LB Раунд 3', id: 37, teamA: 'МужФейсяо',  winsA: 1, teamB: 'Soldeek',     winsB: 2, stream: 'https://twitch.tv/its_soldeek',    bo: 3, time: '2026-05-02T14:00:00Z' },
-      { round: 3, roundLabel: 'LB Раунд 3', id: 36, teamA: 'QuiltedVino', winsA: 2, teamB: 'ZORDMON',     winsB: 1, stream: 'https://twitch.tv/bruddauganda',   bo: 3, time: '2026-05-02T14:00:00Z' },
-      // LB R4
-      { round: 4, roundLabel: 'LB Раунд 4', id: 39, teamA: 'QuiltedVino', winsA: 2, teamB: 'Wisparian',   winsB: 1, stream: 'https://twitch.tv/wispar1an',      bo: 3, time: '2026-05-03T11:00:00Z' },
-      { round: 4, roundLabel: 'LB Раунд 4', id: 40, teamA: 'Soldeek',     winsA: 2, teamB: 'zMize',       winsB: 1, stream: 'https://twitch.tv/its_soldeek',    bo: 3, time: '2026-05-03T11:00:00Z' },
-      // LB SF
-      { round: 5, roundLabel: 'LB Полуфинал', id: 41, teamA: 'QuiltedVino', winsA: 1, teamB: 'Soldeek',   winsB: 2, stream: 'https://twitch.tv/gncow',          bo: 3, time: '2026-05-03T12:00:00Z' },
-      // LB Final
-      { round: 6, roundLabel: 'LB Финал',   id: 42, teamA: 'Soldeek',     winsA: 0, teamB: 'SirGay',      winsB: 2, stream: 'https://twitch.tv/gncow',          bo: 3, time: '2026-05-03T13:00:00Z' },
-    ],
-    grand_final: [
-      { round: 1, roundLabel: 'Гранд-финал', id: 43, teamA: 'Anuiel',     winsA: 2, teamB: 'SirGay',      winsB: 3, stream: 'https://twitch.tv/backaster_ow',   bo: 5, time: '2026-05-03T14:00:00Z' },
-    ],
-  };
+// Upper bracket: rounds as arrays of matches
+// Each match: { id, a, sa, b, sb, stream, bo, time }
+const UB = [
+  // R1 — 8 matches
+  [
+    { id:1,  a:'SirGay',    sa:2, b:'HOTMOMMY',   sb:0, stream:'gncow',        bo:3, time:'2026-05-02T11:00Z' },
+    { id:4,  a:'Soldeek',   sa:2, b:'QuiltedVino', sb:0, stream:'its_soldeek',  bo:3, time:'2026-05-02T11:00Z' },
+    { id:9,  a:'МужФейсяо', sa:2, b:'ZORDMON',     sb:1, stream:null,           bo:3, time:'2026-05-02T11:00Z' },
+    { id:10, a:'ЕдкийЕж',  sa:0, b:'Wisparian',   sb:2, stream:'wispar1an',    bo:3, time:'2026-05-02T11:00Z' },
+    { id:11, a:'Anuiel',    sa:2, b:'Warrkan',     sb:0, stream:'tsezoya',      bo:3, time:'2026-05-02T11:05Z' },
+    { id:14, a:'AleXsoiD03',sa:2, b:'Baljaga',     sb:0, stream:'igravkotoroy', bo:3, time:'2026-05-02T11:00Z' },
+    { id:17, a:'WoodsFrank',sa:2, b:'RedVKill',    sb:0, stream:'redvkill',     bo:3, time:'2026-05-02T11:00Z' },
+    { id:23, a:'zMize',     sa:2, b:'yaLucky',     sb:0, stream:null,           bo:3, time:'2026-05-02T11:00Z' },
+  ],
+  // R2 — 4 matches
+  [
+    { id:13, a:'SirGay',    sa:2, b:'Soldeek',     sb:0, stream:'its_soldeek',  bo:3, time:'2026-05-02T12:00Z' },
+    { id:15, a:'МужФейсяо', sa:0, b:'Wisparian',   sb:2, stream:'wispar1an',    bo:3, time:'2026-05-02T12:00Z' },
+    { id:18, a:'Anuiel',    sa:2, b:'AleXsoiD03',  sb:0, stream:'igravkotoroy', bo:3, time:'2026-05-02T12:00Z' },
+    { id:26, a:'WoodsFrank',sa:0, b:'zMize',       sb:2, stream:null,           bo:3, time:'2026-05-02T12:00Z' },
+  ],
+  // R3 — 2 matches
+  [
+    { id:27, a:'SirGay',    sa:2, b:'Wisparian',   sb:1, stream:'wispar1an',    bo:3, time:'2026-05-02T13:00Z' },
+    { id:28, a:'Anuiel',    sa:2, b:'zMize',       sb:0, stream:null,           bo:3, time:'2026-05-02T13:00Z' },
+  ],
+  // R4 (UB Final) — 1 match
+  [
+    { id:38, a:'SirGay',    sa:0, b:'Anuiel',      sb:2, stream:null,           bo:3, time:'2026-05-03T12:00Z' },
+  ],
+];
 
-  /* ═══ BRACKET RENDERER ═══ */
-  function getWinner(m) {
-    if (m.winsA > m.winsB) return 'A';
-    if (m.winsB > m.winsA) return 'B';
-    return null;
-  }
+const LB = [
+  // R1 — 4 matches
+  [
+    { id:21, a:'HOTMOMMY',   sa:0, b:'QuiltedVino', sb:2, stream:null,          bo:3, time:'2026-05-02T12:00Z' },
+    { id:24, a:'ZORDMON',    sa:2, b:'ЕдкийЕж',    sb:0, stream:'kelperx7',    bo:3, time:'2026-05-02T12:00Z' },
+    { id:25, a:'Warrkan',    sa:1, b:'Baljaga',     sb:2, stream:'link_up99',   bo:3, time:'2026-05-02T12:00Z' },
+    { id:31, a:'RedVKill',   sa:1, b:'yaLucky',     sb:2, stream:'redvkill',    bo:3, time:'2026-05-02T12:00Z' },
+  ],
+  // R2 — 4 matches
+  [
+    { id:35, a:'yaLucky',    sa:1, b:'Soldeek',     sb:2, stream:'its_soldeek', bo:3, time:'2026-05-02T13:00Z' },
+    { id:34, a:'Baljaga',    sa:0, b:'МужФейсяо',  sb:2, stream:null,          bo:3, time:'2026-05-02T13:00Z' },
+    { id:33, a:'ZORDMON',    sa:2, b:'AleXsoiD03',  sb:0, stream:null,          bo:3, time:'2026-05-02T13:00Z' },
+    { id:32, a:'WoodsFrank', sa:1, b:'QuiltedVino', sb:2, stream:'wispar1an',   bo:3, time:'2026-05-02T13:00Z' },
+  ],
+  // R3 — 2 matches
+  [
+    { id:37, a:'МужФейсяо', sa:1, b:'Soldeek',     sb:2, stream:'its_soldeek', bo:3, time:'2026-05-02T14:00Z' },
+    { id:36, a:'QuiltedVino',sa:2, b:'ZORDMON',     sb:1, stream:'bruddauganda',bo:3, time:'2026-05-02T14:00Z' },
+  ],
+  // R4 — 2 matches
+  [
+    { id:39, a:'QuiltedVino',sa:2, b:'Wisparian',   sb:1, stream:'wispar1an',   bo:3, time:'2026-05-03T11:00Z' },
+    { id:40, a:'Soldeek',    sa:2, b:'zMize',       sb:1, stream:'its_soldeek', bo:3, time:'2026-05-03T11:00Z' },
+  ],
+  // R5 (LB SF) — 1 match
+  [
+    { id:41, a:'QuiltedVino',sa:1, b:'Soldeek',     sb:2, stream:'gncow',       bo:3, time:'2026-05-03T12:00Z' },
+  ],
+  // R6 (LB Final) — 1 match
+  [
+    { id:42, a:'Soldeek',    sa:0, b:'SirGay',      sb:2, stream:'gncow',       bo:3, time:'2026-05-03T13:00Z' },
+  ],
+];
 
-  function matchCard(m, type) {
-    const w = getWinner(m);
-    const stateA = w === 'A' ? 'winner' : w === 'B' ? 'loser' : 'pending';
-    const stateB = w === 'B' ? 'winner' : w === 'A' ? 'loser' : 'pending';
-    const streamLabel = m.stream ? m.stream.replace('https://twitch.tv/', '') : null;
-    return `
-      <div class="match-card ${type}">
-        <div class="match-info">
-          <span class="match-id">#${m.id}</span>
-          <span class="match-bo">Bo${m.bo}</span>
-          ${streamLabel ? `<a class="match-stream" href="${m.stream}" target="_blank" rel="noopener"><span class="stream-dot"></span>${streamLabel}</a>` : '<span></span>'}
-        </div>
-        <div class="team-row ${stateA}">
-          <span class="team-score">${w ? m.winsA : '·'}</span>
-          <span class="team-name">${m.teamA}</span>
-        </div>
-        <div class="team-row ${stateB}">
-          <span class="team-score">${w ? m.winsB : '·'}</span>
-          <span class="team-name">${m.teamB}</span>
-        </div>
-      </div>`;
-  }
+const GF = [
+  { id:43, a:'Anuiel', sa:2, b:'SirGay', sb:3, stream:'backaster_ow', bo:5, time:'2026-05-03T14:00Z' },
+];
 
-  function renderBracket(matches, containerId, type) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
+/* ═══════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════ */
+function winner(m) { return m.sa > m.sb ? 'a' : m.sb > m.sa ? 'b' : null; }
+function fmt(m, side) { return winner(m) === null ? '·' : String(side === 'a' ? m.sa : m.sb); }
+function fmtTime(iso) {
+  return new Date(iso).toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit', timeZone:'Europe/Moscow' });
+}
 
-    const rounds = {};
-    const labels = {};
-    for (const m of matches) {
-      if (!rounds[m.round]) { rounds[m.round] = []; labels[m.round] = m.roundLabel; }
-      rounds[m.round].push(m);
+/* ═══════════════════════════════════════════
+   CARD BUILDER
+═══════════════════════════════════════════ */
+function buildCard(m, type) {
+  const w = winner(m);
+  const stA = w === 'a' ? 'winner' : w === 'b' ? 'loser' : 'pending';
+  const stB = w === 'b' ? 'winner' : w === 'a' ? 'loser' : 'pending';
+  const streamHref = m.stream ? `https://twitch.tv/${m.stream}` : null;
+
+  const el = document.createElement('div');
+  el.className = `match-card ${type}-card`;
+  el.dataset.matchId = m.id;
+
+  // meta bar
+  const meta = document.createElement('div');
+  meta.className = 'match-meta';
+  meta.innerHTML = `
+    <span class="meta-id">#${m.id}</span>
+    <span class="meta-right">
+      <span class="meta-bo">Bo${m.bo}</span>
+      ${streamHref ? `<a class="meta-stream" href="${streamHref}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 10 10" fill="currentColor"><path d="M2 0L0 2.5v6h2.5V11l2.5-2.5H7L10 5.5V0H2zm7 5L7.5 6.5H5.5L4 8V6.5H2V1h7v4zM7 2.5h-1v3h1v-3zM5 2.5H4v3h1v-3z"/></svg>
+        ${m.stream}</a>` : ''}
+    </span>`;
+  el.appendChild(meta);
+
+  // team rows
+  [['a', stA, m.a], ['b', stB, m.b]].forEach(([side, state, name]) => {
+    const row = document.createElement('div');
+    row.className = `team-row ${state}`;
+    row.dataset.team = name;
+    row.innerHTML = `<span class="team-name-text">${name || 'TBD'}</span><span class="score-cell">${fmt(m, side)}</span>`;
+
+    // hover: highlight same team across all matches
+    row.addEventListener('mouseenter', () => highlightTeam(name, true));
+    row.addEventListener('mouseleave', () => highlightTeam(name, false));
+
+    // click: show roster modal
+    if (name && ROSTERS[name]) {
+      row.addEventListener('click', (e) => { e.stopPropagation(); showRoster(name); });
     }
 
-    const roundNums = Object.keys(rounds).map(Number).sort((a,b) => a-b);
-    const totalRounds = roundNums.length;
+    el.appendChild(row);
+  });
 
-    for (const r of roundNums) {
-      const col = document.createElement('div');
-      col.className = 'round-col';
+  return el;
+}
 
-      const header = document.createElement('div');
-      header.className = 'round-header';
-      header.textContent = labels[r];
-      col.appendChild(header);
+/* ═══════════════════════════════════════════
+   TEAM HIGHLIGHT
+═══════════════════════════════════════════ */
+function highlightTeam(name, on) {
+  if (!name) return;
+  document.querySelectorAll(`.team-row[data-team="${CSS.escape(name)}"]`).forEach(r => {
+    r.classList.toggle('team-lit', on);
+  });
+}
 
-      const matchesInRound = rounds[r];
-      const matchesContainer = document.createElement('div');
-      matchesContainer.className = 'round-matches';
+/* ═══════════════════════════════════════════
+   ROSTER MODAL
+═══════════════════════════════════════════ */
+function showRoster(name) {
+  const players = ROSTERS[name];
+  if (!players) return;
+  document.getElementById('modal-team-name').textContent = name;
+  const list = document.getElementById('modal-players');
+  list.innerHTML = players.map((p, i) => `
+    <div class="player-row">
+      <span class="player-num">${i + 1}</span>
+      <span class="player-name">${p}</span>
+    </div>`).join('');
+  document.getElementById('modal-bg').classList.add('open');
+}
+document.getElementById('modal-close').addEventListener('click', () => document.getElementById('modal-bg').classList.remove('open'));
+document.getElementById('modal-bg').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); });
 
-      const isLast = r === roundNums[roundNums.length - 1];
-      const isFirst = r === roundNums[0];
+/* ═══════════════════════════════════════════
+   BRACKET RENDERER
+═══════════════════════════════════════════ */
+const SLOT = 52;   // px per match slot in R1
+const COL_W = 162; // match card width
+const COL_GAP = 44; // gap between columns (for connectors)
 
-      for (let i = 0; i < matchesInRound.length; i++) {
-        const m = matchesInRound[i];
-        const wrapper = document.createElement('div');
-        wrapper.className = 'match-wrapper';
-        wrapper.style.flex = '1';
-        wrapper.style.minHeight = `${80 + (totalRounds - r) * 4}px`;
-        wrapper.style.display = 'flex';
-        wrapper.style.alignItems = 'center';
+function renderBracket(rounds, wrapId, svgId, type) {
+  const wrap = document.getElementById(wrapId);
+  const svg  = document.getElementById(svgId);
 
-        // connector line from previous round
-        if (!isFirst) {
-          const connIn = document.createElement('div');
-          connIn.className = 'connector-in';
-          wrapper.appendChild(connIn);
-        } else {
-          wrapper.style.paddingLeft = '16px';
-        }
+  const roundCount = rounds.length;
+  const r1count = rounds[0].length;
 
-        wrapper.innerHTML += matchCard(m, type);
+  // Position each round column
+  const colPositions = []; // { x, matchEls[] }
+  let xCursor = 0;
 
-        // connector to next round
-        if (!isLast) {
-          const connDiv = document.createElement('div');
-          connDiv.className = 'connector';
-          const totalMatches = matchesInRound.length;
-          const nextMatches = rounds[roundNums[roundNums.indexOf(r)+1]]?.length || 1;
-          connDiv.style.height = `${(totalMatches / nextMatches) * 80}px`;
-          wrapper.appendChild(connDiv);
-        } else {
-          wrapper.style.paddingRight = '16px';
-        }
+  rounds.forEach((matches, ri) => {
+    const slotH = SLOT * Math.pow(2, ri); // slot height doubles each round
+    const colH  = r1count * SLOT;         // total column height stays constant
+    const col   = document.createElement('div');
+    col.className = 'round-col';
+    col.style.width = COL_W + 'px';
 
-        matchesContainer.appendChild(wrapper);
-      }
+    // round label
+    const lbl = document.createElement('div');
+    lbl.className = 'round-label';
+    const labels = ['Раунд 1','Раунд 2','Раунд 3','Раунд 4','Раунд 5','Раунд 6'];
+    const special = {
+      ub: { 3: 'Полуфинал', 4: 'UB Финал' },
+      lb: { 5: 'LB Полуфинал', 6: 'LB Финал' },
+      gf: { 1: 'Гранд-финал' },
+    };
+    const s = special[type] && special[type][ri + 1];
+    lbl.textContent = s || labels[ri] || `Раунд ${ri + 1}`;
+    col.appendChild(lbl);
 
-      col.appendChild(matchesContainer);
-      container.appendChild(col);
+    const matchesEl = document.createElement('div');
+    matchesEl.className = 'round-matches';
+    matchesEl.style.height = colH + 'px';
+    matchesEl.style.position = 'relative';
+
+    const matchEls = [];
+
+    matches.forEach((m, mi) => {
+      const slot = document.createElement('div');
+      slot.className = 'match-slot';
+      slot.style.position = 'absolute';
+      slot.style.width = COL_W + 'px';
+      slot.style.height = slotH + 'px';
+      const top = mi * slotH;
+      slot.style.top = top + 'px';
+      slot.style.left = '0';
+      slot.style.display = 'flex';
+      slot.style.alignItems = 'center';
+
+      const card = buildCard(m, type);
+      slot.appendChild(card);
+      matchesEl.appendChild(slot);
+      matchEls.push({ card, slotTop: top, slotH });
+    });
+
+    col.appendChild(matchesEl);
+    wrap.appendChild(col);
+
+    colPositions.push({ x: xCursor, matchEls });
+    xCursor += COL_W;
+
+    // gap column (connector space) — except after last round
+    if (ri < roundCount - 1) {
+      const gap = document.createElement('div');
+      gap.style.width = COL_GAP + 'px';
+      gap.style.flexShrink = '0';
+      wrap.appendChild(gap);
+      xCursor += COL_GAP;
+    }
+  });
+
+  // After layout, draw SVG connectors
+  // We need to wait for layout to be applied
+  setTimeout(() => drawConnectors(svg, colPositions, wrap, type), 0);
+}
+
+function drawConnectors(svg, colPositions, wrap, type) {
+  const LABEL_H = 28;
+
+  // Compute dimensions mathematically (works even if tab is hidden)
+  const lastCol = colPositions[colPositions.length - 1];
+  const totalW = lastCol.x + COL_W;
+  const totalH = LABEL_H + colPositions[0].matchEls.length * SLOT;
+
+  svg.style.width  = totalW + 'px';
+  svg.style.height = totalH + 'px';
+  svg.setAttribute('width', totalW);
+  svg.setAttribute('height', totalH);
+
+  const cls = `conn-line ${type}`;
+
+  for (let ri = 0; ri < colPositions.length - 1; ri++) {
+    const cur  = colPositions[ri];
+    const next = colPositions[ri + 1];
+
+    // Each pair of matches in cur connects to one match in next
+    const curMatches  = cur.matchEls;
+    const nextMatches = next.matchEls;
+
+    for (let ni = 0; ni < nextMatches.length; ni++) {
+      const topMatch    = curMatches[ni * 2];
+      const bottomMatch = curMatches[ni * 2 + 1];
+      const parentMatch = nextMatches[ni];
+
+      if (!topMatch || !bottomMatch || !parentMatch) continue;
+
+      // x-coordinates
+      const x0 = cur.x + COL_W;          // right edge of current col
+      const x1 = next.x;                  // left edge of next col
+      const xMid = x0 + COL_GAP / 2;     // midpoint
+
+      // y-coordinates: center of each match slot
+      const yTop    = LABEL_H + topMatch.slotTop    + topMatch.slotH    / 2;
+      const yBottom = LABEL_H + bottomMatch.slotTop + bottomMatch.slotH / 2;
+      const yParent = LABEL_H + parentMatch.slotTop + parentMatch.slotH / 2;
+
+      // Top match: horizontal right, then vertical to midY, end at xMid
+      // Bottom match: horizontal right, then vertical to midY, end at xMid
+      // From xMid, horizontal to parent
+      const yMid = (yTop + yBottom) / 2;
+
+      const p1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p1.setAttribute('class', cls);
+      p1.setAttribute('d', `M${x0} ${yTop} H${xMid} V${yMid}`);
+      svg.appendChild(p1);
+
+      const p2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p2.setAttribute('class', cls);
+      p2.setAttribute('d', `M${x0} ${yBottom} H${xMid} V${yMid}`);
+      svg.appendChild(p2);
+
+      const p3 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p3.setAttribute('class', cls);
+      p3.setAttribute('d', `M${xMid} ${yMid} H${x1}`);
+      svg.appendChild(p3);
     }
   }
+}
 
-  /* ═══ SCHEDULE TABLE ═══ */
-  function renderSchedule() {
-    const tbody = document.getElementById('schedule-body');
-    const all = [
-      ...BRACKET.upper.map(m => ({ ...m, type: 'upper', typeLabel: 'UB' })),
-      ...BRACKET.lower.map(m => ({ ...m, type: 'lower', typeLabel: 'LB' })),
-      ...BRACKET.grand_final.map(m => ({ ...m, type: 'grand-final', typeLabel: 'GF' })),
-    ].sort((a,b) => new Date(a.time) - new Date(b.time));
+/* ═══════════════════════════════════════════
+   GRAND FINAL (simple, no connector needed)
+═══════════════════════════════════════════ */
+function renderGF() {
+  const wrap = document.getElementById('gf-wrap');
+  GF.forEach(m => {
+    const card = buildCard(m, 'gf');
+    card.style.width = '260px';
+    wrap.appendChild(card);
+  });
+}
 
-    for (const m of all) {
-      const w = getWinner(m);
-      const winner = w === 'A' ? m.teamA : w === 'B' ? m.teamB : null;
-      const loser  = w === 'A' ? m.teamB : w === 'B' ? m.teamA : null;
-      const dt = new Date(m.time);
-      const timeStr = dt.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Moscow' }) + ' МСК';
+/* ═══════════════════════════════════════════
+   SCHEDULE TABLE
+═══════════════════════════════════════════ */
+function renderSchedule() {
+  const tbody = document.getElementById('schedule-body');
+  const all = [
+    ...UB.flat().map(m => ({ ...m, type: 'ub' })),
+    ...LB.flat().map(m => ({ ...m, type: 'lb' })),
+    ...GF.map(m => ({ ...m, type: 'gf' })),
+  ].sort((a, b) => new Date(a.time) - new Date(b.time));
 
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td class="td-time">${timeStr}</td>
-        <td><span class="td-bracket-badge ${m.type}">${m.typeLabel}</span></td>
-        <td>
-          <div class="td-teams">
-            <span class="${winner === m.teamA ? 'winner-name' : ''}">${m.teamA}</span>
-            <span style="color:var(--text-3);font-weight:400">vs</span>
-            <span class="${winner === m.teamB ? 'winner-name' : ''}">${m.teamB}</span>
-          </div>
-        </td>
-        <td class="td-score">${w ? `${m.winsA} : ${m.winsB}` : '—'}</td>
-        <td style="color:var(--text-3)">Bo${m.bo}</td>
-        <td class="td-stream">${m.stream ? `<a href="${m.stream}" target="_blank" rel="noopener">▶ ${m.stream.replace('https://twitch.tv/', '')}</a>` : '<span style="color:var(--text-3)">—</span>'}</td>
-      `;
-      tbody.appendChild(tr);
-    }
-  }
+  const labels = { ub: 'UB', lb: 'LB', gf: 'GF' };
 
-  /* ═══ INIT ═══ */
-  renderBracket(BRACKET.upper, 'upper-bracket', 'upper');
-  renderBracket(BRACKET.lower, 'lower-bracket', 'lower');
-  renderBracket(BRACKET.grand_final, 'grand-final-bracket', 'grand-final');
-  renderSchedule();
-  </script>
+  all.forEach(m => {
+    const w = winner(m);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="t-time">${fmtTime(m.time)}</td>
+      <td><span class="t-badge ${m.type}">${labels[m.type]}</span></td>
+      <td class="t-teams"><span class="${w === 'a' ? 't-win' : ''}">${m.a}</span></td>
+      <td class="t-score">${w ? `${m.sa} : ${m.sb}` : '—'}</td>
+      <td class="t-teams"><span class="${w === 'b' ? 't-win' : ''}">${m.b}</span></td>
+      <td style="color:var(--text-3)">Bo${m.bo}</td>
+      <td class="t-stream">${m.stream ? `<a href="https://twitch.tv/${m.stream}" target="_blank" rel="noopener">▶ ${m.stream}</a>` : '<span style="color:var(--text-3)">—</span>'}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   TABS
+═══════════════════════════════════════════ */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+  });
+});
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+renderBracket(UB, 'ub-wrap', 'ub-svg', 'ub');
+renderBracket(LB, 'lb-wrap', 'lb-svg', 'lb');
+renderGF();
+renderSchedule();
+</script>
 </body>
 </html>
