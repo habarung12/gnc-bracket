@@ -139,12 +139,22 @@
     .section-line { flex: 1; height: 1px; background: var(--border-2); }
 
     /* ── BRACKET SCROLL AREA ── */
-    .bracket-scroll { overflow-x: auto; overflow-y: visible; padding-bottom: 12px; }
+    .bracket-scroll {
+      overflow-x: auto; overflow-y: visible; padding-bottom: 12px;
+      cursor: grab; user-select: none;
+    }
+    .bracket-scroll.dragging { cursor: grabbing; }
     .bracket-wrap { position: relative; display: inline-flex; flex-direction: row; align-items: flex-start; gap: 0; padding: 16px 0 16px; }
 
     /* ── ROUND COLUMN ── */
     .round-col { display: flex; flex-direction: column; position: relative; }
-    .round-label { font-size: 9.5px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--text-3); text-align: center; padding: 0 8px 10px; white-space: nowrap; }
+    .round-label {
+      font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-2); text-align: center; padding: 4px 8px 12px; white-space: nowrap;
+    }
+    .round-label.ub-label { color: rgba(16,185,129,.7); }
+    .round-label.lb-label { color: rgba(245,158,11,.65); }
+    .round-label.gf-label { color: rgba(56,189,248,.7); }
     .round-matches { position: relative; display: flex; flex-direction: column; }
 
     /* ── MATCH SLOT ── */
@@ -189,8 +199,24 @@
     .team-row.team-lit { background: rgba(255,255,255,.07) !important; }
     .team-row.team-lit .team-name-text { color: var(--text) !important; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 2px; }
 
-    .team-name-text { flex: 1; padding: 0 7px; font-size: 11.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-2); transition: color .1s; }
+    .team-name-text { flex: 1; padding: 0 6px; font-size: 11.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-2); transition: color .1s; min-width: 0; }
     .score-cell { width: 26px; flex-shrink: 0; text-align: center; font-size: 12px; font-weight: 700; color: var(--text-2); border-left: 1px solid var(--border-2); height: 100%; display: flex; align-items: center; justify-content: center; }
+
+    /* ── FROM-UB DROP BADGE ── */
+    .src-badge {
+      flex-shrink: 0; font-size: 8px; font-weight: 700; letter-spacing: .05em;
+      padding: 1px 4px; border-radius: 3px; margin-right: 4px;
+      background: rgba(245,158,11,.15); color: rgba(245,158,11,.7);
+      border: 1px solid rgba(245,158,11,.2); white-space: nowrap;
+    }
+    /* inject round label above first match of each "drop-in" group */
+    .lb-drop-label {
+      font-size: 9px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      color: rgba(245,158,11,.55); padding: 2px 7px 1px;
+      border-top: 1px solid rgba(245,158,11,.12);
+      background: rgba(245,158,11,.04);
+      white-space: nowrap;
+    }
 
     /* GF winner row */
     .gf-card .team-row.winner { background: rgba(56,189,248,.1); }
@@ -508,38 +534,39 @@ const UB = [
   ],
 ];
 
+// aSrc/bSrc: 'ub' = dropped from upper bracket, 'lb' = won previous LB match
 const LB = [
-  // R1 — 4 matches
+  // R1 — проигравшие UB Раунда 1 (все из верхней)
   [
-    { id:21, a:'HOTMOMMY',   sa:0, b:'QuiltedVino', sb:2, stream:null,          bo:3, time:'2026-05-02T12:00Z' },
-    { id:24, a:'ZORDMON',    sa:2, b:'ЕдкийЕж',    sb:0, stream:'kelperx7',    bo:3, time:'2026-05-02T12:00Z' },
-    { id:25, a:'Warrkan',    sa:1, b:'Baljaga',     sb:2, stream:'link_up99',   bo:3, time:'2026-05-02T12:00Z' },
-    { id:31, a:'RedVKill',   sa:1, b:'yaLucky',     sb:2, stream:'redvkill',    bo:3, time:'2026-05-02T12:00Z' },
+    { id:21, a:'HOTMOMMY',   sa:0, b:'QuiltedVino', sb:2, stream:null,          bo:3, time:'2026-05-02T12:00Z', aSrc:'ub', bSrc:'ub' },
+    { id:24, a:'ZORDMON',    sa:2, b:'ЕдкийЕж',    sb:0, stream:'kelperx7',    bo:3, time:'2026-05-02T12:00Z', aSrc:'ub', bSrc:'ub' },
+    { id:25, a:'Warrkan',    sa:1, b:'Baljaga',     sb:2, stream:'link_up99',   bo:3, time:'2026-05-02T12:00Z', aSrc:'ub', bSrc:'ub' },
+    { id:31, a:'RedVKill',   sa:1, b:'yaLucky',     sb:2, stream:'redvkill',    bo:3, time:'2026-05-02T12:00Z', aSrc:'ub', bSrc:'ub' },
   ],
-  // R2 — 4 matches
+  // R2 — победители LBR1 vs проигравшие UB Раунда 2
   [
-    { id:35, a:'yaLucky',    sa:1, b:'Soldeek',     sb:2, stream:'its_soldeek', bo:3, time:'2026-05-02T13:00Z' },
-    { id:34, a:'Baljaga',    sa:0, b:'МужФейсяо',  sb:2, stream:null,          bo:3, time:'2026-05-02T13:00Z' },
-    { id:33, a:'ZORDMON',    sa:2, b:'AleXsoiD03',  sb:0, stream:null,          bo:3, time:'2026-05-02T13:00Z' },
-    { id:32, a:'WoodsFrank', sa:1, b:'QuiltedVino', sb:2, stream:'wispar1an',   bo:3, time:'2026-05-02T13:00Z' },
+    { id:35, a:'yaLucky',    sa:1, b:'Soldeek',     sb:2, stream:'its_soldeek', bo:3, time:'2026-05-02T13:00Z', aSrc:'lb', bSrc:'ub' },
+    { id:34, a:'Baljaga',    sa:0, b:'МужФейсяо',  sb:2, stream:null,          bo:3, time:'2026-05-02T13:00Z', aSrc:'lb', bSrc:'ub' },
+    { id:33, a:'ZORDMON',    sa:2, b:'AleXsoiD03',  sb:0, stream:null,          bo:3, time:'2026-05-02T13:00Z', aSrc:'lb', bSrc:'ub' },
+    { id:32, a:'WoodsFrank', sa:1, b:'QuiltedVino', sb:2, stream:'wispar1an',   bo:3, time:'2026-05-02T13:00Z', aSrc:'ub', bSrc:'lb' },
   ],
-  // R3 — 2 matches
+  // R3 — победители LBR2 (все из нижней)
   [
-    { id:37, a:'МужФейсяо', sa:1, b:'Soldeek',     sb:2, stream:'its_soldeek', bo:3, time:'2026-05-02T14:00Z' },
-    { id:36, a:'QuiltedVino',sa:2, b:'ZORDMON',     sb:1, stream:'bruddauganda',bo:3, time:'2026-05-02T14:00Z' },
+    { id:37, a:'МужФейсяо', sa:1, b:'Soldeek',     sb:2, stream:'its_soldeek', bo:3, time:'2026-05-02T14:00Z', aSrc:'lb', bSrc:'lb' },
+    { id:36, a:'QuiltedVino',sa:2, b:'ZORDMON',     sb:1, stream:'bruddauganda',bo:3, time:'2026-05-02T14:00Z', aSrc:'lb', bSrc:'lb' },
   ],
-  // R4 — 2 matches
+  // R4 — победители LBR3 vs проигравшие UB Полуфинала
   [
-    { id:39, a:'QuiltedVino',sa:2, b:'Wisparian',   sb:1, stream:'wispar1an',   bo:3, time:'2026-05-03T11:00Z' },
-    { id:40, a:'Soldeek',    sa:2, b:'zMize',       sb:1, stream:'its_soldeek', bo:3, time:'2026-05-03T11:00Z' },
+    { id:39, a:'QuiltedVino',sa:2, b:'Wisparian',   sb:1, stream:'wispar1an',   bo:3, time:'2026-05-03T11:00Z', aSrc:'lb', bSrc:'ub' },
+    { id:40, a:'Soldeek',    sa:2, b:'zMize',       sb:1, stream:'its_soldeek', bo:3, time:'2026-05-03T11:00Z', aSrc:'lb', bSrc:'ub' },
   ],
-  // R5 (LB SF) — 1 match
+  // R5 (LB SF) — победители LBR4
   [
-    { id:41, a:'QuiltedVino',sa:1, b:'Soldeek',     sb:2, stream:'gncow',       bo:3, time:'2026-05-03T12:00Z' },
+    { id:41, a:'QuiltedVino',sa:1, b:'Soldeek',     sb:2, stream:'gncow',       bo:3, time:'2026-05-03T12:00Z', aSrc:'lb', bSrc:'lb' },
   ],
-  // R6 (LB Final) — 1 match
+  // R6 (LB Final) — победитель LBR5 vs проигравший UB Финала
   [
-    { id:42, a:'Soldeek',    sa:0, b:'SirGay',      sb:2, stream:'gncow',       bo:3, time:'2026-05-03T13:00Z' },
+    { id:42, a:'Soldeek',    sa:0, b:'SirGay',      sb:2, stream:'gncow',       bo:3, time:'2026-05-03T13:00Z', aSrc:'lb', bSrc:'ub' },
   ],
 ];
 
@@ -583,11 +610,12 @@ function buildCard(m, type) {
   el.appendChild(meta);
 
   // team rows
-  [['a', stA, m.a], ['b', stB, m.b]].forEach(([side, state, name]) => {
+  [['a', stA, m.a, m.aSrc], ['b', stB, m.b, m.bSrc]].forEach(([side, state, name, src]) => {
     const row = document.createElement('div');
     row.className = `team-row ${state}`;
     row.dataset.team = name;
-    row.innerHTML = `<span class="team-name-text">${name || 'TBD'}</span><span class="score-cell">${fmt(m, side)}</span>`;
+    const badge = src === 'ub' ? `<span class="src-badge">↓ UB</span>` : '';
+    row.innerHTML = `${badge}<span class="team-name-text">${name || 'TBD'}</span><span class="score-cell">${fmt(m, side)}</span>`;
 
     // hover: highlight same team across all matches
     row.addEventListener('mouseenter', () => highlightTeam(name, true));
@@ -659,15 +687,15 @@ function renderBracket(rounds, wrapId, svgId, type) {
 
     // round label
     const lbl = document.createElement('div');
-    lbl.className = 'round-label';
+    lbl.className = `round-label ${type}-label`;
     const labels = ['Раунд 1','Раунд 2','Раунд 3','Раунд 4','Раунд 5','Раунд 6'];
     const special = {
-      ub: { 3: 'Полуфинал', 4: 'UB Финал' },
-      lb: { 5: 'LB Полуфинал', 6: 'LB Финал' },
+      ub: { 3: 'UB Полуфинал', 4: 'UB Финал' },
+      lb: { 2: 'LB Раунд 2 (+↓ UB2)', 4: 'LB Раунд 4 (+↓ UB СФ)', 5: 'LB Полуфинал', 6: 'LB Финал (+↓ UB)' },
       gf: { 1: 'Гранд-финал' },
     };
     const s = special[type] && special[type][ri + 1];
-    lbl.textContent = s || labels[ri] || `Раунд ${ri + 1}`;
+    lbl.textContent = s || `${type === 'lb' ? 'LB ' : type === 'ub' ? 'UB ' : ''}${labels[ri] || `Раунд ${ri + 1}`}`;
     col.appendChild(lbl);
 
     const matchesEl = document.createElement('div');
@@ -833,6 +861,45 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 });
 
 /* ═══════════════════════════════════════════
+   DRAG-TO-PAN
+═══════════════════════════════════════════ */
+function enableDragScroll(el) {
+  let down = false, startX, startY, scrollL, scrollT;
+  el.addEventListener('mousedown', e => {
+    // Don't drag when clicking on interactive elements
+    if (e.target.closest('a, button, .team-row')) return;
+    down = true;
+    el.classList.add('dragging');
+    startX = e.pageX - el.getBoundingClientRect().left;
+    startY = e.pageY - el.getBoundingClientRect().top;
+    scrollL = el.scrollLeft;
+    scrollT = el.scrollTop;
+  });
+  const stop = () => { down = false; el.classList.remove('dragging'); };
+  el.addEventListener('mouseleave', stop);
+  el.addEventListener('mouseup', stop);
+  el.addEventListener('mousemove', e => {
+    if (!down) return;
+    e.preventDefault();
+    const x = e.pageX - el.getBoundingClientRect().left;
+    const y = e.pageY - el.getBoundingClientRect().top;
+    el.scrollLeft = scrollL - (x - startX);
+    el.scrollTop  = scrollT - (y - startY);
+  });
+  // Touch support
+  let touchStart = null;
+  el.addEventListener('touchstart', e => {
+    touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY, sl: el.scrollLeft, st: el.scrollTop };
+  }, { passive: true });
+  el.addEventListener('touchmove', e => {
+    if (!touchStart) return;
+    el.scrollLeft = touchStart.sl - (e.touches[0].clientX - touchStart.x);
+    el.scrollTop  = touchStart.st - (e.touches[0].clientY - touchStart.y);
+  }, { passive: true });
+  el.addEventListener('touchend', () => { touchStart = null; });
+}
+
+/* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
 renderBracket(UB, 'ub-wrap', 'ub-svg', 'ub');
@@ -842,6 +909,9 @@ renderBracket(LB, 'lb-wrap-full', 'lb-svg-full', 'lb');
 renderGF('gf-wrap');
 renderGF('gf-wrap-full');
 renderSchedule();
+
+// Enable drag-to-pan on all bracket scroll areas
+document.querySelectorAll('.bracket-scroll').forEach(enableDragScroll);
 </script>
 </body>
 </html>
