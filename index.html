@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GNC — Турнирная сетка</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #070707;
+      --bg-2:        #0d0d0d;
+      --bg-card:     #0a0a0a;
+      --border:      #27272a;
+      --border-soft: #1c1c1f;
+      --text:        #f4f4f5;
+      --text-2:      #a1a1aa;
+      --text-3:      #52525b;
+      --accent:      #00bb7f;
+      --accent-glow: rgba(0,187,127,.18);
+
+      --ub-color:    #10b981;
+      --ub-bg:       rgba(5,46,22,.55);
+      --ub-border:   rgba(16,185,129,.75);
+
+      --lb-color:    #f59e0b;
+      --lb-bg:       rgba(41,17,0,.55);
+      --lb-border:   rgba(245,158,11,.75);
+
+      --gf-color:    #38bdf8;
+      --gf-bg:       rgba(3,22,41,.55);
+      --gf-border:   rgba(56,189,248,.75);
+
+      --win-bg:      rgba(5,46,22,.4);
+      --lose-bg:     transparent;
+      --win-text:    #d1fae5;
+      --lose-text:   #71717a;
+
+      --radius:      12px;
+      --radius-sm:   8px;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* dot grid background */
+    body {
+      background-image: radial-gradient(circle, rgba(255,255,255,.045) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    /* ambient glow */
+    .glow {
+      pointer-events: none;
+      position: fixed;
+      top: -35vw; right: -25vw;
+      width: 80vw; height: 80vw;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      z-index: 0;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      background: rgba(7,7,7,.85);
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .header-inner {
+      max-width: 1400px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px; height: 56px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--text);
+      font-weight: 800; font-size: 15px; letter-spacing: -.3px;
+    }
+    .logo img { height: 28px; width: auto; object-fit: contain; }
+    .logo-text { color: var(--text); }
+    .logo-text span { color: var(--accent); }
+    nav { display: flex; align-items: center; gap: 4px; }
+    nav a {
+      padding: 5px 12px; border-radius: 8px;
+      text-decoration: none; font-size: 13px; font-weight: 500;
+      color: var(--text-2); transition: color .15s, background .15s;
+    }
+    nav a:hover { color: var(--text); background: rgba(255,255,255,.05); }
+    nav a.active { color: var(--text); background: rgba(255,255,255,.07); }
+
+    /* ── PAGE ── */
+    main {
+      position: relative; z-index: 1;
+      max-width: 1400px; margin: 0 auto;
+      padding: 32px 20px 64px;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 16px; margin-bottom: 32px; flex-wrap: wrap;
+    }
+    .tournament-meta { display: flex; flex-direction: column; gap: 6px; }
+    .tournament-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 10px; border-radius: 999px;
+      background: rgba(0,187,127,.12); border: 1px solid rgba(0,187,127,.25);
+      color: #6ee7b7; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      width: fit-content;
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .tournament-name {
+      font-size: 26px; font-weight: 900; letter-spacing: -.6px;
+      color: var(--text);
+    }
+    .tournament-name span { color: var(--accent); }
+    .tournament-sub { font-size: 13px; color: var(--text-3); }
+
+    .meta-cards { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start; }
+    .meta-card {
+      padding: 10px 16px; border-radius: var(--radius-sm);
+      border: 1px solid var(--border); background: var(--bg-2);
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .meta-card-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-3); }
+    .meta-card-value { font-size: 15px; font-weight: 700; color: var(--text); }
+    .meta-card-value.green { color: #34d399; }
+
+    /* ── WINNER PODIUM ── */
+    .podium-section { margin-bottom: 32px; }
+    .podium-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .podium-card {
+      padding: 14px 20px; border-radius: var(--radius);
+      border: 1px solid var(--border); background: var(--bg-2);
+      display: flex; align-items: center; gap: 14px;
+      flex: 1; min-width: 220px; max-width: 340px;
+    }
+    .podium-card.first { border-color: rgba(250,204,21,.4); background: rgba(20,18,0,.6); }
+    .podium-card.second { border-color: rgba(148,163,184,.3); background: rgba(10,12,16,.6); }
+    .podium-card.third { border-color: rgba(180,83,9,.3); background: rgba(20,8,0,.6); }
+    .podium-place { font-size: 22px; min-width: 28px; }
+    .podium-info { display: flex; flex-direction: column; gap: 1px; }
+    .podium-place-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-3); }
+    .podium-team { font-size: 15px; font-weight: 800; color: var(--text); }
+
+    /* ── BRACKET SECTION ── */
+    .bracket-section { margin-bottom: 40px; }
+    .bracket-section-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px;
+    }
+    .bracket-section-label {
+      font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 6px;
+    }
+    .bracket-section-label.upper { color: var(--ub-color); background: var(--ub-bg); border: 1px solid rgba(16,185,129,.2); }
+    .bracket-section-label.lower { color: var(--lb-color); background: var(--lb-bg); border: 1px solid rgba(245,158,11,.2); }
+    .bracket-section-label.grand-final { color: var(--gf-color); background: var(--gf-bg); border: 1px solid rgba(56,189,248,.2); }
+    .bracket-section-divider { flex: 1; height: 1px; background: var(--border-soft); }
+
+    /* ── BRACKET GRID ── */
+    .bracket-scroll { overflow-x: auto; padding-bottom: 8px; }
+    .bracket-rounds {
+      display: flex; gap: 0; min-width: max-content;
+    }
+
+    /* ── ROUND COLUMN ── */
+    .round-col {
+      display: flex; flex-direction: column;
+      gap: 0; position: relative;
+    }
+    .round-header {
+      font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--text-3); text-align: center;
+      padding: 6px 16px 10px;
+      white-space: nowrap;
+    }
+    .round-matches { display: flex; flex-direction: column; gap: 0; flex: 1; }
+
+    /* ── MATCH WRAPPER (with connectors) ── */
+    .match-wrapper {
+      display: flex; align-items: center;
+      flex: 1;
+    }
+    .match-wrapper.with-connector { position: relative; }
+
+    .match-cell {
+      display: flex; align-items: center;
+      padding: 0 16px 0 0; position: relative;
+      width: 220px;
+    }
+    .match-cell:first-child { padding-left: 16px; }
+
+    /* connector lines */
+    .connector {
+      width: 24px; height: 100%; position: relative; flex-shrink: 0;
+    }
+    .connector::before,
+    .connector::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      width: 12px;
+      border-right: 1px solid var(--border);
+    }
+    .connector::before {
+      top: 50%; bottom: 0;
+      border-top: 1px solid var(--border);
+      transform: translateY(-100%);
+    }
+    .connector::after {
+      top: 0; bottom: 50%;
+      border-bottom: 1px solid var(--border);
+      transform: translateY(100%);
+    }
+    .connector-in {
+      width: 16px; height: 2px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    /* ── MATCH CARD ── */
+    .match-card {
+      width: 192px; border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      background: var(--bg-card);
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,.35);
+      transition: border-color .15s, box-shadow .15s;
+      cursor: default;
+    }
+    .match-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.5); }
+    .match-card.upper { border-color: var(--ub-border); }
+    .match-card.lower { border-color: var(--lb-border); }
+    .match-card.grand-final { border-color: var(--gf-border); }
+    .match-card.tbd { border-color: var(--border); opacity: .6; }
+
+    /* card top: match info */
+    .match-info {
+      padding: 4px 8px 3px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+    .match-id { font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); }
+    .match-bo { font-size: 9px; font-weight: 600; color: var(--text-3); }
+    .match-stream {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 9px; font-weight: 600; color: #9147ff;
+      text-decoration: none; transition: color .15s;
+    }
+    .match-stream:hover { color: #b280ff; }
+    .stream-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+    /* team rows */
+    .team-row {
+      display: grid; grid-template-columns: 2rem 1fr;
+      align-items: center;
+    }
+    .team-row + .team-row {
+      border-top: 1px solid rgba(255,255,255,.04);
+    }
+    .team-score {
+      height: 100%; min-height: 30px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Inter', monospace; font-size: 12px; font-weight: 900;
+      border-right: 1.5px solid rgba(255,255,255,.06);
+    }
+    .team-name {
+      padding: 0 8px;
+      font-size: 11.5px; font-weight: 600;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* winner / loser state */
+    .team-row.winner .team-score {
+      background: rgba(16,185,129,.15);
+      color: #6ee7b7;
+      border-right-color: rgba(16,185,129,.2);
+    }
+    .team-row.winner .team-name { color: var(--win-text); }
+    .team-row.loser .team-score { color: var(--text-3); }
+    .team-row.loser .team-name { color: var(--lose-text); }
+    .team-row.pending .team-score { color: var(--text-3); }
+    .team-row.pending .team-name { color: var(--text-3); font-style: italic; }
+
+    /* grand final card */
+    .match-card.grand-final .team-row.winner .team-score {
+      background: rgba(56,189,248,.15);
+      color: #7dd3fc;
+      border-right-color: rgba(56,189,248,.2);
+    }
+    .match-card.grand-final .team-row.winner .team-name { color: #e0f2fe; }
+
+    /* ── MATCH SCHEDULE TABLE ── */
+    .schedule-section { margin-top: 48px; }
+    .schedule-table-wrapper {
+      border-radius: var(--radius); border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      background: var(--bg-2);
+      padding: 10px 14px; text-align: left;
+      font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text-3); border-bottom: 1px solid var(--border);
+    }
+    tbody tr { border-bottom: 1px solid var(--border-soft); transition: background .1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,.02); }
+    tbody td {
+      padding: 9px 14px; font-size: 12.5px; color: var(--text-2);
+      vertical-align: middle;
+    }
+    .td-teams {
+      font-weight: 600; color: var(--text);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .td-teams .winner-name { color: #6ee7b7; }
+    .td-score {
+      font-family: 'Inter', monospace; font-weight: 700; font-size: 13px;
+      color: var(--text);
+    }
+    .td-bracket-badge {
+      display: inline-flex; padding: 2px 8px; border-radius: 5px;
+      font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .td-bracket-badge.upper { background: var(--ub-bg); color: var(--ub-color); }
+    .td-bracket-badge.lower { background: var(--lb-bg); color: var(--lb-color); }
+    .td-bracket-badge.grand-final { background: var(--gf-bg); color: var(--gf-color); }
+    .td-stream a {
+      color: #9147ff; text-decoration: none; font-size: 11px; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 4px; transition: color .15s;
+    }
+    .td-stream a:hover { color: #b280ff; }
+    .td-time { color: var(--text-3); white-space: nowrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border-soft);
+      padding: 24px 20px;
+      text-align: center;
+      font-size: 12px; color: var(--text-3);
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .page-header { flex-direction: column; }
+      .tournament-name { font-size: 20px; }
+      nav a span { display: none; }
+      .meta-cards { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow"></div>
+
+  <header>
+    <div class="header-inner">
+      <a class="logo" href="https://gncow.ru">
+        <img src="https://gncow.ru/uploads/ca6ddceb-4dca-403b-87f6-58e982a83936.png" alt="GNC" onerror="this.style.display='none'" />
+        <span class="logo-text">GNC<span>OW</span></span>
+      </a>
+      <nav>
+        <a href="https://gncow.ru/bracket" class="active"><span>Сетка</span></a>
+        <a href="https://gncow.ru/teams"><span>Команды</span></a>
+        <a href="https://gncow.ru/hall-of-fame"><span>Зал славы</span></a>
+        <a href="https://gncow.ru/rules"><span>Правила</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Page header -->
+    <div class="page-header">
+      <div class="tournament-meta">
+        <div class="tournament-badge">
+          <div class="badge-dot"></div>
+          Турнир завершён
+        </div>
+        <h1 class="tournament-name">GNC <span>SPRING</span> 2026</h1>
+        <p class="tournament-sub">2–3 мая 2026 · Double Elimination · Platinum+</p>
+      </div>
+      <div class="meta-cards">
+        <div class="meta-card">
+          <span class="meta-card-label">Призовой фонд</span>
+          <span class="meta-card-value green">250 $</span>
+        </div>
+        <div class="meta-card">
+          <span class="meta-card-label">Команд</span>
+          <span class="meta-card-value">16</span>
+        </div>
+        <div class="meta-card">
+          <span class="meta-card-label">Формат</span>
+          <span class="meta-card-value">Bo3 / Bo5</span>
+        </div>
+        <div class="meta-card">
+          <span class="meta-card-label">Стрим</span>
+          <span class="meta-card-value"><a href="https://twitch.tv/gncow" style="color:var(--accent);text-decoration:none;">twitch.tv/gncow</a></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Podium -->
+    <div class="podium-section">
+      <div class="podium-row">
+        <div class="podium-card first">
+          <span class="podium-place">🥇</span>
+          <div class="podium-info">
+            <span class="podium-place-label">Чемпион</span>
+            <span class="podium-team">SirGay</span>
+          </div>
+        </div>
+        <div class="podium-card second">
+          <span class="podium-place">🥈</span>
+          <div class="podium-info">
+            <span class="podium-place-label">2 место</span>
+            <span class="podium-team">Anuiel</span>
+          </div>
+        </div>
+        <div class="podium-card third">
+          <span class="podium-place">🥉</span>
+          <div class="podium-info">
+            <span class="podium-place-label">3 место</span>
+            <span class="podium-team">Soldeek</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ UPPER BRACKET ═══════════════ -->
+    <div class="bracket-section">
+      <div class="bracket-section-header">
+        <span class="bracket-section-label upper">Верхняя сетка</span>
+        <div class="bracket-section-divider"></div>
+      </div>
+      <div class="bracket-scroll">
+        <div class="bracket-rounds" id="upper-bracket"></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ LOWER BRACKET ═══════════════ -->
+    <div class="bracket-section">
+      <div class="bracket-section-header">
+        <span class="bracket-section-label lower">Нижняя сетка</span>
+        <div class="bracket-section-divider"></div>
+      </div>
+      <div class="bracket-scroll">
+        <div class="bracket-rounds" id="lower-bracket"></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ GRAND FINAL ═══════════════ -->
+    <div class="bracket-section">
+      <div class="bracket-section-header">
+        <span class="bracket-section-label grand-final">Гранд-финал</span>
+        <div class="bracket-section-divider"></div>
+      </div>
+      <div class="bracket-scroll">
+        <div class="bracket-rounds" id="grand-final-bracket"></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ SCHEDULE TABLE ═══════════════ -->
+    <div class="schedule-section">
+      <div class="bracket-section-header">
+        <span class="bracket-section-label upper" style="background:rgba(255,255,255,.04);color:var(--text-2);border-color:var(--border);">Все матчи</span>
+        <div class="bracket-section-divider"></div>
+      </div>
+      <div class="schedule-table-wrapper">
+        <table id="schedule-table">
+          <thead>
+            <tr>
+              <th>Время</th>
+              <th>Сетка</th>
+              <th>Матч</th>
+              <th>Счёт</th>
+              <th>Формат</th>
+              <th>Стрим</th>
+            </tr>
+          </thead>
+          <tbody id="schedule-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      GNC Overwatch Tournament · <a href="https://gncow.ru">gncow.ru</a> ·
+      <a href="https://discord.gg/gnc">Discord</a> ·
+      <a href="https://twitch.tv/gncow">Twitch</a>
+    </p>
+  </footer>
+
+  <script>
+  /* ═══ DATA ═══ */
+  const BRACKET = {
+    upper: [
+      // Round 1 (UB R1)
+      { round: 1, roundLabel: 'UB Раунд 1', id: 1,  teamA: 'SirGay',       winsA: 2, teamB: 'HOTMOMMY',    winsB: 0, stream: 'https://twitch.tv/gncow',         bo: 3, time: '2026-05-02T11:00:00Z' },
+      { round: 1, roundLabel: 'UB Раунд 1', id: 4,  teamA: 'Soldeek',      winsA: 2, teamB: 'QuiltedVino', winsB: 0, stream: 'https://twitch.tv/its_soldeek',    bo: 3, time: '2026-05-02T11:00:00Z' },
+      { round: 1, roundLabel: 'UB Раунд 1', id: 9,  teamA: 'МужФейсяо',    winsA: 2, teamB: 'ZORDMON',     winsB: 1, stream: null,                               bo: 3, time: '2026-05-02T11:00:00Z' },
+      { round: 1, roundLabel: 'UB Раунд 1', id: 10, teamA: 'ЕдкийЕж',      winsA: 0, teamB: 'Wisparian',   winsB: 2, stream: 'https://twitch.tv/wispar1an',      bo: 3, time: '2026-05-02T11:00:00Z' },
+      { round: 1, roundLabel: 'UB Раунд 1', id: 11, teamA: 'Anuiel',        winsA: 2, teamB: 'Warrkan',     winsB: 0, stream: 'https://twitch.tv/tsezoya',        bo: 3, time: '2026-05-02T11:05:00Z' },
+      { round: 1, roundLabel: 'UB Раунд 1', id: 14, teamA: 'AleXsoiD03',   winsA: 2, teamB: 'Baljaga',     winsB: 0, stream: 'https://twitch.tv/igravkotoroy',   bo: 3, time: '2026-05-02T11:00:00Z' },
+      { round: 1, roundLabel: 'UB Раунд 1', id: 17, teamA: 'WoodsFrank',   winsA: 2, teamB: 'RedVKill',    winsB: 0, stream: 'https://twitch.tv/redvkill',       bo: 3, time: '2026-05-02T11:00:00Z' },
+      { round: 1, roundLabel: 'UB Раунд 1', id: 23, teamA: 'zMize',        winsA: 2, teamB: 'yaLucky',     winsB: 0, stream: null,                               bo: 3, time: '2026-05-02T11:00:00Z' },
+      // Round 2 (UB R2)
+      { round: 2, roundLabel: 'UB Раунд 2', id: 13, teamA: 'SirGay',       winsA: 2, teamB: 'Soldeek',     winsB: 0, stream: 'https://twitch.tv/its_soldeek',    bo: 3, time: '2026-05-02T12:00:00Z' },
+      { round: 2, roundLabel: 'UB Раунд 2', id: 15, teamA: 'МужФейсяо',    winsA: 0, teamB: 'Wisparian',   winsB: 2, stream: 'https://twitch.tv/wispar1an',      bo: 3, time: '2026-05-02T12:00:00Z' },
+      { round: 2, roundLabel: 'UB Раунд 2', id: 18, teamA: 'Anuiel',        winsA: 2, teamB: 'AleXsoiD03', winsB: 0, stream: 'https://twitch.tv/igravkotoroy',   bo: 3, time: '2026-05-02T12:00:00Z' },
+      { round: 2, roundLabel: 'UB Раунд 2', id: 26, teamA: 'WoodsFrank',   winsA: 0, teamB: 'zMize',       winsB: 2, stream: null,                               bo: 3, time: '2026-05-02T12:00:00Z' },
+      // Round 3 (UB SF)
+      { round: 3, roundLabel: 'UB Полуфинал', id: 27, teamA: 'SirGay',     winsA: 2, teamB: 'Wisparian',   winsB: 1, stream: 'https://twitch.tv/wispar1an',      bo: 3, time: '2026-05-02T13:00:00Z' },
+      { round: 3, roundLabel: 'UB Полуфинал', id: 28, teamA: 'Anuiel',      winsA: 2, teamB: 'zMize',       winsB: 0, stream: null,                               bo: 3, time: '2026-05-02T13:00:00Z' },
+      // Upper Final
+      { round: 4, roundLabel: 'UB Финал',   id: 38, teamA: 'SirGay',       winsA: 0, teamB: 'Anuiel',      winsB: 2, stream: null,                               bo: 3, time: '2026-05-03T12:00:00Z' },
+    ],
+    lower: [
+      // LB R1
+      { round: 1, roundLabel: 'LB Раунд 1', id: 21, teamA: 'HOTMOMMY',    winsA: 0, teamB: 'QuiltedVino', winsB: 2, stream: null,                               bo: 3, time: '2026-05-02T12:00:00Z' },
+      { round: 1, roundLabel: 'LB Раунд 1', id: 24, teamA: 'ZORDMON',     winsA: 2, teamB: 'ЕдкийЕж',    winsB: 0, stream: 'https://twitch.tv/kelperx7',       bo: 3, time: '2026-05-02T12:00:00Z' },
+      { round: 1, roundLabel: 'LB Раунд 1', id: 25, teamA: 'Warrkan',     winsA: 1, teamB: 'Baljaga',     winsB: 2, stream: 'https://twitch.tv/link_up99',      bo: 3, time: '2026-05-02T12:00:00Z' },
+      { round: 1, roundLabel: 'LB Раунд 1', id: 31, teamA: 'RedVKill',    winsA: 1, teamB: 'yaLucky',     winsB: 2, stream: 'https://twitch.tv/redvkill',       bo: 3, time: '2026-05-02T12:00:00Z' },
+      // LB R2
+      { round: 2, roundLabel: 'LB Раунд 2', id: 35, teamA: 'yaLucky',     winsA: 1, teamB: 'Soldeek',     winsB: 2, stream: 'https://twitch.tv/its_soldeek',    bo: 3, time: '2026-05-02T13:00:00Z' },
+      { round: 2, roundLabel: 'LB Раунд 2', id: 34, teamA: 'Baljaga',     winsA: 0, teamB: 'МужФейсяо',  winsB: 2, stream: null,                               bo: 3, time: '2026-05-02T13:00:00Z' },
+      { round: 2, roundLabel: 'LB Раунд 2', id: 33, teamA: 'ZORDMON',     winsA: 2, teamB: 'AleXsoiD03', winsB: 0, stream: null,                               bo: 3, time: '2026-05-02T13:00:00Z' },
+      { round: 2, roundLabel: 'LB Раунд 2', id: 32, teamA: 'WoodsFrank',  winsA: 1, teamB: 'QuiltedVino', winsB: 2, stream: 'https://twitch.tv/wispar1an',      bo: 3, time: '2026-05-02T13:00:00Z' },
+      // LB R3
+      { round: 3, roundLabel: 'LB Раунд 3', id: 37, teamA: 'МужФейсяо',  winsA: 1, teamB: 'Soldeek',     winsB: 2, stream: 'https://twitch.tv/its_soldeek',    bo: 3, time: '2026-05-02T14:00:00Z' },
+      { round: 3, roundLabel: 'LB Раунд 3', id: 36, teamA: 'QuiltedVino', winsA: 2, teamB: 'ZORDMON',     winsB: 1, stream: 'https://twitch.tv/bruddauganda',   bo: 3, time: '2026-05-02T14:00:00Z' },
+      // LB R4
+      { round: 4, roundLabel: 'LB Раунд 4', id: 39, teamA: 'QuiltedVino', winsA: 2, teamB: 'Wisparian',   winsB: 1, stream: 'https://twitch.tv/wispar1an',      bo: 3, time: '2026-05-03T11:00:00Z' },
+      { round: 4, roundLabel: 'LB Раунд 4', id: 40, teamA: 'Soldeek',     winsA: 2, teamB: 'zMize',       winsB: 1, stream: 'https://twitch.tv/its_soldeek',    bo: 3, time: '2026-05-03T11:00:00Z' },
+      // LB SF
+      { round: 5, roundLabel: 'LB Полуфинал', id: 41, teamA: 'QuiltedVino', winsA: 1, teamB: 'Soldeek',   winsB: 2, stream: 'https://twitch.tv/gncow',          bo: 3, time: '2026-05-03T12:00:00Z' },
+      // LB Final
+      { round: 6, roundLabel: 'LB Финал',   id: 42, teamA: 'Soldeek',     winsA: 0, teamB: 'SirGay',      winsB: 2, stream: 'https://twitch.tv/gncow',          bo: 3, time: '2026-05-03T13:00:00Z' },
+    ],
+    grand_final: [
+      { round: 1, roundLabel: 'Гранд-финал', id: 43, teamA: 'Anuiel',     winsA: 2, teamB: 'SirGay',      winsB: 3, stream: 'https://twitch.tv/backaster_ow',   bo: 5, time: '2026-05-03T14:00:00Z' },
+    ],
+  };
+
+  /* ═══ BRACKET RENDERER ═══ */
+  function getWinner(m) {
+    if (m.winsA > m.winsB) return 'A';
+    if (m.winsB > m.winsA) return 'B';
+    return null;
+  }
+
+  function matchCard(m, type) {
+    const w = getWinner(m);
+    const stateA = w === 'A' ? 'winner' : w === 'B' ? 'loser' : 'pending';
+    const stateB = w === 'B' ? 'winner' : w === 'A' ? 'loser' : 'pending';
+    const streamLabel = m.stream ? m.stream.replace('https://twitch.tv/', '') : null;
+    return `
+      <div class="match-card ${type}">
+        <div class="match-info">
+          <span class="match-id">#${m.id}</span>
+          <span class="match-bo">Bo${m.bo}</span>
+          ${streamLabel ? `<a class="match-stream" href="${m.stream}" target="_blank" rel="noopener"><span class="stream-dot"></span>${streamLabel}</a>` : '<span></span>'}
+        </div>
+        <div class="team-row ${stateA}">
+          <span class="team-score">${w ? m.winsA : '·'}</span>
+          <span class="team-name">${m.teamA}</span>
+        </div>
+        <div class="team-row ${stateB}">
+          <span class="team-score">${w ? m.winsB : '·'}</span>
+          <span class="team-name">${m.teamB}</span>
+        </div>
+      </div>`;
+  }
+
+  function renderBracket(matches, containerId, type) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const rounds = {};
+    const labels = {};
+    for (const m of matches) {
+      if (!rounds[m.round]) { rounds[m.round] = []; labels[m.round] = m.roundLabel; }
+      rounds[m.round].push(m);
+    }
+
+    const roundNums = Object.keys(rounds).map(Number).sort((a,b) => a-b);
+    const totalRounds = roundNums.length;
+
+    for (const r of roundNums) {
+      const col = document.createElement('div');
+      col.className = 'round-col';
+
+      const header = document.createElement('div');
+      header.className = 'round-header';
+      header.textContent = labels[r];
+      col.appendChild(header);
+
+      const matchesInRound = rounds[r];
+      const matchesContainer = document.createElement('div');
+      matchesContainer.className = 'round-matches';
+
+      const isLast = r === roundNums[roundNums.length - 1];
+      const isFirst = r === roundNums[0];
+
+      for (let i = 0; i < matchesInRound.length; i++) {
+        const m = matchesInRound[i];
+        const wrapper = document.createElement('div');
+        wrapper.className = 'match-wrapper';
+        wrapper.style.flex = '1';
+        wrapper.style.minHeight = `${80 + (totalRounds - r) * 4}px`;
+        wrapper.style.display = 'flex';
+        wrapper.style.alignItems = 'center';
+
+        // connector line from previous round
+        if (!isFirst) {
+          const connIn = document.createElement('div');
+          connIn.className = 'connector-in';
+          wrapper.appendChild(connIn);
+        } else {
+          wrapper.style.paddingLeft = '16px';
+        }
+
+        wrapper.innerHTML += matchCard(m, type);
+
+        // connector to next round
+        if (!isLast) {
+          const connDiv = document.createElement('div');
+          connDiv.className = 'connector';
+          const totalMatches = matchesInRound.length;
+          const nextMatches = rounds[roundNums[roundNums.indexOf(r)+1]]?.length || 1;
+          connDiv.style.height = `${(totalMatches / nextMatches) * 80}px`;
+          wrapper.appendChild(connDiv);
+        } else {
+          wrapper.style.paddingRight = '16px';
+        }
+
+        matchesContainer.appendChild(wrapper);
+      }
+
+      col.appendChild(matchesContainer);
+      container.appendChild(col);
+    }
+  }
+
+  /* ═══ SCHEDULE TABLE ═══ */
+  function renderSchedule() {
+    const tbody = document.getElementById('schedule-body');
+    const all = [
+      ...BRACKET.upper.map(m => ({ ...m, type: 'upper', typeLabel: 'UB' })),
+      ...BRACKET.lower.map(m => ({ ...m, type: 'lower', typeLabel: 'LB' })),
+      ...BRACKET.grand_final.map(m => ({ ...m, type: 'grand-final', typeLabel: 'GF' })),
+    ].sort((a,b) => new Date(a.time) - new Date(b.time));
+
+    for (const m of all) {
+      const w = getWinner(m);
+      const winner = w === 'A' ? m.teamA : w === 'B' ? m.teamB : null;
+      const loser  = w === 'A' ? m.teamB : w === 'B' ? m.teamA : null;
+      const dt = new Date(m.time);
+      const timeStr = dt.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Moscow' }) + ' МСК';
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="td-time">${timeStr}</td>
+        <td><span class="td-bracket-badge ${m.type}">${m.typeLabel}</span></td>
+        <td>
+          <div class="td-teams">
+            <span class="${winner === m.teamA ? 'winner-name' : ''}">${m.teamA}</span>
+            <span style="color:var(--text-3);font-weight:400">vs</span>
+            <span class="${winner === m.teamB ? 'winner-name' : ''}">${m.teamB}</span>
+          </div>
+        </td>
+        <td class="td-score">${w ? `${m.winsA} : ${m.winsB}` : '—'}</td>
+        <td style="color:var(--text-3)">Bo${m.bo}</td>
+        <td class="td-stream">${m.stream ? `<a href="${m.stream}" target="_blank" rel="noopener">▶ ${m.stream.replace('https://twitch.tv/', '')}</a>` : '<span style="color:var(--text-3)">—</span>'}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+  }
+
+  /* ═══ INIT ═══ */
+  renderBracket(BRACKET.upper, 'upper-bracket', 'upper');
+  renderBracket(BRACKET.lower, 'lower-bracket', 'lower');
+  renderBracket(BRACKET.grand_final, 'grand-final-bracket', 'grand-final');
+  renderSchedule();
+  </script>
+</body>
+</html>
