@@ -39,8 +39,8 @@
       --lose-text:#282848;
 
       --row-h:    28px;
-      --card-w:   190px;
-      --col-gap:  48px;
+      --card-w:   224px;
+      --col-gap:  52px;
     }
 
     html, body {
@@ -95,12 +95,13 @@
     /* — Logo — */
     .logo {
       display: flex; align-items: center;
-      padding: 0 24px;
+      padding: 0 20px;
       text-decoration: none; flex-shrink: 0;
       border-right: 1px solid rgba(255,255,255,.07);
+      min-width: 72px;
     }
     .logo img {
-      height: 28px; width: auto; max-width: 44px;
+      height: 42px; width: auto;
       object-fit: contain; display: block;
     }
 
@@ -567,23 +568,27 @@
     /* ── Footer: time + stream ── */
     .lbf-footer {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 4px 9px;
+      padding: 4px 9px; gap: 6px;
       border-top: 1px solid var(--border-2);
       background: rgba(0,0,0,.18);
+      overflow: hidden; /* prevent wrapping */
     }
     .lbf-time {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; font-weight: 600;
+      font-size: 10.5px; font-weight: 600;
       color: #9090c8; letter-spacing: .02em;
+      white-space: nowrap; flex-shrink: 0;
     }
     .lbf-stream {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 9px; font-weight: 600; color: #9147ff;
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 9.5px; font-weight: 600; color: #9147ff;
       text-decoration: none; transition: color .12s;
       font-family: 'Space Grotesk', sans-serif;
+      white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis; flex-shrink: 1; min-width: 0;
     }
     .lbf-stream:hover { color: #bf94ff; }
-    .lbf-stream-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+    .lbf-stream-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
 
     /* GF → sky blue */
     .lbf-card.gf-type { border-color: rgba(42,180,240,.45); box-shadow: 0 0 20px rgba(42,180,240,.08); }
@@ -898,7 +903,7 @@
       <div class="hero-name-block">
         <div style="display:flex;align-items:center;gap:16px;">
           <img src="https://gncow.ru/uploads/ca6ddceb-4dca-403b-87f6-58e982a83936.png"
-               alt="GNC" style="height:52px;width:auto;object-fit:contain;flex-shrink:0;"
+               alt="GNC" style="height:72px;width:auto;object-fit:contain;flex-shrink:0;display:block;"
                onerror="this.style.display='none'" />
           <h1 class="tournament-name">GNC: ВЕСЕННИЙ СЕЗОН</h1>
         </div>
@@ -1617,7 +1622,7 @@ function enableDragScroll(el) {
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
-const CARD_OPTS = { slot: 86, cardW: 190 };  // slot = card height (2×28px rows + footer + border ≈ 84px)
+const CARD_OPTS = { slot: 86, cardW: 224 };  // wider card so time+stream fit on one line → footer=24px, total≈82px
 renderBracket(UB, 'ub-wrap',      'ub-svg',      'ub', CARD_OPTS);
 renderBracket(LB, 'lb-wrap',      'lb-svg',      'lb', CARD_OPTS);
 renderBracket(UB, 'ub-wrap-full', 'ub-svg-full', 'ub', CARD_OPTS);
