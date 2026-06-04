@@ -398,6 +398,13 @@
     .t-stream a:hover { color: #bf94ff; }
     .t-time { color: var(--text-3); font-size: 11px; white-space: nowrap; }
 
+    /* ── HIDE NATIVE SCROLLBARS ── */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3a3a40; }
+    * { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+
     /* ── FOOTER ── */
     footer { position: relative; z-index: 1; border-top: 1px solid var(--border-2); padding: 20px; text-align: center; font-size: 11.5px; color: var(--text-3); }
     footer a { color: var(--accent); text-decoration: none; }
@@ -820,7 +827,11 @@ function renderBracket(rounds, wrapId, svgId, type, opts = {}) {
   let xCursor = 0;
 
   rounds.forEach((matches, ri) => {
-    const slotH = SLOT * Math.pow(2, ri); // slot height doubles each round
+    // LB: rounds pair up (4,4,2,2,1,1) so slot doubles every 2 rounds
+    // UB: rounds halve every round (8,4,2,1) so slot doubles every round
+    const slotH = type === 'lb'
+      ? SLOT * Math.pow(2, Math.floor(ri / 2))
+      : SLOT * Math.pow(2, ri);
     const colH  = r1count * SLOT;         // total column height stays constant
     const col   = document.createElement('div');
     col.className = 'round-col';
@@ -905,11 +916,29 @@ function drawConnectors(svg, colPositions, type, COL_W) {
   for (let ri = 0; ri < colPositions.length - 1; ri++) {
     const cur  = colPositions[ri];
     const next = colPositions[ri + 1];
-
-    // Each pair of matches in cur connects to one match in next
     const curMatches  = cur.matchEls;
     const nextMatches = next.matchEls;
 
+    const x0   = cur.x + COL_W;
+    const x1   = next.x;
+    const xMid = x0 + COL_GAP / 2;
+
+    if (curMatches.length === nextMatches.length) {
+      // ── STRAIGHT 1:1 connectors (LB R1→R2, R3→R4, R5→R6) ──
+      for (let ni = 0; ni < nextMatches.length; ni++) {
+        const from = curMatches[ni];
+        const to   = nextMatches[ni];
+        if (!from || !to) continue;
+        const y0 = LABEL_H + from.slotTop + from.slotH / 2;
+        const y1 = LABEL_H + to.slotTop   + to.slotH   / 2;
+        const p  = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        p.setAttribute('class', cls);
+        // horizontal → vertical (if needed) → horizontal
+        p.setAttribute('d', `M${x0} ${y0} H${xMid} V${y1} H${x1}`);
+        svg.appendChild(p);
+      }
+    } else {
+      // ── BRACKET 2→1 connectors (UB all, LB R2→R3, R4→R5) ──
     for (let ni = 0; ni < nextMatches.length; ni++) {
       const topMatch    = curMatches[ni * 2];
       const bottomMatch = curMatches[ni * 2 + 1];
@@ -917,20 +946,9 @@ function drawConnectors(svg, colPositions, type, COL_W) {
 
       if (!topMatch || !bottomMatch || !parentMatch) continue;
 
-      // x-coordinates
-      const x0 = cur.x + COL_W;          // right edge of current col
-      const x1 = next.x;                  // left edge of next col
-      const xMid = x0 + COL_GAP / 2;     // midpoint
-
-      // y-coordinates: center of each match slot
       const yTop    = LABEL_H + topMatch.slotTop    + topMatch.slotH    / 2;
       const yBottom = LABEL_H + bottomMatch.slotTop + bottomMatch.slotH / 2;
-      const yParent = LABEL_H + parentMatch.slotTop + parentMatch.slotH / 2;
-
-      // Top match: horizontal right, then vertical to midY, end at xMid
-      // Bottom match: horizontal right, then vertical to midY, end at xMid
-      // From xMid, horizontal to parent
-      const yMid = (yTop + yBottom) / 2;
+      const yMid    = (yTop + yBottom) / 2;
 
       const p1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       p1.setAttribute('class', cls);
@@ -947,6 +965,7 @@ function drawConnectors(svg, colPositions, type, COL_W) {
       p3.setAttribute('d', `M${xMid} ${yMid} H${x1}`);
       svg.appendChild(p3);
     }
+    } // end else bracket connectors
   }
 }
 
