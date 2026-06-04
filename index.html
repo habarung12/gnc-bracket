@@ -89,19 +89,25 @@
     .header-inner {
       max-width: 1540px; margin: 0 auto;
       display: flex; align-items: stretch; justify-content: space-between;
-      padding: 0; height: 60px; gap: 0;
+      padding: 0; height: 64px; gap: 0;
     }
 
     /* — Logo — */
     .logo {
       display: flex; align-items: center;
-      padding: 0 20px;
+      padding: 0 18px;
       text-decoration: none; flex-shrink: 0;
       border-right: 1px solid rgba(255,255,255,.07);
-      min-width: 72px;
+    }
+    /* wrapper gives breathing room so emblem doesn't press against edges */
+    .logo-img-wrap {
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 3px;               /* 3px visual buffer on all sides */
+      box-sizing: border-box;
     }
     .logo img {
-      height: 42px; width: auto;
+      width: 100%; height: 100%;
       object-fit: contain; display: block;
     }
 
@@ -843,7 +849,9 @@
 
     <!-- Logo -->
     <a class="logo" href="https://gncow.ru">
-      <img src="https://gncow.ru/uploads/ca6ddceb-4dca-403b-87f6-58e982a83936.png" alt="GNC" onerror="this.style.display='none'" />
+      <div class="logo-img-wrap">
+        <img src="https://gncow.ru/uploads/ca6ddceb-4dca-403b-87f6-58e982a83936.png" alt="GNC" onerror="this.parentElement.style.display='none'" />
+      </div>
     </a>
 
     <!-- Nav -->
@@ -902,9 +910,11 @@
     <div class="hero-top">
       <div class="hero-name-block">
         <div style="display:flex;align-items:center;gap:16px;">
-          <img src="https://gncow.ru/uploads/ca6ddceb-4dca-403b-87f6-58e982a83936.png"
-               alt="GNC" style="height:72px;width:auto;object-fit:contain;flex-shrink:0;display:block;"
-               onerror="this.style.display='none'" />
+          <div style="width:64px;height:64px;padding:4px;box-sizing:border-box;flex-shrink:0;">
+            <img src="https://gncow.ru/uploads/ca6ddceb-4dca-403b-87f6-58e982a83936.png"
+                 alt="GNC" style="width:100%;height:100%;object-fit:contain;display:block;"
+                 onerror="this.parentElement.style.display='none'" />
+          </div>
           <h1 class="tournament-name">GNC: ВЕСЕННИЙ СЕЗОН</h1>
         </div>
         <div class="tournament-badge"><div class="badge-dot"></div> ЗАВЕРШЁН</div>
