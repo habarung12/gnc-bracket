@@ -11,14 +11,14 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #05050e;
-      --bg-2:     #0a0a18;
-      --bg-card:  #09091a;
-      --border:   rgba(255,255,255,.07);
-      --border-2: rgba(255,255,255,.04);
-      --text:     #dde0f5;
-      --text-2:   #6868a0;
-      --text-3:   #333360;
+      --bg:       #07070a;   /* near-black, slight warm tint */
+      --bg-2:     #0e0e14;
+      --bg-card:  #0b0b10;
+      --border:   rgba(255,255,255,.09);
+      --border-2: rgba(255,255,255,.05);
+      --text:     #e8e8f0;
+      --text-2:   #7878a8;
+      --text-3:   #404060;
       --accent:   #4a8fff;
       --accent-d: #2a6fe0;
 
@@ -30,9 +30,9 @@
       --lb-dim:   rgba(232,151,10,.1);
       --lb-line:  rgba(232,151,10,.45);
 
-      --gf:       #2ab4f0;
-      --gf-dim:   rgba(42,180,240,.1);
-      --gf-line:  rgba(42,180,240,.45);
+      --gf:       #9b6dff;
+      --gf-dim:   rgba(155,109,255,.1);
+      --gf-line:  rgba(155,109,255,.45);
 
       --win-bg:   rgba(74,143,255,.07);
       --win-text: #b8d4ff;
@@ -82,8 +82,9 @@
     ══════════════════════════════════ */
     header {
       position: sticky; top: 0; z-index: 50;
-      background: #04041c;
-      border-bottom: 1px solid rgba(74,143,255,.15);
+      background: #000;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 1px 0 rgba(74,143,255,.08);
     }
     .header-inner {
       max-width: 1540px; margin: 0 auto;
@@ -99,7 +100,7 @@
       border-right: 1px solid rgba(255,255,255,.07);
     }
     .logo img {
-      height: 30px; width: auto;
+      height: 28px; width: auto; max-width: 44px;
       object-fit: contain; display: block;
     }
 
@@ -157,15 +158,15 @@
     .nav-cta {
       display: flex; align-items: center;
       padding: 0 24px;
-      background: #c8ff00; color: #000;
+      background: #2563eb; color: #fff;
       font-family: 'Space Grotesk', sans-serif;
       font-size: 10.5px; font-weight: 700;
       letter-spacing: .13em; text-transform: uppercase;
       text-decoration: none; white-space: nowrap;
-      transition: background .15s, color .15s;
+      transition: background .15s;
       border: none; cursor: pointer;
     }
-    .nav-cta:hover { background: #dfff4f; }
+    .nav-cta:hover { background: #3b82f6; }
 
     /* ══════════════════════════════════
        MAIN
@@ -725,34 +726,46 @@
     }
     table { width: 100%; border-collapse: collapse; }
     thead th {
-      background: rgba(255,255,255,.02); padding: 10px 14px; text-align: left;
+      background: rgba(255,255,255,.03); padding: 11px 14px; text-align: left;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 8.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
-      color: var(--text-3); border-bottom: 1px solid var(--border);
+      font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--text-2); border-bottom: 1px solid var(--border);
     }
     tbody tr { border-bottom: 1px solid var(--border-2); transition: background .1s; }
     tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: rgba(255,255,255,.015); }
-    tbody td { padding: 8px 14px; font-size: 12px; color: var(--text-2); vertical-align: middle; }
-    .t-teams { font-weight: 600; color: var(--text); }
-    .t-win { color: var(--ub); }
+    tbody tr:hover { background: rgba(255,255,255,.025); }
+    tbody td { padding: 9px 14px; font-size: 13px; color: var(--text-2); vertical-align: middle; }
+
+    /* Team names — clickable */
+    .t-team-link {
+      cursor: pointer; font-weight: 600;
+      transition: color .12s;
+    }
+    .t-team-link:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+    /* Winners = green, Losers = dimmer */
+    .t-team-win { color: #4ade80; font-weight: 700; }
+    .t-team-win:hover { color: #86efac; }
+    .t-team-lose { color: var(--text-3); font-weight: 500; }
+    .t-team-lose:hover { color: var(--text-2); }
+
     .t-score {
       font-family: 'JetBrains Mono', monospace;
-      font-weight: 700; color: var(--text); font-size: 12px;
+      font-weight: 800; color: var(--text); font-size: 13px;
     }
     .t-badge {
-      display: inline-flex; padding: 2px 8px; border-radius: 2px;
+      display: inline-flex; padding: 2px 9px; border-radius: 3px;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 8.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      font-size: 9.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
     }
     .t-badge.ub { background: var(--ub-dim); color: var(--ub); }
     .t-badge.lb { background: var(--lb-dim); color: var(--lb); }
     .t-badge.gf { background: var(--gf-dim); color: var(--gf); }
-    .t-stream a { color: #9147ff; text-decoration: none; font-size: 11px; font-weight: 500; }
-    .t-stream a:hover { color: #bf94ff; }
+    .t-stream a { color: #a78bfa; text-decoration: none; font-size: 12px; font-weight: 600; }
+    .t-stream a:hover { color: #c4b5fd; }
     .t-time {
       font-family: 'JetBrains Mono', monospace;
-      color: var(--text-3); font-size: 11px; white-space: nowrap;
+      color: var(--text-2); font-size: 12px; font-weight: 600; white-space: nowrap;
     }
 
     /* ══════════════════════════════════
@@ -883,20 +896,25 @@
   <div class="page-hero">
     <div class="hero-top">
       <div class="hero-name-block">
-        <h1 class="tournament-name">GNCSPRING2026</h1>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <img src="https://gncow.ru/uploads/ca6ddceb-4dca-403b-87f6-58e982a83936.png"
+               alt="GNC" style="height:52px;width:auto;object-fit:contain;flex-shrink:0;"
+               onerror="this.style.display='none'" />
+          <h1 class="tournament-name">GNC: ВЕСЕННИЙ СЕЗОН</h1>
+        </div>
         <div class="tournament-badge"><div class="badge-dot"></div> ЗАВЕРШЁН</div>
       </div>
     </div>
     <div class="hero-divider"></div>
     <div class="hero-meta-line">
       <div class="hero-sub">
-        <span>Overwatch 2</span>
+        <span>Overwatch</span>
         <div class="hero-sub-dot"></div>
         <span>Double Elimination</span>
         <div class="hero-sub-dot"></div>
         <span>Platinum+</span>
       </div>
-      <div class="hero-date">2 – 3 МАЯ 2026</div>
+      <div class="hero-date" style="font-size:16px;font-weight:700;color:var(--text);">2 – 3 МАЯ 2026</div>
     </div>
     <div style="margin-top: 20px;">
       <div class="meta-pills">
@@ -1503,20 +1521,44 @@ function renderSchedule() {
     ...GF.map(m => ({ ...m, type: 'gf' })),
   ].sort((a, b) => new Date(a.time) - new Date(b.time));
 
-  const labels = { ub: 'UB', lb: 'LB', gf: 'GF' };
+  // Russian labels for bracket type
+  const labels = { ub: 'Верхняя', lb: 'Нижняя', gf: 'Гранд-финал' };
+
+  // Format time with МСК
+  function fmtTimeMsk(iso) {
+    const dt = new Date(iso);
+    const d = dt.toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', timeZone:'Europe/Moscow' });
+    const t = dt.toLocaleString('ru-RU', { hour:'2-digit', minute:'2-digit', timeZone:'Europe/Moscow' });
+    return `${d}, ${t}`;
+  }
 
   all.forEach(m => {
-    const w = winner(m);
+    const w  = winner(m);
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td class="t-time">${fmtTime(m.time)}</td>
+      <td class="t-time">${fmtTimeMsk(m.time)} МСК</td>
       <td><span class="t-badge ${m.type}">${labels[m.type]}</span></td>
-      <td class="t-teams"><span class="${w === 'a' ? 't-win' : ''}">${m.a}</span></td>
+      <td class="t-teams"></td>
       <td class="t-score">${w ? `${m.sa} : ${m.sb}` : '—'}</td>
-      <td class="t-teams"><span class="${w === 'b' ? 't-win' : ''}">${m.b}</span></td>
-      <td style="color:var(--text-3)">Bo${m.bo}</td>
+      <td class="t-teams"></td>
+      <td style="color:var(--text-2);font-size:12px;">Bo${m.bo}</td>
       <td class="t-stream">${m.stream ? `<a href="https://twitch.tv/${m.stream}" target="_blank" rel="noopener">▶ ${m.stream}</a>` : '<span style="color:var(--text-3)">—</span>'}</td>
     `;
+
+    // Add clickable team names with win/lose styling
+    ['a', 'b'].forEach((side, idx) => {
+      const name   = side === 'a' ? m.a : m.b;
+      const isWin  = w === side;
+      const isLose = w && w !== side;
+      const td = tr.querySelectorAll('.t-teams')[idx];
+      const span = document.createElement('span');
+      span.textContent = name || 'TBD';
+      span.className = `t-team-link ${isWin ? 't-team-win' : isLose ? 't-team-lose' : ''}`;
+      if (name && ROSTERS[name]) {
+        span.addEventListener('click', () => showRoster(name));
+      }
+      td.appendChild(span);
+    });
     tbody.appendChild(tr);
   });
 }
@@ -1575,7 +1617,7 @@ function enableDragScroll(el) {
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
-const CARD_OPTS = { slot: 76, cardW: 190 };  // slot = card height, cardW = card width
+const CARD_OPTS = { slot: 86, cardW: 190 };  // slot = card height (2×28px rows + footer + border ≈ 84px)
 renderBracket(UB, 'ub-wrap',      'ub-svg',      'ub', CARD_OPTS);
 renderBracket(LB, 'lb-wrap',      'lb-svg',      'lb', CARD_OPTS);
 renderBracket(UB, 'ub-wrap-full', 'ub-svg-full', 'ub', CARD_OPTS);
