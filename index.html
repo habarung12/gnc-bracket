@@ -243,14 +243,19 @@
     /* ══════════════════════════════════
        TOURNAMENT INFO PANEL (horizontal)
     ══════════════════════════════════ */
+    .hero-panels {
+      display: flex; gap: 14px; flex-wrap: wrap; margin-top: 20px;
+      align-items: stretch;
+    }
     .hero-stats-panel {
-      width: 100%; max-width: 760px;
+      flex: 1 1 440px; min-width: 300px;
       position: relative;
-      margin-top: 20px;
+      display: flex; flex-direction: column;
       background: linear-gradient(150deg, rgba(22,24,36,.6) 0%, rgba(9,10,16,.85) 70%);
       border: 1px solid rgba(255,255,255,.1);
       border-radius: 4px;
     }
+    .hero-stats-panel .sp-grid { flex: 1; }
     /* cyber corner brackets — all 4 corners */
     .hero-stats-panel > .cb {
       position: absolute; width: 14px; height: 14px;
@@ -319,6 +324,9 @@
       overflow: hidden; text-overflow: ellipsis;
     }
     .sp-value.accent { color: var(--accent); }
+    .sp-value.done { color: #4ade80; display: inline-flex; align-items: center; gap: 6px; }
+    .sp-value.done::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 6px #4ade80; }
+    .sp-value.sm { font-size: 13px; }
     .sp-cell.is-link:hover .sp-value { color: #6fa8ff; }
 
     @media (max-width: 760px) {
@@ -1107,17 +1115,18 @@
                onerror="this.style.display='none'" />
           <h1 class="tournament-name">GNC: ВЕСЕННИЙ СЕЗОН</h1>
         </div>
-        <div class="tournament-badge"><div class="badge-dot"></div> ЗАВЕРШЁН</div>
       </div>
     </div>
 
-    <!-- TOURNAMENT INFO PANEL (under title) -->
+    <!-- TWO TOURNAMENT PANELS -->
+    <div class="hero-panels">
+
+    <!-- PANEL 1: tournament info -->
     <div class="hero-stats-panel">
       <span class="cb tl"></span><span class="cb tr"></span>
       <span class="cb bl"></span><span class="cb br"></span>
       <div class="sp-head">
         <span class="sp-tag"><span class="sp-tag-mark"></span> Информация о турнире</span>
-        <span class="sp-date">2–3 МАЯ 2026</span>
       </div>
       <div class="sp-grid">
         <div class="sp-cell">
@@ -1151,13 +1160,45 @@
       </div>
     </div>
 
-    <div class="hero-divider"></div>
-    <div class="hero-meta-line">
-      <div class="hero-sub">
-        <span>Double Elimination <span style="color:var(--text-3);font-weight:400;">(формат турнира)</span></span>
-        <div class="hero-sub-dot"></div>
-        <span>Platinum+ <span style="color:var(--text-3);font-weight:400;">(минимальный ранг)</span></span>
+    <!-- PANEL 2: schedule / status -->
+    <div class="hero-stats-panel">
+      <span class="cb tl"></span><span class="cb tr"></span>
+      <span class="cb bl"></span><span class="cb br"></span>
+      <div class="sp-head">
+        <span class="sp-tag"><span class="sp-tag-mark"></span> Условия и статус</span>
       </div>
+      <div class="sp-grid">
+        <div class="sp-cell">
+          <span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg></span>
+          <div class="sp-text">
+            <span class="sp-label">Дата проведения</span>
+            <span class="sp-value accent">2–3 мая</span>
+          </div>
+        </div>
+        <div class="sp-cell">
+          <span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg></span>
+          <div class="sp-text">
+            <span class="sp-label">Формат турнира</span>
+            <span class="sp-value sm">Double Elim.</span>
+          </div>
+        </div>
+        <div class="sp-cell">
+          <span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span>
+          <div class="sp-text">
+            <span class="sp-label">Минимальный ранг</span>
+            <span class="sp-value">Platinum+</span>
+          </div>
+        </div>
+        <div class="sp-cell">
+          <span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span>
+          <div class="sp-text">
+            <span class="sp-label">Статус турнира</span>
+            <span class="sp-value done">Завершён</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     </div>
   </div>
 
