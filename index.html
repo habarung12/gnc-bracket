@@ -264,65 +264,67 @@
     .podium-section { margin-bottom: 48px; }
     .podium-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 9px; font-weight: 600;
-      letter-spacing: .18em; text-transform: uppercase;
-      color: var(--text-3); margin-bottom: 16px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--text-2); margin-bottom: 18px;
     }
 
-    .podium { display: flex; flex-direction: column; gap: 1px; }
+    .podium {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    }
+    @media (max-width: 720px) { .podium { grid-template-columns: 1fr; } }
 
-    .podium-row {
-      display: flex; align-items: center; gap: 0;
-      padding: 14px 20px;
+    .podium-card {
+      position: relative;
+      display: flex; align-items: center; gap: 16px;
+      padding: 18px 20px 16px;
       background: var(--bg-2);
       border: 1px solid var(--border);
-      border-radius: 0;
-      transition: background .15s, border-color .15s;
-      position: relative; overflow: hidden;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform .15s, border-color .15s;
     }
-    .podium-row:first-child { border-radius: 4px 4px 0 0; }
-    .podium-row:last-child  { border-radius: 0 0 4px 4px; }
-    .podium-row:not(:first-child) { border-top: none; }
+    .podium-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.14); }
 
-    .podium-row:hover { background: rgba(255,255,255,.02); border-color: rgba(255,255,255,.08); }
+    /* top accent bar (gold/silver/bronze) */
+    .podium-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .podium-card.p1::before { background: linear-gradient(90deg, #ffd24a, #f5a623); }
+    .podium-card.p2::before { background: linear-gradient(90deg, #d8dde8, #9aa3b8); }
+    .podium-card.p3::before { background: linear-gradient(90deg, #e8945a, #c2622f); }
 
-    .podium-row.p1 { background: rgba(0,204,136,.04); }
-    .podium-row.p1::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 2px; background: var(--accent);
+    /* hexagonal medal */
+    .podium-medal {
+      width: 52px; height: 58px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px; font-weight: 800; color: #1a1208;
+      position: relative;
     }
-    .podium-row.p2::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 2px; background: rgba(160,160,200,.3);
-    }
-    .podium-row.p3::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 2px; background: rgba(232,151,10,.4);
-    }
+    .podium-card.p1 .podium-medal { background: linear-gradient(155deg, #ffe17a 10%, #f5a623 90%); box-shadow: 0 0 18px rgba(245,166,35,.3); }
+    .podium-card.p2 .podium-medal { background: linear-gradient(155deg, #eef1f7 10%, #9aa3b8 90%); }
+    .podium-card.p3 .podium-medal { background: linear-gradient(155deg, #f0a877 10%, #c2622f 90%); }
 
-    .podium-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; font-weight: 700;
-      color: var(--text-3); width: 28px; flex-shrink: 0;
-      letter-spacing: .04em;
-    }
-    .podium-row.p1 .podium-num { color: rgba(0,204,136,.6); }
-
+    .podium-info { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
     .podium-team-name {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 15px; font-weight: 600;
-      color: var(--text); flex: 1;
-      letter-spacing: -.01em;
+      font-size: 18px; font-weight: 700; font-style: italic;
+      color: var(--text); letter-spacing: -.01em;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      cursor: pointer; transition: color .12s;
     }
-    .podium-row.p1 .podium-team-name { color: #c0ffe4; }
-
-    .podium-label-text {
-      font-size: 9px; font-weight: 600;
-      letter-spacing: .14em; text-transform: uppercase;
-      color: var(--text-3);
-      font-family: 'Space Grotesk', sans-serif;
+    .podium-card.p1 .podium-team-name:hover { color: #ffe17a; }
+    .podium-card.p2 .podium-team-name:hover { color: #eef1f7; }
+    .podium-card.p3 .podium-team-name:hover { color: #f0a877; }
+    .podium-record {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; font-weight: 600; color: var(--text-2);
+      letter-spacing: .04em;
     }
-    .podium-row.p1 .podium-label-text { color: rgba(0,204,136,.5); }
+    .podium-record .pr-w { color: #4ade80; }
+    .podium-record .pr-l { color: #f87171; }
 
     /* ══════════════════════════════════
        TABS
@@ -720,56 +722,80 @@
 
     /* ── Map history panel ── */
     .map-toggle {
-      width: 100%; background: none; border: none;
+      width: 100%; background: rgba(255,255,255,.02); border: none;
       border-top: 1px solid var(--border-2);
-      color: var(--text-3); font-size: 9px; cursor: pointer;
-      padding: 3px 9px; text-align: left;
+      color: var(--text-2); font-size: 10px; cursor: pointer;
+      padding: 5px 10px; text-align: left;
       font-family: 'Space Grotesk', sans-serif;
-      letter-spacing: .1em; text-transform: uppercase;
+      font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
       display: flex; align-items: center; justify-content: space-between;
       transition: color .1s, background .1s;
     }
-    .map-toggle:hover { color: var(--text-2); background: rgba(255,255,255,.02); }
-    .map-toggle .toggle-arrow { transition: transform .15s; font-size: 8px; }
+    .map-toggle:hover { color: var(--text); background: rgba(255,255,255,.05); }
+    .map-toggle .toggle-arrow { transition: transform .15s; font-size: 9px; }
     .map-toggle.open .toggle-arrow { transform: rotate(180deg); }
     .map-history {
       max-height: 0; overflow: hidden;
-      transition: max-height .2s ease;
-      background: rgba(0,0,0,.15);
+      transition: max-height .25s ease;
+      background: rgba(0,0,0,.25);
       border-top: 1px solid var(--border-2);
     }
-    .map-history.open { max-height: 160px; }
+    .map-history.open { max-height: 260px; }
     .map-row {
-      display: flex; align-items: center; gap: 6px;
-      padding: 3px 9px;
-      border-bottom: 1px solid rgba(255,255,255,.02);
-      font-size: 10.5px;
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.04);
     }
     .map-row:last-child { border-bottom: none; }
-    .map-win  { font-size: 9px; font-weight: 700; color: #4ade80; flex-shrink: 0; min-width: 12px; }
-    .map-lose { font-size: 9px; font-weight: 700; color: #f87171; flex-shrink: 0; min-width: 12px; }
-    .map-name { color: var(--text-2); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .map-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; font-weight: 700; color: var(--text-3);
+      flex-shrink: 0; min-width: 16px;
+    }
+    .map-name {
+      font-size: 12.5px; font-weight: 600; color: var(--text);
+      flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .map-winner {
+      font-size: 11.5px; font-weight: 700; color: #4ade80;
+      display: inline-flex; align-items: center; gap: 4px;
+      flex-shrink: 0; white-space: nowrap;
+    }
+    .map-winner::before { content: '✓'; font-size: 11px; }
 
-    /* ── Schedule section dividers ── */
-    .schedule-section-header {
+    /* ── Schedule: 3 separate rounded blocks ── */
+    .schedule-blocks { display: flex; flex-direction: column; gap: 28px; }
+    .schedule-block {
+      border-radius: 10px; overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg-2);
+    }
+    .schedule-block-head {
       display: flex; align-items: center; gap: 10px;
-      padding: 14px 14px 10px;
-      background: rgba(255,255,255,.02);
-      border-bottom: 1px solid var(--border-2);
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
     }
-    .schedule-section-title {
+    .schedule-block-head::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    }
+    .schedule-block.ub .schedule-block-head::before { background: var(--ub); }
+    .schedule-block.lb .schedule-block-head::before { background: var(--lb); }
+    .schedule-block.gf .schedule-block-head::before { background: var(--gf); }
+    .sb-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+      font-size: 13px; font-weight: 700; letter-spacing: .04em;
     }
-    .schedule-section-title.ub { color: var(--ub); }
-    .schedule-section-title.lb { color: var(--lb); }
-    .schedule-section-title.gf { color: var(--gf); }
-    .schedule-section-count {
-      font-size: 9px; font-weight: 600; padding: 1px 6px; border-radius: 4px;
+    .schedule-block.ub .sb-title { color: var(--ub); }
+    .schedule-block.lb .sb-title { color: var(--lb); }
+    .schedule-block.gf .sb-title { color: var(--gf); }
+    .sb-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 5px;
     }
-    .schedule-section-count.ub { background: var(--ub-dim); color: var(--ub); }
-    .schedule-section-count.lb { background: var(--lb-dim); color: var(--lb); }
-    .schedule-section-count.gf { background: var(--gf-dim); color: var(--gf); }
+    .schedule-block.ub .sb-count { background: var(--ub-dim); color: var(--ub); }
+    .schedule-block.lb .sb-count { background: var(--lb-dim); color: var(--lb); }
+    .schedule-block.gf .sb-count { background: var(--gf-dim); color: var(--gf); }
     .journey-opponent {
       font-size: 12.5px; font-weight: 500; color: var(--text-2); line-height: 1.5;
     }
@@ -1017,22 +1043,28 @@
 
   <!-- PODIUM -->
   <div class="podium-section">
-    <div class="podium-title">Финальное положение</div>
+    <div class="podium-title">Финальный пьедестал</div>
     <div class="podium">
-      <div class="podium-row p1">
-        <span class="podium-num">01</span>
-        <span class="podium-team-name">SirGay</span>
-        <span class="podium-label-text">ЧЕМПИОН</span>
+      <div class="podium-card p1">
+        <div class="podium-medal">1ST</div>
+        <div class="podium-info">
+          <span class="podium-team-name" data-roster="SirGay">SirGay</span>
+          <span class="podium-record"><span class="pr-w">5</span> – <span class="pr-l">1</span></span>
+        </div>
       </div>
-      <div class="podium-row p2">
-        <span class="podium-num">02</span>
-        <span class="podium-team-name">Anuiel</span>
-        <span class="podium-label-text">ФИНАЛИСТ</span>
+      <div class="podium-card p2">
+        <div class="podium-medal">2ND</div>
+        <div class="podium-info">
+          <span class="podium-team-name" data-roster="Anuiel">Anuiel</span>
+          <span class="podium-record"><span class="pr-w">4</span> – <span class="pr-l">1</span></span>
+        </div>
       </div>
-      <div class="podium-row p3">
-        <span class="podium-num">03</span>
-        <span class="podium-team-name">Soldeek</span>
-        <span class="podium-label-text">ТОП-3</span>
+      <div class="podium-card p3">
+        <div class="podium-medal">3RD</div>
+        <div class="podium-info">
+          <span class="podium-team-name" data-roster="Soldeek">Soldeek</span>
+          <span class="podium-record"><span class="pr-w">5</span> – <span class="pr-l">2</span></span>
+        </div>
       </div>
     </div>
   </div>
@@ -1106,22 +1138,7 @@
     <div class="all-matches-header">
       <div class="all-matches-title">Все матчи</div>
     </div>
-    <div class="schedule-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Время (МСК)</th>
-            <th>Сетка</th>
-            <th>Команда A</th>
-            <th>Счёт</th>
-            <th>Команда B</th>
-            <th>Формат</th>
-            <th>Стрим</th>
-          </tr>
-        </thead>
-        <tbody id="schedule-body"></tbody>
-      </table>
-    </div>
+    <div class="schedule-blocks" id="schedule-blocks"></div>
   </div>
 
 </main>
@@ -1458,14 +1475,14 @@ function buildCardAll(m, type) {
 
     const panel = document.createElement('div');
     panel.className = 'map-history';
-    // Determine overall match winner side
-    maps.forEach((mp) => {
+    maps.forEach((mp, idx) => {
       const row = document.createElement('div');
       row.className = 'map-row';
-      const isWin = mp.w === w; // match winner won this map?
+      const mapWinner = mp.w === 'a' ? m.a : m.b; // team that won THIS map
       row.innerHTML = `
-        <span class="${isWin ? 'map-win' : 'map-lose'}">${isWin ? '✓' : '✗'}</span>
-        <span class="map-name">${mp.map}</span>`;
+        <span class="map-num">${idx + 1}</span>
+        <span class="map-name">${mp.map}</span>
+        <span class="map-winner">${mapWinner}</span>`;
       panel.appendChild(row);
     });
 
@@ -1772,7 +1789,7 @@ function renderGF(containerId) {
    SCHEDULE TABLE
 ═══════════════════════════════════════════ */
 function renderSchedule() {
-  const tbody = document.getElementById('schedule-body');
+  const container = document.getElementById('schedule-blocks');
 
   const SECTIONS = [
     { type: 'ub', label: 'Верхняя сетка', matches: UB.flat().map(m => ({...m, type:'ub'})).sort((a,b)=>new Date(a.time)-new Date(b.time)) },
@@ -1788,21 +1805,33 @@ function renderSchedule() {
   }
 
   SECTIONS.forEach(({ type, label, matches }) => {
-    // Section header row
-    const hdrTr = document.createElement('tr');
-    hdrTr.innerHTML = `
-      <td colspan="7" class="schedule-section-header">
-        <span class="schedule-section-title ${type}">${label}</span>
-        <span class="schedule-section-count ${type}">${matches.length} матчей</span>
-      </td>`;
-    tbody.appendChild(hdrTr);
+    const block = document.createElement('div');
+    block.className = `schedule-block ${type}`;
+    block.innerHTML = `
+      <div class="schedule-block-head">
+        <span class="sb-title">${label}</span>
+        <span class="sb-count">${matches.length} матчей</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Время (МСК)</th>
+            <th>Команда A</th>
+            <th>Счёт</th>
+            <th>Команда B</th>
+            <th>Формат</th>
+            <th>Стрим</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>`;
+    const tbody = block.querySelector('tbody');
 
     matches.forEach(m => {
       const w  = winner(m);
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td class="t-time">${fmtTimeMsk(m.time)} МСК</td>
-        <td></td>
         <td class="t-teams"></td>
         <td class="t-score">${w ? `${m.sa} : ${m.sb}` : '—'}</td>
         <td class="t-teams"></td>
@@ -1822,6 +1851,8 @@ function renderSchedule() {
       });
       tbody.appendChild(tr);
     });
+
+    container.appendChild(block);
   });
 }
 
@@ -1879,7 +1910,7 @@ function enableDragScroll(el) {
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
-const CARD_OPTS = { slot: 86, cardW: 224 };  // wider card so time+stream fit on one line → footer=24px, total≈82px
+const CARD_OPTS = { slot: 116, cardW: 224 };  // rows(56)+footer(24)+map-toggle(28)+borders ≈ 110px, +6px breathing room
 renderBracket(UB, 'ub-wrap',      'ub-svg',      'ub', CARD_OPTS);
 renderBracket(LB, 'lb-wrap',      'lb-svg',      'lb', CARD_OPTS);
 renderBracket(UB, 'ub-wrap-full', 'ub-svg-full', 'ub', CARD_OPTS);
@@ -1890,6 +1921,11 @@ renderSchedule();
 
 // Enable drag-to-pan on all bracket scroll areas
 document.querySelectorAll('.bracket-scroll').forEach(enableDragScroll);
+
+// Podium team names → open roster modal
+document.querySelectorAll('.podium-team-name[data-roster]').forEach(el => {
+  el.addEventListener('click', () => showRoster(el.dataset.roster));
+});
 
 // Sticky header border on scroll
 window.addEventListener('scroll', () => {
