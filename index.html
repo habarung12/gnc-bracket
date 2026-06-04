@@ -240,23 +240,130 @@
       letter-spacing: .06em;
     }
 
-    .meta-pills { display: flex; gap: 1px; flex-wrap: wrap; }
-    .meta-pill {
-      padding: 7px 16px;
-      border: 1px solid var(--border);
-      background: var(--bg-2);
-      font-size: 11px; color: var(--text-2);
-      font-weight: 500; letter-spacing: .02em;
-      transition: border-color .15s;
-      cursor: default;
+    /* ══════════════════════════════════
+       CYBERPUNK STATS PANEL (photo-2 style)
+    ══════════════════════════════════ */
+    .hero-stats-panel {
+      width: 400px; max-width: 100%; flex-shrink: 0;
+      position: relative;
+      background:
+        linear-gradient(160deg, rgba(22,24,36,.85) 0%, rgba(9,10,16,.95) 60%);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 4px;
     }
-    .meta-pill:first-child { border-radius: 3px 0 0 3px; }
-    .meta-pill:last-child  { border-radius: 0 3px 3px 0; }
-    .meta-pill:not(:first-child) { border-left: none; }
-    .meta-pill:hover { border-color: rgba(255,255,255,.12); }
-    .meta-pill strong { color: var(--text); font-weight: 600; }
-    .meta-pill a { color: var(--accent); text-decoration: none; }
-    .meta-pill a:hover { color: #40e8a0; }
+    /* cyber corner brackets */
+    .hero-stats-panel::before,
+    .hero-stats-panel::after {
+      content: ''; position: absolute; width: 16px; height: 16px;
+      border-color: var(--accent); pointer-events: none; opacity: .55;
+    }
+    .hero-stats-panel::before {
+      top: -1px; left: -1px;
+      border-top: 2px solid; border-left: 2px solid;
+    }
+    .hero-stats-panel::after {
+      bottom: -1px; right: -1px;
+      border-bottom: 2px solid; border-right: 2px solid;
+    }
+
+    /* header strip */
+    .sp-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 13px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.02);
+    }
+    .sp-tag {
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px; font-weight: 700; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--text-2);
+    }
+    .sp-tag-mark {
+      width: 14px; height: 14px; flex-shrink: 0;
+      border: 1.5px solid var(--accent); border-radius: 1px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .sp-tag-mark::after {
+      content: ''; width: 5px; height: 5px;
+      background: var(--accent); opacity: .8;
+    }
+    .sp-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; font-weight: 700; letter-spacing: .04em;
+      color: var(--accent);
+    }
+
+    /* stat rows */
+    .sp-rows { display: flex; flex-direction: column; }
+    .sp-row {
+      display: flex; align-items: center; gap: 13px;
+      padding: 13px 15px;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      transition: background .15s;
+      position: relative;
+    }
+    .sp-row:hover { background: rgba(255,255,255,.025); }
+    .sp-icon {
+      width: 26px; height: 26px; flex-shrink: 0;
+      object-fit: contain; opacity: .9;
+    }
+    .sp-text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+    .sp-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 8.5px; font-weight: 600; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--text-3);
+    }
+    .sp-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px; font-weight: 700; color: var(--text);
+      letter-spacing: -.01em; line-height: 1.1;
+    }
+    .sp-value .accent { color: var(--accent); }
+
+    /* CTA bar (twitch) — like photo-2 bottom bar */
+    .sp-cta {
+      display: flex; align-items: center; gap: 11px;
+      padding: 12px 15px;
+      text-decoration: none;
+      background: rgba(74,143,255,.05);
+      transition: background .15s;
+    }
+    .sp-cta:hover { background: rgba(74,143,255,.1); }
+    .sp-cta .sp-icon { opacity: 1; }
+    .sp-cta-text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+    .sp-cta-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 8.5px; font-weight: 600; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--text-3);
+    }
+    .sp-cta-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px; font-weight: 700; color: var(--accent);
+      letter-spacing: .01em;
+    }
+    .sp-cta-btn {
+      width: 30px; height: 30px; flex-shrink: 0;
+      border: 1px solid rgba(74,143,255,.35);
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      transition: border-color .15s, background .15s;
+    }
+    .sp-cta:hover .sp-cta-btn { border-color: var(--accent); background: rgba(74,143,255,.12); }
+    /* corner notches on button */
+    .sp-cta-btn::before, .sp-cta-btn::after {
+      content: ''; position: absolute; width: 5px; height: 5px;
+      border-color: var(--accent);
+    }
+    .sp-cta-btn::before { top: -1px; left: -1px; border-top: 1.5px solid; border-left: 1.5px solid; }
+    .sp-cta-btn::after  { bottom: -1px; right: -1px; border-bottom: 1.5px solid; border-right: 1.5px solid; }
+    .sp-cta-btn img { width: 13px; height: 13px; object-fit: contain; }
+
+    @media (max-width: 860px) {
+      .hero-stats-panel { width: 100%; }
+    }
 
     /* ══════════════════════════════════
        PODIUM
@@ -1021,6 +1128,45 @@
         </div>
         <div class="tournament-badge"><div class="badge-dot"></div> ЗАВЕРШЁН</div>
       </div>
+
+      <!-- CYBERPUNK STATS PANEL -->
+      <div class="hero-stats-panel">
+        <div class="sp-head">
+          <span class="sp-tag"><span class="sp-tag-mark"></span> Турнир</span>
+          <span class="sp-date">2–3 МАЯ 2026</span>
+        </div>
+        <div class="sp-rows">
+          <div class="sp-row">
+            <img class="sp-icon" src="assets/icons/prize.png" alt="" />
+            <div class="sp-text">
+              <span class="sp-label">Призовой фонд</span>
+              <span class="sp-value"><span class="accent">250 $</span></span>
+            </div>
+          </div>
+          <div class="sp-row">
+            <img class="sp-icon" src="assets/icons/teams.png" alt="" />
+            <div class="sp-text">
+              <span class="sp-label">Участников</span>
+              <span class="sp-value">16 команд</span>
+            </div>
+          </div>
+          <div class="sp-row">
+            <img class="sp-icon" src="assets/icons/format.png" alt="" />
+            <div class="sp-text">
+              <span class="sp-label">Формат матчей</span>
+              <span class="sp-value">Bo3 / Bo5</span>
+            </div>
+          </div>
+        </div>
+        <a class="sp-cta" href="https://twitch.tv/gncow" target="_blank" rel="noopener">
+          <img class="sp-icon" src="assets/icons/stream.png" alt="" />
+          <div class="sp-cta-text">
+            <span class="sp-cta-label">Трансляция</span>
+            <span class="sp-cta-value">twitch.tv/gncow</span>
+          </div>
+          <span class="sp-cta-btn"><img src="assets/icons/chevron.png" alt="" /></span>
+        </a>
+      </div>
     </div>
     <div class="hero-divider"></div>
     <div class="hero-meta-line">
@@ -1028,15 +1174,6 @@
         <span>Double Elimination <span style="color:var(--text-3);font-weight:400;">(формат турнира)</span></span>
         <div class="hero-sub-dot"></div>
         <span>Platinum+ <span style="color:var(--text-3);font-weight:400;">(минимальный ранг)</span></span>
-      </div>
-      <div class="hero-date" style="font-size:16px;font-weight:700;color:var(--text);">2 – 3 МАЯ 2026</div>
-    </div>
-    <div style="margin-top: 20px;">
-      <div class="meta-pills">
-        <div class="meta-pill">Призовой фонд <strong>250 $</strong></div>
-        <div class="meta-pill"><strong>16</strong> Команд</div>
-        <div class="meta-pill">Bo3 / Bo5</div>
-        <div class="meta-pill"><a href="https://twitch.tv/gncow" target="_blank" rel="noopener">twitch.tv/gncow</a></div>
       </div>
     </div>
   </div>
