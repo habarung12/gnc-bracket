@@ -241,35 +241,30 @@
     }
 
     /* ══════════════════════════════════
-       CYBERPUNK STATS PANEL (photo-2 style)
+       TOURNAMENT INFO PANEL (horizontal)
     ══════════════════════════════════ */
     .hero-stats-panel {
-      width: 400px; max-width: 100%; flex-shrink: 0;
+      width: 100%; max-width: 760px;
       position: relative;
-      background:
-        linear-gradient(160deg, rgba(22,24,36,.85) 0%, rgba(9,10,16,.95) 60%);
+      margin-top: 20px;
+      background: linear-gradient(150deg, rgba(22,24,36,.6) 0%, rgba(9,10,16,.85) 70%);
       border: 1px solid rgba(255,255,255,.1);
       border-radius: 4px;
     }
-    /* cyber corner brackets */
-    .hero-stats-panel::before,
-    .hero-stats-panel::after {
-      content: ''; position: absolute; width: 16px; height: 16px;
-      border-color: var(--accent); pointer-events: none; opacity: .55;
+    /* cyber corner brackets — all 4 corners */
+    .hero-stats-panel > .cb {
+      position: absolute; width: 14px; height: 14px;
+      border-color: var(--accent); opacity: .55; pointer-events: none;
     }
-    .hero-stats-panel::before {
-      top: -1px; left: -1px;
-      border-top: 2px solid; border-left: 2px solid;
-    }
-    .hero-stats-panel::after {
-      bottom: -1px; right: -1px;
-      border-bottom: 2px solid; border-right: 2px solid;
-    }
+    .hero-stats-panel > .cb.tl { top: -1px; left: -1px; border-top: 2px solid; border-left: 2px solid; }
+    .hero-stats-panel > .cb.tr { top: -1px; right: -1px; border-top: 2px solid; border-right: 2px solid; }
+    .hero-stats-panel > .cb.bl { bottom: -1px; left: -1px; border-bottom: 2px solid; border-left: 2px solid; }
+    .hero-stats-panel > .cb.br { bottom: -1px; right: -1px; border-bottom: 2px solid; border-right: 2px solid; }
 
     /* header strip */
     .sp-head {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 9px 13px;
+      padding: 8px 14px;
       border-bottom: 1px solid rgba(255,255,255,.08);
       background: rgba(255,255,255,.02);
     }
@@ -280,89 +275,57 @@
       text-transform: uppercase; color: var(--text-2);
     }
     .sp-tag-mark {
-      width: 14px; height: 14px; flex-shrink: 0;
+      width: 13px; height: 13px; flex-shrink: 0;
       border: 1.5px solid var(--accent); border-radius: 1px;
-      display: flex; align-items: center; justify-content: center;
-      position: relative;
+      display: flex; align-items: center; justify-content: center; position: relative;
     }
-    .sp-tag-mark::after {
-      content: ''; width: 5px; height: 5px;
-      background: var(--accent); opacity: .8;
-    }
+    .sp-tag-mark::after { content: ''; width: 5px; height: 5px; background: var(--accent); opacity: .8; }
     .sp-date {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 12px; font-weight: 700; letter-spacing: .04em;
-      color: var(--accent);
+      font-size: 12px; font-weight: 700; letter-spacing: .04em; color: var(--accent);
     }
 
-    /* stat rows */
-    .sp-rows { display: flex; flex-direction: column; }
-    .sp-row {
-      display: flex; align-items: center; gap: 13px;
-      padding: 13px 15px;
-      border-bottom: 1px solid rgba(255,255,255,.05);
-      transition: background .15s;
-      position: relative;
+    /* horizontal cell grid */
+    .sp-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
     }
-    .sp-row:hover { background: rgba(255,255,255,.025); }
-    .sp-icon {
-      width: 26px; height: 26px; flex-shrink: 0;
-      object-fit: contain; opacity: .9;
+    .sp-cell {
+      display: flex; align-items: center; gap: 11px;
+      padding: 15px 16px;
+      border-right: 1px solid rgba(255,255,255,.06);
+      transition: background .15s; text-decoration: none;
+      position: relative; min-width: 0;
     }
-    .sp-text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+    .sp-cell:last-child { border-right: none; }
+    .sp-cell:hover { background: rgba(255,255,255,.025); }
+
+    .sp-ico {
+      width: 24px; height: 24px; flex-shrink: 0;
+      color: var(--accent); opacity: .9;
+    }
+    .sp-ico svg { width: 100%; height: 100%; display: block; }
+
+    .sp-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
     .sp-label {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 8.5px; font-weight: 600; letter-spacing: .14em;
+      font-size: 8px; font-weight: 600; letter-spacing: .12em;
       text-transform: uppercase; color: var(--text-3);
+      white-space: nowrap;
     }
     .sp-value {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 17px; font-weight: 700; color: var(--text);
-      letter-spacing: -.01em; line-height: 1.1;
+      font-size: 15px; font-weight: 700; color: var(--text);
+      letter-spacing: -.01em; line-height: 1; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
     }
-    .sp-value .accent { color: var(--accent); }
+    .sp-value.accent { color: var(--accent); }
+    .sp-cell.is-link:hover .sp-value { color: #6fa8ff; }
 
-    /* CTA bar (twitch) — like photo-2 bottom bar */
-    .sp-cta {
-      display: flex; align-items: center; gap: 11px;
-      padding: 12px 15px;
-      text-decoration: none;
-      background: rgba(74,143,255,.05);
-      transition: background .15s;
-    }
-    .sp-cta:hover { background: rgba(74,143,255,.1); }
-    .sp-cta .sp-icon { opacity: 1; }
-    .sp-cta-text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
-    .sp-cta-label {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 8.5px; font-weight: 600; letter-spacing: .14em;
-      text-transform: uppercase; color: var(--text-3);
-    }
-    .sp-cta-value {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 14px; font-weight: 700; color: var(--accent);
-      letter-spacing: .01em;
-    }
-    .sp-cta-btn {
-      width: 30px; height: 30px; flex-shrink: 0;
-      border: 1px solid rgba(74,143,255,.35);
-      border-radius: 2px;
-      display: flex; align-items: center; justify-content: center;
-      position: relative;
-      transition: border-color .15s, background .15s;
-    }
-    .sp-cta:hover .sp-cta-btn { border-color: var(--accent); background: rgba(74,143,255,.12); }
-    /* corner notches on button */
-    .sp-cta-btn::before, .sp-cta-btn::after {
-      content: ''; position: absolute; width: 5px; height: 5px;
-      border-color: var(--accent);
-    }
-    .sp-cta-btn::before { top: -1px; left: -1px; border-top: 1.5px solid; border-left: 1.5px solid; }
-    .sp-cta-btn::after  { bottom: -1px; right: -1px; border-bottom: 1.5px solid; border-right: 1.5px solid; }
-    .sp-cta-btn img { width: 13px; height: 13px; object-fit: contain; }
-
-    @media (max-width: 860px) {
-      .hero-stats-panel { width: 100%; }
+    @media (max-width: 760px) {
+      .hero-stats-panel { max-width: 100%; }
+      .sp-grid { grid-template-columns: repeat(2, 1fr); }
+      .sp-cell:nth-child(2) { border-right: none; }
+      .sp-cell:nth-child(1), .sp-cell:nth-child(2) { border-bottom: 1px solid rgba(255,255,255,.06); }
     }
 
     /* ══════════════════════════════════
@@ -384,35 +347,44 @@
     .podium-card {
       position: relative;
       display: flex; align-items: center; gap: 16px;
-      padding: 18px 20px 16px;
-      background: var(--bg-2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-      transition: transform .15s, border-color .15s;
+      padding: 18px 20px;
+      background: linear-gradient(150deg, rgba(22,24,36,.5) 0%, rgba(9,10,16,.85) 70%);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 4px;
+      transition: border-color .15s;
     }
-    .podium-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.14); }
+    .podium-card:hover { border-color: rgba(255,255,255,.18); }
 
-    /* top accent bar (gold/silver/bronze) */
-    .podium-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    /* cyber corner brackets (match info panel) */
+    .podium-card > .cb {
+      position: absolute; width: 13px; height: 13px; opacity: .6; pointer-events: none;
     }
-    .podium-card.p1::before { background: linear-gradient(90deg, #ffd24a, #f5a623); }
-    .podium-card.p2::before { background: linear-gradient(90deg, #d8dde8, #9aa3b8); }
-    .podium-card.p3::before { background: linear-gradient(90deg, #e8945a, #c2622f); }
+    .podium-card > .cb.tl { top: -1px; left: -1px; border-top: 2px solid; border-left: 2px solid; }
+    .podium-card > .cb.tr { top: -1px; right: -1px; border-top: 2px solid; border-right: 2px solid; }
+    .podium-card > .cb.bl { bottom: -1px; left: -1px; border-bottom: 2px solid; border-left: 2px solid; }
+    .podium-card > .cb.br { bottom: -1px; right: -1px; border-bottom: 2px solid; border-right: 2px solid; }
+    .podium-card.p1 > .cb { border-color: #f5a623; }
+    .podium-card.p2 > .cb { border-color: #9aa3b8; }
+    .podium-card.p3 > .cb { border-color: #c2622f; }
 
-    /* hexagonal medal */
+    /* square medal with corner brackets */
     .podium-medal {
-      width: 52px; height: 58px; flex-shrink: 0;
+      width: 54px; height: 54px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      border-radius: 3px; position: relative;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 13px; font-weight: 800; color: #1a1208;
-      position: relative;
+      font-size: 14px; font-weight: 800; color: #0a0a12;
     }
-    .podium-card.p1 .podium-medal { background: linear-gradient(155deg, #ffe17a 10%, #f5a623 90%); box-shadow: 0 0 18px rgba(245,166,35,.3); }
-    .podium-card.p2 .podium-medal { background: linear-gradient(155deg, #eef1f7 10%, #9aa3b8 90%); }
-    .podium-card.p3 .podium-medal { background: linear-gradient(155deg, #f0a877 10%, #c2622f 90%); }
+    .podium-card.p1 .podium-medal { background: linear-gradient(150deg, #ffe17a, #f5a623); box-shadow: 0 0 16px rgba(245,166,35,.25); }
+    .podium-card.p2 .podium-medal { background: linear-gradient(150deg, #eef1f7, #9aa3b8); }
+    .podium-card.p3 .podium-medal { background: linear-gradient(150deg, #f0a877, #c2622f); }
+    /* medal corner notches */
+    .podium-medal::before, .podium-medal::after {
+      content: ''; position: absolute; width: 7px; height: 7px;
+      border-color: rgba(10,10,18,.55);
+    }
+    .podium-medal::before { top: 3px; left: 3px; border-top: 1.5px solid; border-left: 1.5px solid; }
+    .podium-medal::after  { bottom: 3px; right: 3px; border-bottom: 1.5px solid; border-right: 1.5px solid; }
 
     .podium-info { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
     .podium-team-name {
@@ -623,8 +595,11 @@
       background: var(--bg-2);
       overflow: hidden;
       transition: border-color .12s;
+      position: relative;
     }
     .lbf-card:hover { border-color: rgba(255,255,255,.14); }
+    /* when map history is open: let dropdown escape + float above neighbours */
+    .lbf-card.maps-open { overflow: visible; z-index: 50; }
 
     /* hide old header — not used in new design */
     .lbf-header { display: none; }
@@ -841,13 +816,19 @@
     .map-toggle:hover { color: var(--text); background: rgba(255,255,255,.05); }
     .map-toggle .toggle-arrow { transition: transform .15s; font-size: 9px; }
     .map-toggle.open .toggle-arrow { transform: rotate(180deg); }
+    /* floating dropdown — overlays cards below instead of pushing layout */
     .map-history {
-      max-height: 0; overflow: hidden;
-      transition: max-height .25s ease;
-      background: rgba(0,0,0,.25);
-      border-top: 1px solid var(--border-2);
+      position: absolute; top: 100%; left: -1px; right: -1px;
+      background: #0f0f1c;
+      border: 1px solid rgba(255,255,255,.14);
+      border-top: none;
+      border-radius: 0 0 5px 5px;
+      box-shadow: 0 16px 34px rgba(0,0,0,.65);
+      max-height: 0; overflow: hidden; opacity: 0;
+      transition: max-height .2s ease, opacity .15s;
+      z-index: 60; pointer-events: none;
     }
-    .map-history.open { max-height: 260px; }
+    .map-history.open { max-height: 300px; overflow-y: auto; opacity: 1; pointer-events: auto; }
     .map-row {
       display: flex; align-items: center; gap: 8px;
       padding: 7px 10px;
@@ -1128,46 +1109,48 @@
         </div>
         <div class="tournament-badge"><div class="badge-dot"></div> ЗАВЕРШЁН</div>
       </div>
+    </div>
 
-      <!-- CYBERPUNK STATS PANEL -->
-      <div class="hero-stats-panel">
-        <div class="sp-head">
-          <span class="sp-tag"><span class="sp-tag-mark"></span> Турнир</span>
-          <span class="sp-date">2–3 МАЯ 2026</span>
-        </div>
-        <div class="sp-rows">
-          <div class="sp-row">
-            <img class="sp-icon" src="assets/icons/prize.png" alt="" />
-            <div class="sp-text">
-              <span class="sp-label">Призовой фонд</span>
-              <span class="sp-value"><span class="accent">250 $</span></span>
-            </div>
-          </div>
-          <div class="sp-row">
-            <img class="sp-icon" src="assets/icons/teams.png" alt="" />
-            <div class="sp-text">
-              <span class="sp-label">Участников</span>
-              <span class="sp-value">16 команд</span>
-            </div>
-          </div>
-          <div class="sp-row">
-            <img class="sp-icon" src="assets/icons/format.png" alt="" />
-            <div class="sp-text">
-              <span class="sp-label">Формат матчей</span>
-              <span class="sp-value">Bo3 / Bo5</span>
-            </div>
+    <!-- TOURNAMENT INFO PANEL (under title) -->
+    <div class="hero-stats-panel">
+      <span class="cb tl"></span><span class="cb tr"></span>
+      <span class="cb bl"></span><span class="cb br"></span>
+      <div class="sp-head">
+        <span class="sp-tag"><span class="sp-tag-mark"></span> Информация о турнире</span>
+        <span class="sp-date">2–3 МАЯ 2026</span>
+      </div>
+      <div class="sp-grid">
+        <div class="sp-cell">
+          <span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span>
+          <div class="sp-text">
+            <span class="sp-label">Призовой фонд</span>
+            <span class="sp-value accent">250 $</span>
           </div>
         </div>
-        <a class="sp-cta" href="https://twitch.tv/gncow" target="_blank" rel="noopener">
-          <img class="sp-icon" src="assets/icons/stream.png" alt="" />
-          <div class="sp-cta-text">
-            <span class="sp-cta-label">Трансляция</span>
-            <span class="sp-cta-value">twitch.tv/gncow</span>
+        <div class="sp-cell">
+          <span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          <div class="sp-text">
+            <span class="sp-label">Участников</span>
+            <span class="sp-value">16 команд</span>
           </div>
-          <span class="sp-cta-btn"><img src="assets/icons/chevron.png" alt="" /></span>
+        </div>
+        <div class="sp-cell">
+          <span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.544-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.152A4 4 0 0 0 17.32 5z"/></svg></span>
+          <div class="sp-text">
+            <span class="sp-label">Формат матчей</span>
+            <span class="sp-value">Bo3 / Bo5</span>
+          </div>
+        </div>
+        <a class="sp-cell is-link" href="https://twitch.tv/gncow" target="_blank" rel="noopener">
+          <span class="sp-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg></span>
+          <div class="sp-text">
+            <span class="sp-label">Трансляция</span>
+            <span class="sp-value">twitch.tv/gncow</span>
+          </div>
         </a>
       </div>
     </div>
+
     <div class="hero-divider"></div>
     <div class="hero-meta-line">
       <div class="hero-sub">
@@ -1183,6 +1166,7 @@
     <div class="podium-title">Финальный пьедестал</div>
     <div class="podium">
       <div class="podium-card p1">
+        <span class="cb tl"></span><span class="cb tr"></span><span class="cb bl"></span><span class="cb br"></span>
         <div class="podium-medal">1ST</div>
         <div class="podium-info">
           <span class="podium-team-name" data-roster="SirGay">SirGay</span>
@@ -1190,6 +1174,7 @@
         </div>
       </div>
       <div class="podium-card p2">
+        <span class="cb tl"></span><span class="cb tr"></span><span class="cb bl"></span><span class="cb br"></span>
         <div class="podium-medal">2ND</div>
         <div class="podium-info">
           <span class="podium-team-name" data-roster="Anuiel">Anuiel</span>
@@ -1197,6 +1182,7 @@
         </div>
       </div>
       <div class="podium-card p3">
+        <span class="cb tl"></span><span class="cb tr"></span><span class="cb bl"></span><span class="cb br"></span>
         <div class="podium-medal">3RD</div>
         <div class="podium-info">
           <span class="podium-team-name" data-roster="Soldeek">Soldeek</span>
@@ -1625,8 +1611,18 @@ function buildCardAll(m, type) {
 
     toggle.addEventListener('click', e => {
       e.stopPropagation();
-      toggle.classList.toggle('open');
-      panel.classList.toggle('open');
+      const opening = !panel.classList.contains('open');
+      // close any other open map history first
+      document.querySelectorAll('.lbf-card.maps-open').forEach(c => {
+        if (c !== el) {
+          c.classList.remove('maps-open');
+          c.querySelector('.map-history')?.classList.remove('open');
+          c.querySelector('.map-toggle')?.classList.remove('open');
+        }
+      });
+      toggle.classList.toggle('open', opening);
+      panel.classList.toggle('open', opening);
+      el.classList.toggle('maps-open', opening);
     });
 
     el.appendChild(toggle);
