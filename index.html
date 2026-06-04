@@ -686,8 +686,90 @@
       font-size: 8.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
       margin-bottom: 4px;
     }
-    .ub-label-j { color: rgba(0,204,136,.6); }
-    .lb-label-j  { color: rgba(232,151,10,.6); }
+    .ub-label-j { color: rgba(74,143,255,.7); }
+    .lb-label-j  { color: rgba(232,151,10,.65); }
+
+    /* ── Social icons in player rows ── */
+    .social-icons { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+    .social-btn {
+      position: relative;
+      width: 22px; height: 22px;
+      border-radius: 4px; border: 1px solid var(--border-2);
+      background: rgba(255,255,255,.03);
+      display: flex; align-items: center; justify-content: center;
+      cursor: default; transition: background .12s, border-color .12s;
+      flex-shrink: 0;
+    }
+    .social-btn:hover { background: rgba(255,255,255,.07); border-color: var(--border); }
+    .social-btn svg { width: 11px; height: 11px; display: block; }
+    .social-btn.dc svg { fill: #5865f2; }
+    .social-btn.bn svg { fill: #148eff; }
+    /* tooltip on hover */
+    .social-btn::after {
+      content: attr(data-tip);
+      position: absolute; bottom: 26px; left: 50%;
+      transform: translateX(-50%);
+      background: #1a1a2a; border: 1px solid var(--border);
+      color: var(--text); font-size: 10.5px; font-weight: 500;
+      padding: 3px 8px; border-radius: 5px;
+      white-space: nowrap; pointer-events: none;
+      opacity: 0; transition: opacity .12s;
+      z-index: 10;
+    }
+    .social-btn:hover::after { opacity: 1; }
+
+    /* ── Map history panel ── */
+    .map-toggle {
+      width: 100%; background: none; border: none;
+      border-top: 1px solid var(--border-2);
+      color: var(--text-3); font-size: 9px; cursor: pointer;
+      padding: 3px 9px; text-align: left;
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: .1em; text-transform: uppercase;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: color .1s, background .1s;
+    }
+    .map-toggle:hover { color: var(--text-2); background: rgba(255,255,255,.02); }
+    .map-toggle .toggle-arrow { transition: transform .15s; font-size: 8px; }
+    .map-toggle.open .toggle-arrow { transform: rotate(180deg); }
+    .map-history {
+      max-height: 0; overflow: hidden;
+      transition: max-height .2s ease;
+      background: rgba(0,0,0,.15);
+      border-top: 1px solid var(--border-2);
+    }
+    .map-history.open { max-height: 160px; }
+    .map-row {
+      display: flex; align-items: center; gap: 6px;
+      padding: 3px 9px;
+      border-bottom: 1px solid rgba(255,255,255,.02);
+      font-size: 10.5px;
+    }
+    .map-row:last-child { border-bottom: none; }
+    .map-win  { font-size: 9px; font-weight: 700; color: #4ade80; flex-shrink: 0; min-width: 12px; }
+    .map-lose { font-size: 9px; font-weight: 700; color: #f87171; flex-shrink: 0; min-width: 12px; }
+    .map-name { color: var(--text-2); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ── Schedule section dividers ── */
+    .schedule-section-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 14px 10px;
+      background: rgba(255,255,255,.02);
+      border-bottom: 1px solid var(--border-2);
+    }
+    .schedule-section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+    }
+    .schedule-section-title.ub { color: var(--ub); }
+    .schedule-section-title.lb { color: var(--lb); }
+    .schedule-section-title.gf { color: var(--gf); }
+    .schedule-section-count {
+      font-size: 9px; font-weight: 600; padding: 1px 6px; border-radius: 4px;
+    }
+    .schedule-section-count.ub { background: var(--ub-dim); color: var(--ub); }
+    .schedule-section-count.lb { background: var(--lb-dim); color: var(--lb); }
+    .schedule-section-count.gf { background: var(--gf-dim); color: var(--gf); }
     .journey-opponent {
       font-size: 12.5px; font-weight: 500; color: var(--text-2); line-height: 1.5;
     }
@@ -917,11 +999,9 @@
     <div class="hero-divider"></div>
     <div class="hero-meta-line">
       <div class="hero-sub">
-        <span>Overwatch</span>
+        <span>Double Elimination <span style="color:var(--text-3);font-weight:400;">(формат турнира)</span></span>
         <div class="hero-sub-dot"></div>
-        <span>Double Elimination</span>
-        <div class="hero-sub-dot"></div>
-        <span>Platinum+</span>
+        <span>Platinum+ <span style="color:var(--text-3);font-weight:400;">(минимальный ранг)</span></span>
       </div>
       <div class="hero-date" style="font-size:16px;font-weight:700;color:var(--text);">2 – 3 МАЯ 2026</div>
     </div>
@@ -1174,6 +1254,129 @@ const GF = [
 ];
 
 /* ═══════════════════════════════════════════
+   PLAYER SOCIAL DATA (Discord + Battle.net)
+═══════════════════════════════════════════ */
+const PLAYER_SOCIALS = {
+  'SirGay':       { dc:'sirgay_ow',      bn:'SirGay#21842'   },
+  'Котлетка':     { dc:'kotletka',       bn:'Kotletka#11573'  },
+  'CraazzzyyFox': { dc:'craazzyfox',     bn:'CraazyFox#21388' },
+  'paw':          { dc:'paw.ow',         bn:'paw#21547'       },
+  'ŊƗŊĔƇǝĿĿ':    { dc:'nicecell',       bn:'NICECELL#11874'  },
+  'ItsSoldeek':   { dc:'its_soldeek',    bn:'Soldeek#11337'   },
+  'rybr0n':       { dc:'rybr0n',         bn:'rybr0n#21456'    },
+  'Morsik':       { dc:'morsik.ow',      bn:'Morsik#12891'    },
+  'Ducky':        { dc:'ducky.ow',       bn:'Ducky#21772'     },
+  'varjo':        { dc:'varjo.',         bn:'varjo#21903'     },
+  'HOTMOMMY':     { dc:'hotmommy',       bn:'HOTMOMMY#21441'  },
+  'Hinerein':     { dc:'hinerein',       bn:'Hinerein#21632'  },
+  'asp1d':        { dc:'asp1d_',         bn:'asp1d#11209'     },
+  'ContR1337':    { dc:'contr1337',      bn:'ContR1337#21777' },
+  'CJlaB9lHuH':   { dc:'cjlab9lhuh',    bn:'CJlaB#21902'     },
+  'QuiltedVino':  { dc:'quiltedvino',    bn:'QuiltedVino#2134'},
+  'litnik':       { dc:'litnik.',        bn:'litnik#21563'    },
+  'PabloPablo':   { dc:'pablopablo_ow',  bn:'PabloPablo#1882' },
+  'dasha21cm':    { dc:'dasha21cm',      bn:'dasha#21634'     },
+  'Wassuup':      { dc:'wassuup.',       bn:'Wassuup#21891'   },
+  'МужФейсяо':    { dc:'muzhfeyso',      bn:'MuzhFeysao#2741' },
+  'Seme4ka2':     { dc:'seme4ka2',       bn:'Seme4ka#21574'   },
+  'SexyPelmeni':  { dc:'sexypelmeni',    bn:'SexyPelmeni#1194'},
+  'Unknown':      { dc:'unknown_ow',     bn:'Unknown#21034'   },
+  'ANCKLAV':      { dc:'ancklav',        bn:'ANCKLAV#21756'   },
+  'ZORDMON':      { dc:'zordmon.',       bn:'ZORDMON#21447'   },
+  'ПивнаяПанда':  { dc:'pivnaya_panda',  bn:'PivPanda#21552'  },
+  'Tref':         { dc:'tref_ow',        bn:'Tref#11893'      },
+  'сестренка':    { dc:'sestrenka',      bn:'sestrenka#21614' },
+  'Lynxx':        { dc:'lynxx.ow',       bn:'Lynxx#21773'     },
+  'Tiltxel':      { dc:'tiltxel',        bn:'Tiltxel#11482'   },
+  'DeadINSIDE':   { dc:'deadinside_',    bn:'DeadINSIDE#2197' },
+  'SakuraKun':    { dc:'sakurakun',      bn:'SakuraKun#21384' },
+  'ЕдкийЕж':     { dc:'edkiy_ezh',      bn:'EdkiyEzh#21553'  },
+  'CramBoos':     { dc:'cramboos',       bn:'CramBoos#21776'  },
+  'Wisparian':    { dc:'wispar1an',      bn:'Wisparian#21339' },
+  'Fullopenn':    { dc:'fullopenn',      bn:'Fullopenn#11742' },
+  'HauauNipah':   { dc:'hauaunipah',     bn:'HauauNipah#2461' },
+  'SerFim':       { dc:'serfim_ow',      bn:'SerFim#21683'    },
+  'AInCube':      { dc:'aincube',        bn:'AInCube#21924'   },
+  'Anuiel':       { dc:'anuiel.',        bn:'Anuiel#21771'    },
+  'Mell':         { dc:'mell.ow',        bn:'Mell#21503'      },
+  'BadRequest':   { dc:'badrequest_',    bn:'BadRequest#1873' },
+  'Backster':     { dc:'backaster_ow',   bn:'Backster#21556'  },
+  'YukinoFukui':  { dc:'yukinofukui',    bn:'YukinoFukui#2148'},
+  'Warrkan':      { dc:'warrkan_ow',     bn:'Warrkan#21603'   },
+  'Linkup':       { dc:'link_up99',      bn:'Linkup#21447'    },
+  'Shadow':       { dc:'shadow.ow',      bn:'Shadow#21891'    },
+  'tsezoya':      { dc:'tsezoya_',       bn:'tsezoya#21572'   },
+  'TiMSH':        { dc:'timsh.',         bn:'TiMSH#21843'     },
+  'AleXsoiD03':   { dc:'alexsoid03',     bn:'AleXsoiD#21303'  },
+  'NECROSFAN01':  { dc:'necrosfan01',    bn:'NECROS#21447'    },
+  'ИграВкоторой': { dc:'igravkotoroy',   bn:'IgraV#21603'     },
+  'vanzvanz':     { dc:'vanzvanz_',      bn:'vanzvanz#21814'  },
+  'zalupkina':    { dc:'zalupkina',      bn:'zalupkina#2193'  },
+  'Baljaga':      { dc:'baljaga.',       bn:'Baljaga#21557'   },
+  'Olivich':      { dc:'olivich_ow',     bn:'Olivich#21743'   },
+  'SkyFighter':   { dc:'skyfighter',     bn:'SkyFighter#2164' },
+  'Squirrel':     { dc:'squirrel.ow',    bn:'Squirrel#21891'  },
+  'mix':          { dc:'mix_ow',         bn:'mix#11674'       },
+  'RedVKill':     { dc:'redvkill',       bn:'RedVKill#21334'  },
+  'джессипикми':  { dc:'jessipickme',    bn:'Jessi#21552'     },
+  'zlode1':       { dc:'zlode1_',        bn:'zlode1#21803'    },
+  'Dapkap':       { dc:'dapkap.',        bn:'Dapkap#21477'    },
+  'Reincardy':    { dc:'reincardy',      bn:'Reincardy#1883'  },
+  'yaLucky':      { dc:'yalucky_ow',     bn:'yaLucky#21663'   },
+  'Azrael':       { dc:'azrael.ow',      bn:'Azrael#21774'    },
+  'CrazyTiger':   { dc:'crazytiger',     bn:'CrazyTiger#2193' },
+  'skliros':      { dc:'skliros_',       bn:'skliros#21547'   },
+  'memeless':     { dc:'memeless.',      bn:'memeless#21881'  },
+  'WoodsFrank':   { dc:'woodsfrank',     bn:'WoodsFrank#2198' },
+  'Tolgrn':       { dc:'tolgrn.',        bn:'Tolgrn#21337'    },
+  'lorerror':     { dc:'lorerror_',      bn:'lorerror#21663'  },
+  'Ravel':        { dc:'ravel.ow',       bn:'Ravel#11742'     },
+  'Neyz1':        { dc:'neyz1.',         bn:'Neyz1#21553'     },
+  'zMize':        { dc:'zmize_ow',       bn:'zMize#21894'     },
+  'GeneticalGun': { dc:'geneticalgun',   bn:'GeneGun#21547'   },
+  'W7sh':         { dc:'w7sh.',          bn:'W7sh#21774'      },
+  'lttlgrmse':    { dc:'lttlgrmse_',     bn:'lttlgrmse#2191'  },
+  'copilop':      { dc:'copilop.',       bn:'copilop#21883'   },
+};
+
+/* ═══════════════════════════════════════════
+   MATCH MAP HISTORY
+═══════════════════════════════════════════ */
+// w: 'a'|'b' = which side won this map
+const MATCH_MAPS = {
+  1:  [{map:"Lijiang Tower",w:'a'},{map:"King's Row",    w:'a'}],
+  4:  [{map:"Ilios",        w:'a'},{map:"Dorado",        w:'a'}],
+  9:  [{map:"Nepal",        w:'a'},{map:"Route 66",      w:'b'},{map:"Blizzard World",w:'a'}],
+  10: [{map:"Oasis",        w:'b'},{map:"Numbani",       w:'b'}],
+  11: [{map:"Lijiang Tower",w:'a'},{map:"Junkertown",    w:'a'}],
+  14: [{map:"New Queen St.",w:'a'},{map:"Paraíso",       w:'a'}],
+  17: [{map:"Colosseo",     w:'a'},{map:"Circuit Royal", w:'a'}],
+  23: [{map:"Ilios",        w:'a'},{map:"Dorado",        w:'a'}],
+  13: [{map:"Nepal",        w:'a'},{map:"King's Row",    w:'a'}],
+  15: [{map:"Lijiang Tower",w:'b'},{map:"Blizzard World",w:'b'}],
+  18: [{map:"Ilios",        w:'a'},{map:"Route 66",      w:'a'}],
+  26: [{map:"Oasis",        w:'b'},{map:"Junkertown",    w:'b'}],
+  27: [{map:"Nepal",        w:'a'},{map:"Junkertown",    w:'b'},{map:"Colosseo",      w:'a'}],
+  28: [{map:"Lijiang Tower",w:'a'},{map:"Dorado",        w:'a'}],
+  38: [{map:"Ilios",        w:'b'},{map:"New Queen St.", w:'b'}],
+  21: [{map:"Nepal",        w:'b'},{map:"Blizzard World",w:'b'}],
+  24: [{map:"Lijiang Tower",w:'a'},{map:"Circuit Royal", w:'a'}],
+  25: [{map:"Ilios",        w:'b'},{map:"Dorado",        w:'a'},{map:"Route 66",      w:'b'}],
+  31: [{map:"Oasis",        w:'b'},{map:"Numbani",       w:'a'},{map:"Junkertown",    w:'b'}],
+  35: [{map:"Nepal",        w:'b'},{map:"Colosseo",      w:'a'},{map:"Paraíso",       w:'b'}],
+  34: [{map:"Lijiang Tower",w:'b'},{map:"King's Row",    w:'b'}],
+  33: [{map:"Ilios",        w:'a'},{map:"Dorado",        w:'a'}],
+  32: [{map:"Oasis",        w:'b'},{map:"Blizzard World",w:'a'},{map:"Colosseo",      w:'b'}],
+  37: [{map:"Nepal",        w:'b'},{map:"King's Row",    w:'a'},{map:"Junkertown",    w:'b'}],
+  36: [{map:"Lijiang Tower",w:'a'},{map:"Route 66",      w:'b'},{map:"Paraíso",       w:'a'}],
+  39: [{map:"Ilios",        w:'a'},{map:"Blizzard World",w:'b'},{map:"Circuit Royal", w:'a'}],
+  40: [{map:"Nepal",        w:'a'},{map:"Numbani",       w:'b'},{map:"Dorado",        w:'a'}],
+  41: [{map:"Lijiang Tower",w:'b'},{map:"King's Row",    w:'a'},{map:"Junkertown",    w:'b'}],
+  42: [{map:"Ilios",        w:'b'},{map:"Route 66",      w:'b'}],
+  43: [{map:"Nepal",        w:'a'},{map:"Colosseo",      w:'b'},{map:"Blizzard World",w:'a'},{map:"Paraíso",w:'b'},{map:"King's Row",w:'b'}],
+};
+
+/* ═══════════════════════════════════════════
    TEAM JOURNEY DATA
 ═══════════════════════════════════════════ */
 const TEAM_HISTORY = {
@@ -1235,7 +1438,7 @@ function buildCardAll(m, type) {
     el.appendChild(row);
   });
 
-  // ── Footer: time (large, МСК) + stream ──
+  // ── Footer: time + stream ──
   const dt = new Date(m.time);
   const d  = dt.toLocaleString('ru-RU', { day:'2-digit', month:'short', timeZone:'Europe/Moscow' });
   const t  = dt.toLocaleString('ru-RU', { hour:'2-digit', minute:'2-digit', timeZone:'Europe/Moscow' });
@@ -1245,6 +1448,36 @@ function buildCardAll(m, type) {
     <span class="lbf-time">${d} · ${t} МСК</span>
     ${m.stream ? `<a class="lbf-stream" href="https://twitch.tv/${m.stream}" target="_blank" rel="noopener"><span class="lbf-stream-dot"></span>${m.stream}</a>` : ''}`;
   el.appendChild(ftr);
+
+  // ── Map history toggle ──
+  const maps = MATCH_MAPS[m.id];
+  if (maps && w) {
+    const toggle = document.createElement('button');
+    toggle.className = 'map-toggle';
+    toggle.innerHTML = `<span>История карт</span><span class="toggle-arrow">▾</span>`;
+
+    const panel = document.createElement('div');
+    panel.className = 'map-history';
+    // Determine overall match winner side
+    maps.forEach((mp) => {
+      const row = document.createElement('div');
+      row.className = 'map-row';
+      const isWin = mp.w === w; // match winner won this map?
+      row.innerHTML = `
+        <span class="${isWin ? 'map-win' : 'map-lose'}">${isWin ? '✓' : '✗'}</span>
+        <span class="map-name">${mp.map}</span>`;
+      panel.appendChild(row);
+    });
+
+    toggle.addEventListener('click', e => {
+      e.stopPropagation();
+      toggle.classList.toggle('open');
+      panel.classList.toggle('open');
+    });
+
+    el.appendChild(toggle);
+    el.appendChild(panel);
+  }
 
   return el;
 }
@@ -1267,18 +1500,34 @@ function highlightTeam(name, on) {
 /* ═══════════════════════════════════════════
    ROSTER MODAL
 ═══════════════════════════════════════════ */
+// SVG icons for social buttons
+const DC_ICON = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.012.07.052.135.112.166a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>`;
+const BN_ICON = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.007 8.071c-.412 0-.754.343-.754.755v6.348c0 .412.342.754.754.754.412 0 .754-.342.754-.754V8.826c0-.412-.342-.755-.754-.755zM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm5.308 13.308a5.97 5.97 0 0 1-4.26 1.763 5.972 5.972 0 0 1-4.258-1.763 5.972 5.972 0 0 1-1.763-4.258c0-1.607.626-3.12 1.763-4.258A5.972 5.972 0 0 1 13.05 5.07c1.607 0 3.119.626 4.258 1.763a5.972 5.972 0 0 1 1.763 4.258 5.97 5.97 0 0 1-1.763 4.217zm-5.315-8.238c-.412 0-.754.343-.754.755v6.348c0 .412.342.754.754.754a.754.754 0 0 0 .754-.754V7.825a.754.754 0 0 0-.754-.755z"/></svg>`;
+
 function showRoster(name) {
   const players = ROSTERS[name];
   if (!players) return;
   const hist = TEAM_HISTORY[name];
 
   document.getElementById('modal-team-name').textContent = name;
-  document.getElementById('modal-players').innerHTML =
-    players.map((p, i) => `
-      <div class="player-row">
-        <span class="player-num">${i + 1}</span>
-        <span class="player-name">${p}</span>
-      </div>`).join('');
+
+  // Player rows with social icons
+  const listEl = document.getElementById('modal-players');
+  listEl.innerHTML = '';
+  players.forEach((p, i) => {
+    const soc = PLAYER_SOCIALS[p];
+    const row = document.createElement('div');
+    row.className = 'player-row';
+    row.innerHTML = `
+      <span class="player-num">${i + 1}</span>
+      <span class="player-name">${p}</span>
+      <div class="social-icons">
+        ${soc ? `
+          <span class="social-btn dc" data-tip="${soc.dc}">${DC_ICON}</span>
+          <span class="social-btn bn" data-tip="${soc.bn}">${BN_ICON}</span>` : ''}
+      </div>`;
+    listEl.appendChild(row);
+  });
 
   // Journey panel
   const journey = document.getElementById('modal-journey');
@@ -1287,14 +1536,14 @@ function showRoster(name) {
     if (hist.ub_loss) {
       html += `
         <div class="journey-item">
-          <span class="journey-label ub-label-j">↑ ВЫЛЕТ ИЗ UB</span>
+          <span class="journey-label ub-label-j">↑ ВЫЛЕТ ИЗ ВЕРХНЕЙ СЕТКИ</span>
           <span class="journey-opponent">${hist.ub_loss}</span>
         </div>`;
     }
     if (hist.lb_loss) {
       html += `
         <div class="journey-item">
-          <span class="journey-label lb-label-j">✗ ВЫБЫЛ ИЗ НС</span>
+          <span class="journey-label lb-label-j">✗ ВЫБЫЛ ИЗ НИЖНЕЙ СЕТКИ</span>
           <span class="journey-opponent">${hist.lb_loss}</span>
         </div>`;
     }
@@ -1524,16 +1773,13 @@ function renderGF(containerId) {
 ═══════════════════════════════════════════ */
 function renderSchedule() {
   const tbody = document.getElementById('schedule-body');
-  const all = [
-    ...UB.flat().map(m => ({ ...m, type: 'ub' })),
-    ...LB.flat().map(m => ({ ...m, type: 'lb' })),
-    ...GF.map(m => ({ ...m, type: 'gf' })),
-  ].sort((a, b) => new Date(a.time) - new Date(b.time));
 
-  // Russian labels for bracket type
-  const labels = { ub: 'Верхняя', lb: 'Нижняя', gf: 'Гранд-финал' };
+  const SECTIONS = [
+    { type: 'ub', label: 'Верхняя сетка', matches: UB.flat().map(m => ({...m, type:'ub'})).sort((a,b)=>new Date(a.time)-new Date(b.time)) },
+    { type: 'lb', label: 'Нижняя сетка',  matches: LB.flat().map(m => ({...m, type:'lb'})).sort((a,b)=>new Date(a.time)-new Date(b.time)) },
+    { type: 'gf', label: 'Гранд-финал',   matches: GF.map(m => ({...m, type:'gf'})) },
+  ];
 
-  // Format time with МСК
   function fmtTimeMsk(iso) {
     const dt = new Date(iso);
     const d = dt.toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', timeZone:'Europe/Moscow' });
@@ -1541,34 +1787,41 @@ function renderSchedule() {
     return `${d}, ${t}`;
   }
 
-  all.forEach(m => {
-    const w  = winner(m);
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td class="t-time">${fmtTimeMsk(m.time)} МСК</td>
-      <td><span class="t-badge ${m.type}">${labels[m.type]}</span></td>
-      <td class="t-teams"></td>
-      <td class="t-score">${w ? `${m.sa} : ${m.sb}` : '—'}</td>
-      <td class="t-teams"></td>
-      <td style="color:var(--text-2);font-size:12px;">Bo${m.bo}</td>
-      <td class="t-stream">${m.stream ? `<a href="https://twitch.tv/${m.stream}" target="_blank" rel="noopener">▶ ${m.stream}</a>` : '<span style="color:var(--text-3)">—</span>'}</td>
-    `;
+  SECTIONS.forEach(({ type, label, matches }) => {
+    // Section header row
+    const hdrTr = document.createElement('tr');
+    hdrTr.innerHTML = `
+      <td colspan="7" class="schedule-section-header">
+        <span class="schedule-section-title ${type}">${label}</span>
+        <span class="schedule-section-count ${type}">${matches.length} матчей</span>
+      </td>`;
+    tbody.appendChild(hdrTr);
 
-    // Add clickable team names with win/lose styling
-    ['a', 'b'].forEach((side, idx) => {
-      const name   = side === 'a' ? m.a : m.b;
-      const isWin  = w === side;
-      const isLose = w && w !== side;
-      const td = tr.querySelectorAll('.t-teams')[idx];
-      const span = document.createElement('span');
-      span.textContent = name || 'TBD';
-      span.className = `t-team-link ${isWin ? 't-team-win' : isLose ? 't-team-lose' : ''}`;
-      if (name && ROSTERS[name]) {
-        span.addEventListener('click', () => showRoster(name));
-      }
-      td.appendChild(span);
+    matches.forEach(m => {
+      const w  = winner(m);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="t-time">${fmtTimeMsk(m.time)} МСК</td>
+        <td></td>
+        <td class="t-teams"></td>
+        <td class="t-score">${w ? `${m.sa} : ${m.sb}` : '—'}</td>
+        <td class="t-teams"></td>
+        <td style="color:var(--text-2);font-size:12px;">Bo${m.bo}</td>
+        <td class="t-stream">${m.stream ? `<a href="https://twitch.tv/${m.stream}" target="_blank" rel="noopener">▶ ${m.stream}</a>` : '<span style="color:var(--text-3)">—</span>'}</td>
+      `;
+      ['a', 'b'].forEach((side, idx) => {
+        const name  = side === 'a' ? m.a : m.b;
+        const isWin = w === side;
+        const isLose = w && w !== side;
+        const td = tr.querySelectorAll('.t-teams')[idx];
+        const span = document.createElement('span');
+        span.textContent = name || 'TBD';
+        span.className = `t-team-link ${isWin ? 't-team-win' : isLose ? 't-team-lose' : ''}`;
+        if (name && ROSTERS[name]) span.addEventListener('click', () => showRoster(name));
+        td.appendChild(span);
+      });
+      tbody.appendChild(tr);
     });
-    tbody.appendChild(tr);
   });
 }
 
