@@ -543,8 +543,27 @@
       text-underline-offset: 2px;
     }
 
-    /* winner left accent for LB */
+    /* ── type-specific overrides ── */
+    /* LB (default = amber) */
     .lbf-row.winner { border-left: 2px solid var(--lb); }
+
+    /* UB → green */
+    .lbf-card.ub-type { border-color: rgba(0,204,136,.35); }
+    .lbf-card.ub-type .lbf-header { background: rgba(0,204,136,.06); border-bottom-color: rgba(0,204,136,.1); }
+    .lbf-card.ub-type .lbf-badge  { color: rgba(0,204,136,.75); }
+    .lbf-card.ub-type .lbf-footer { border-top-color: rgba(0,204,136,.07); }
+    .lbf-card.ub-type .lbf-row.winner { background: rgba(0,204,136,.08); border-left-color: var(--ub); }
+    .lbf-card.ub-type .lbf-row.winner .lbf-name  { color: #aaffe0; }
+    .lbf-card.ub-type .lbf-row.winner .lbf-score { color: rgba(0,204,136,.9); }
+
+    /* GF → sky blue */
+    .lbf-card.gf-type { border-color: rgba(42,180,240,.45); box-shadow: 0 0 20px rgba(42,180,240,.08); }
+    .lbf-card.gf-type .lbf-header { background: rgba(42,180,240,.07); border-bottom-color: rgba(42,180,240,.12); }
+    .lbf-card.gf-type .lbf-badge  { color: rgba(42,180,240,.85); }
+    .lbf-card.gf-type .lbf-footer { border-top-color: rgba(42,180,240,.08); }
+    .lbf-card.gf-type .lbf-row.winner { background: rgba(42,180,240,.09); border-left-color: var(--gf); }
+    .lbf-card.gf-type .lbf-row.winner .lbf-name  { color: #caf0fd; }
+    .lbf-card.gf-type .lbf-row.winner .lbf-score { color: rgba(42,180,240,.9); }
 
     .lbf-footer {
       display: flex; align-items: center; justify-content: space-between;
@@ -552,9 +571,11 @@
       border-top: 1px solid rgba(232,151,10,.08);
       background: rgba(0,0,0,.15);
     }
+    /* ── bright time ── */
     .lbf-time {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 8.5px; color: var(--text-3); letter-spacing: .04em;
+      font-size: 9px; font-weight: 600;
+      color: #7888c8; letter-spacing: .05em;
     }
     .lbf-stream {
       display: inline-flex; align-items: center; gap: 4px;
@@ -647,6 +668,38 @@
       transform: translateY(12px); transition: transform .2s;
     }
     .modal-bg.open .modal { transform: translateY(0); }
+
+    /* wider modal for journey panel */
+    .modal { width: 560px !important; }
+    .modal-body {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+    }
+    .modal-col-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 8.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--text-3); margin-bottom: 10px;
+    }
+
+    /* Journey panel */
+    .journey-result {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px; font-weight: 700; color: var(--text);
+      margin-bottom: 14px; padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .journey-item { margin-bottom: 12px; }
+    .journey-label {
+      display: block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 8.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .ub-label-j { color: rgba(0,204,136,.6); }
+    .lb-label-j  { color: rgba(232,151,10,.6); }
+    .journey-opponent {
+      font-size: 12.5px; font-weight: 500; color: var(--text-2); line-height: 1.5;
+    }
+
     .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
     .modal-title {
       font-family: 'Space Grotesk', sans-serif;
@@ -954,8 +1007,17 @@
       <span class="modal-title" id="modal-team-name"></span>
       <button class="modal-close" id="modal-close">✕</button>
     </div>
-    <div class="modal-sub">Состав команды · GNCSPRING2026</div>
-    <div class="player-list" id="modal-players"></div>
+    <div class="modal-sub">GNCSPRING2026</div>
+    <div class="modal-body">
+      <div class="modal-col">
+        <div class="modal-col-label">Состав команды</div>
+        <div class="player-list" id="modal-players"></div>
+      </div>
+      <div class="modal-col">
+        <div class="modal-col-label">Турнирный путь</div>
+        <div id="modal-journey"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1055,6 +1117,28 @@ const GF = [
 ];
 
 /* ═══════════════════════════════════════════
+   TEAM JOURNEY DATA
+═══════════════════════════════════════════ */
+const TEAM_HISTORY = {
+  'SirGay':      { result:'🏆 Чемпион',   ub_loss: null,                              lb_loss: null },
+  'Anuiel':      { result:'🥈 2-е место', ub_loss:'Проиграл SirGay · UB Финал',       lb_loss:'Проиграл SirGay · Гранд-финал' },
+  'Soldeek':     { result:'🥉 3-е место', ub_loss:'Проиграл SirGay · UB Раунд 2',     lb_loss:'Проиграл SirGay · LB Финал' },
+  'QuiltedVino': { result:'Выбыл',        ub_loss:'Проиграл Soldeek · UB Раунд 1',    lb_loss:'Проиграл Soldeek · LB Полуфинал' },
+  'Wisparian':   { result:'Выбыл',        ub_loss:'Проиграл SirGay · UB Полуфинал',   lb_loss:'Проиграл QuiltedVino · LB Раунд 4' },
+  'zMize':       { result:'Выбыл',        ub_loss:'Проиграл Anuiel · UB Полуфинал',   lb_loss:'Проиграл Soldeek · LB Раунд 4' },
+  'МужФейсяо':   { result:'Выбыл',        ub_loss:'Проиграл Wisparian · UB Раунд 2',  lb_loss:'Проиграл Soldeek · LB Раунд 3' },
+  'AleXsoiD03':  { result:'Выбыл',        ub_loss:'Проиграл Anuiel · UB Раунд 2',     lb_loss:'Проиграл ZORDMON · LB Раунд 2' },
+  'WoodsFrank':  { result:'Выбыл',        ub_loss:'Проиграл zMize · UB Раунд 2',      lb_loss:'Проиграл QuiltedVino · LB Раунд 2' },
+  'ZORDMON':     { result:'Выбыл',        ub_loss:'Проиграл МужФейсяо · UB Раунд 1',  lb_loss:'Проиграл QuiltedVino · LB Раунд 3' },
+  'HOTMOMMY':    { result:'Выбыл',        ub_loss:'Проиграл SirGay · UB Раунд 1',     lb_loss:'Проиграл QuiltedVino · LB Раунд 1' },
+  'ЕдкийЕж':    { result:'Выбыл',        ub_loss:'Проиграл Wisparian · UB Раунд 1',  lb_loss:'Проиграл ZORDMON · LB Раунд 1' },
+  'Baljaga':     { result:'Выбыл',        ub_loss:'Проиграл AleXsoiD03 · UB Раунд 1', lb_loss:'Проиграл МужФейсяо · LB Раунд 2' },
+  'Warrkan':     { result:'Выбыл',        ub_loss:'Проиграл Anuiel · UB Раунд 1',     lb_loss:'Проиграл Baljaga · LB Раунд 1' },
+  'RedVKill':    { result:'Выбыл',        ub_loss:'Проиграл WoodsFrank · UB Раунд 1', lb_loss:'Проиграл yaLucky · LB Раунд 1' },
+  'yaLucky':     { result:'Выбыл',        ub_loss:'Проиграл zMize · UB Раунд 1',      lb_loss:'Проиграл Soldeek · LB Раунд 2' },
+};
+
+/* ═══════════════════════════════════════════
    UTILS
 ═══════════════════════════════════════════ */
 function winner(m) { return m.sa > m.sb ? 'a' : m.sb > m.sa ? 'b' : null; }
@@ -1064,85 +1148,43 @@ function fmtTime(iso) {
 }
 
 /* ═══════════════════════════════════════════
-   CARD BUILDER
+   UNIFIED CARD BUILDER (UB / LB / GF)
 ═══════════════════════════════════════════ */
-function buildCard(m, type) {
-  const w = winner(m);
-  const stA = w === 'a' ? 'winner' : w === 'b' ? 'loser' : 'pending';
-  const stB = w === 'b' ? 'winner' : w === 'a' ? 'loser' : 'pending';
-  const streamHref = m.stream ? `https://twitch.tv/${m.stream}` : null;
+const CARD_META = {
+  ub: { badge: '↑ Верхняя сетка', cls: 'ub-type' },
+  lb: { badge: '↓ Нижняя сетка',  cls: 'lb-type' },
+  gf: { badge: '★ Гранд-финал',   cls: 'gf-type' },
+};
+
+function buildCardAll(m, type) {
+  const w    = winner(m);
+  const stA  = w === 'a' ? 'winner' : w === 'b' ? 'loser' : 'pending';
+  const stB  = w === 'b' ? 'winner' : w === 'a' ? 'loser' : 'pending';
+  const meta = CARD_META[type] || CARD_META.ub;
 
   const el = document.createElement('div');
-  el.className = `match-card ${type}-card`;
+  el.className = `lbf-card ${meta.cls}`;
   el.dataset.matchId = m.id;
 
-  // meta bar
-  const meta = document.createElement('div');
-  meta.className = 'match-meta';
-  meta.innerHTML = `
-    <span class="meta-id">#${m.id}</span>
-    <span class="meta-right">
-      <span class="meta-bo">Bo${m.bo}</span>
-      ${streamHref ? `<a class="meta-stream" href="${streamHref}" target="_blank" rel="noopener">
-        <svg viewBox="0 0 10 10" fill="currentColor"><path d="M2 0L0 2.5v6h2.5V11l2.5-2.5H7L10 5.5V0H2zm7 5L7.5 6.5H5.5L4 8V6.5H2V1h7v4zM7 2.5h-1v3h1v-3zM5 2.5H4v3h1v-3z"/></svg>
-        ${m.stream}</a>` : ''}
-    </span>`;
-  el.appendChild(meta);
-
-  // team rows
-  [['a', stA, m.a, m.aSrc], ['b', stB, m.b, m.bSrc]].forEach(([side, state, name, src]) => {
-    const row = document.createElement('div');
-    row.className = `team-row ${state}`;
-    row.dataset.team = name;
-    const badge = src === 'ub' ? `<span class="src-badge">↓ UB</span>` : '';
-    row.innerHTML = `${badge}<span class="team-name-text">${name || 'TBD'}</span><span class="score-cell">${fmt(m, side)}</span>`;
-
-    // hover: highlight same team across all matches
-    row.addEventListener('mouseenter', () => highlightTeam(name, true));
-    row.addEventListener('mouseleave', () => highlightTeam(name, false));
-
-    // click: show roster modal
-    if (name && ROSTERS[name]) {
-      row.addEventListener('click', (e) => { e.stopPropagation(); showRoster(name); });
-    }
-
-    el.appendChild(row);
-  });
-
-  return el;
-}
-
-/* ═══════════════════════════════════════════
-   LB FULL-SIZE CARD BUILDER
-═══════════════════════════════════════════ */
-function buildCardLB(m) {
-  const w = winner(m);
-  const stA = w === 'a' ? 'winner' : w === 'b' ? 'loser' : 'pending';
-  const stB = w === 'b' ? 'winner' : w === 'a' ? 'loser' : 'pending';
-
-  const el = document.createElement('div');
-  el.className = 'lbf-card';
-  el.dataset.matchId = m.id;
-
-  // Header
+  // ── Header ──
   const hdr = document.createElement('div');
   hdr.className = 'lbf-header';
   hdr.innerHTML = `
-    <span class="lbf-badge">↓ Нижняя сетка</span>
+    <span class="lbf-badge">${meta.badge}</span>
     <span class="lbf-meta">
       <span class="lbf-bo">Bo${m.bo}</span>
       <span class="lbf-id">#${m.id}</span>
-      ${m.stream ? `<a class="lbf-stream" href="https://twitch.tv/${m.stream}" target="_blank" rel="noopener" title="${m.stream}"><span class="lbf-stream-dot"></span>${m.stream}</a>` : ''}
+      ${m.stream ? `<a class="lbf-stream" href="https://twitch.tv/${m.stream}" target="_blank" rel="noopener"><span class="lbf-stream-dot"></span>${m.stream}</a>` : ''}
     </span>`;
   el.appendChild(hdr);
 
-  // Team rows
+  // ── Team rows ──
   [['a', stA, m.a, m.aSrc, m.sa], ['b', stB, m.b, m.bSrc, m.sb]].forEach(([side, state, name, src, score]) => {
     const row = document.createElement('div');
     row.className = `lbf-row ${state}`;
     row.dataset.team = name || '';
     const slotLabel = side === 'a' ? 'СЛ А' : 'СЛ Б';
-    const ubBadge = src === 'ub' ? `<span class="lbf-ub-src">↓UB</span>` : '';
+    const ubBadge   = src === 'ub' ? `<span class="lbf-ub-src">↓UB</span>` : '';
     row.innerHTML = `
       <span class="lbf-slot">${slotLabel}</span>
       ${ubBadge}
@@ -1154,7 +1196,7 @@ function buildCardLB(m) {
     el.appendChild(row);
   });
 
-  // Footer
+  // ── Footer with bright time ──
   const dt = new Date(m.time);
   const timeStr = dt.toLocaleString('ru-RU', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', timeZone:'Europe/Moscow' }).replace(',', ' |');
   const ftr = document.createElement('div');
@@ -1165,13 +1207,17 @@ function buildCardLB(m) {
   return el;
 }
 
+// Keep aliases for backward compat
+function buildCard(m, type)   { return buildCardAll(m, type); }
+function buildCardLB(m)        { return buildCardAll(m, 'lb'); }
+
 /* ═══════════════════════════════════════════
    TEAM HIGHLIGHT
 ═══════════════════════════════════════════ */
 function highlightTeam(name, on) {
   if (!name) return;
   const esc = CSS.escape(name);
-  document.querySelectorAll(`.team-row[data-team="${esc}"], .lbf-row[data-team="${esc}"]`).forEach(r => {
+  document.querySelectorAll(`[data-team="${esc}"]`).forEach(r => {
     r.classList.toggle('team-lit', on);
   });
 }
@@ -1182,13 +1228,40 @@ function highlightTeam(name, on) {
 function showRoster(name) {
   const players = ROSTERS[name];
   if (!players) return;
+  const hist = TEAM_HISTORY[name];
+
   document.getElementById('modal-team-name').textContent = name;
-  const list = document.getElementById('modal-players');
-  list.innerHTML = players.map((p, i) => `
-    <div class="player-row">
-      <span class="player-num">${i + 1}</span>
-      <span class="player-name">${p}</span>
-    </div>`).join('');
+  document.getElementById('modal-players').innerHTML =
+    players.map((p, i) => `
+      <div class="player-row">
+        <span class="player-num">${i + 1}</span>
+        <span class="player-name">${p}</span>
+      </div>`).join('');
+
+  // Journey panel
+  const journey = document.getElementById('modal-journey');
+  if (journey && hist) {
+    let html = `<div class="journey-result">${hist.result}</div>`;
+    if (hist.ub_loss) {
+      html += `
+        <div class="journey-item">
+          <span class="journey-label ub-label-j">↑ ВЫЛЕТ ИЗ UB</span>
+          <span class="journey-opponent">${hist.ub_loss}</span>
+        </div>`;
+    }
+    if (hist.lb_loss) {
+      html += `
+        <div class="journey-item">
+          <span class="journey-label lb-label-j">✗ ВЫБЫЛ ИЗ НС</span>
+          <span class="journey-opponent">${hist.lb_loss}</span>
+        </div>`;
+    }
+    if (!hist.ub_loss && !hist.lb_loss) {
+      html += `<div class="journey-item"><span class="journey-label ub-label-j">Не проиграл ни одного матча</span></div>`;
+    }
+    journey.innerHTML = html;
+  }
+
   document.getElementById('modal-bg').classList.add('open');
 }
 document.getElementById('modal-close').addEventListener('click', () => document.getElementById('modal-bg').classList.remove('open'));
@@ -1256,7 +1329,7 @@ function renderBracket(rounds, wrapId, svgId, type, opts = {}) {
       slot.style.display = 'flex';
       slot.style.alignItems = 'center';
 
-      const card = type === 'lb' ? buildCardLB(m) : buildCard(m, type);
+      const card = buildCardAll(m, type);
       slot.appendChild(card);
       matchesEl.appendChild(slot);
       matchEls.push({ card, slotTop: top, slotH });
@@ -1451,11 +1524,11 @@ function enableDragScroll(el) {
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
-const LB_OPTS = { slot: 122, cardW: 210 };
-renderBracket(UB, 'ub-wrap', 'ub-svg', 'ub');
-renderBracket(LB, 'lb-wrap', 'lb-svg', 'lb', LB_OPTS);
-renderBracket(UB, 'ub-wrap-full', 'ub-svg-full', 'ub');
-renderBracket(LB, 'lb-wrap-full', 'lb-svg-full', 'lb', LB_OPTS);
+const CARD_OPTS = { slot: 122, cardW: 210 };
+renderBracket(UB, 'ub-wrap',      'ub-svg',      'ub', CARD_OPTS);
+renderBracket(LB, 'lb-wrap',      'lb-svg',      'lb', CARD_OPTS);
+renderBracket(UB, 'ub-wrap-full', 'ub-svg-full', 'ub', CARD_OPTS);
+renderBracket(LB, 'lb-wrap-full', 'lb-svg-full', 'lb', CARD_OPTS);
 renderGF('gf-wrap');
 renderGF('gf-wrap-full');
 renderSchedule();
