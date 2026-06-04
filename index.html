@@ -39,7 +39,7 @@
       --lose-text:#282848;
 
       --row-h:    28px;
-      --card-w:   224px;
+      --card-w:   156px;
       --col-gap:  52px;
     }
 
@@ -1217,6 +1217,252 @@
       nav { display: none; }
       .nav-socials { display: none; }
     }
+
+    /* ════════════════════════════════════════════════════════
+       ▓▓▓  REDESIGN — MINIMAL NEO-BRUTALISM (Linear/Browserbase)
+       overrides everything below the header
+    ════════════════════════════════════════════════════════ */
+    :root {
+      --bg:       #08090c;
+      --surface:  #0d0e12;
+      --surface2: #131419;
+      --line:     rgba(255,255,255,.08);
+      --line2:    rgba(255,255,255,.14);
+      --text:     #ececf1;
+      --text-2:   #8a8a96;
+      --text-3:   #50505b;
+      --accent:   #4d7cfe;
+      --accent-2: #3461e6;
+      --ub: #4d7cfe; --lb: #4d7cfe; --gf: #4d7cfe;
+      --win: #ffffff;
+      --radius: 6px;
+    }
+    body { background: var(--bg) !important; }
+    .glow, .glow-lb { display: none !important; }
+    .cb { display: none !important; }
+    ::selection { background: rgba(77,124,254,.3); }
+
+    main { max-width: 1240px !important; padding: 0 24px 96px !important; }
+
+    /* ── HERO ── */
+    .page-hero { padding: 52px 0 28px !important; border-bottom: 1px solid var(--line) !important; margin-bottom: 40px !important; }
+    .hero-top { margin-bottom: 0 !important; }
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500;
+      letter-spacing: .12em; color: var(--accent); margin-bottom: 10px;
+    }
+    .hero-eyebrow .he-mark { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: none; }
+    .tournament-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(30px, 4.2vw, 46px) !important; font-weight: 700 !important;
+      letter-spacing: -.025em !important; line-height: 1.02 !important; color: #fff !important;
+    }
+
+    /* ── TOURNAMENT INFO BAR (replaces hover buttons) ── */
+    .info-buttons { display: none !important; }
+    .tinfo {
+      display: flex; flex-wrap: wrap; margin-top: 26px;
+      border: 1px solid var(--line); border-radius: var(--radius);
+      background: var(--surface); overflow: hidden;
+    }
+    .tinfo-cell {
+      display: flex; flex-direction: column; gap: 5px;
+      padding: 14px 20px; flex: 1; min-width: 120px;
+      border-right: 1px solid var(--line);
+      text-decoration: none;
+    }
+    .tinfo-cell:last-child { border-right: none; }
+    .tinfo-cell .ti-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500;
+      letter-spacing: .1em; text-transform: uppercase; color: var(--text-3);
+    }
+    .tinfo-cell .ti-value {
+      font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600; color: var(--text);
+      display: flex; align-items: center; gap: 7px;
+    }
+    .tinfo-cell.is-link .ti-value { color: var(--accent); transition: color .12s; }
+    .tinfo-cell.is-link:hover .ti-value { color: #7aa0ff; }
+    .ti-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .ti-dot.done { background: var(--text-2); }
+    .ti-dot.live { background: #ef4444; box-shadow: 0 0 8px #ef4444; animation: livePulse 1.3s ease-in-out infinite; }
+
+    /* ── PODIUM (minimal) ── */
+    .podium-section { margin-bottom: 56px !important; }
+    .podium-title {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px !important; font-weight: 500 !important;
+      letter-spacing: .14em !important; text-transform: uppercase; color: var(--text-3) !important; margin-bottom: 14px !important;
+    }
+    .podium { display: grid !important; grid-template-columns: repeat(3,1fr) !important; gap: 10px !important; }
+    @media (max-width: 720px){ .podium { grid-template-columns: 1fr !important; } }
+    .podium-cell { position: relative; }
+    .podium-card {
+      display: flex !important; align-items: center !important; gap: 14px !important;
+      padding: 16px 18px !important;
+      background: var(--surface) !important; border: 1px solid var(--line) !important;
+      border-radius: var(--radius) !important; box-shadow: none !important; cursor: default;
+      transition: border-color .14s, background .14s !important;
+    }
+    .podium-cell:hover .podium-card { border-color: var(--line2) !important; background: var(--surface2) !important; }
+    .podium-medal {
+      width: 30px !important; height: 30px !important; border-radius: 4px !important;
+      background: transparent !important; box-shadow: none !important;
+      font-family: 'JetBrains Mono', monospace !important; font-size: 12px !important; font-weight: 700 !important;
+      color: var(--text-3) !important; border: 1px solid var(--line2);
+    }
+    .podium-medal::before, .podium-medal::after { display: none !important; }
+    .podium-card.p1 .podium-medal { color: var(--accent) !important; border-color: rgba(77,124,254,.5); }
+    .podium-team-name {
+      font-style: normal !important; font-size: 16px !important; font-weight: 600 !important; color: #fff !important;
+    }
+    .podium-record { font-size: 12px !important; color: var(--text-2) !important; }
+    .podium-record .pr-w { color: var(--text) !important; }
+    .podium-record .pr-l { color: var(--text-3) !important; }
+    /* podium hover roster dropdown */
+    .podium-pop {
+      background: var(--surface2) !important; border: 1px solid var(--line2) !important; border-top: none !important;
+      box-shadow: 0 16px 40px rgba(0,0,0,.5) !important; border-radius: 0 0 var(--radius) var(--radius) !important;
+    }
+    .podium-cell:hover .podium-card { border-bottom-color: transparent !important; border-radius: var(--radius) var(--radius) 0 0 !important; }
+    .pp-head { color: var(--text-3) !important; }
+    .pp-name { color: var(--text) !important; }
+
+    /* ── TABS ── */
+    .tabs { border-bottom: 1px solid var(--line) !important; margin-bottom: 28px !important; gap: 2px !important; }
+    .tab-btn {
+      font-family: 'Space Grotesk', sans-serif !important; font-size: 12px !important; font-weight: 600 !important;
+      letter-spacing: .04em !important; text-transform: none !important;
+      color: var(--text-3) !important; padding: 11px 16px !important; border: none !important; background: none !important;
+      position: relative;
+    }
+    .tab-btn:hover { color: var(--text-2) !important; }
+    .tab-btn.active { color: #fff !important; }
+    .tab-btn.active::after {
+      content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--accent);
+    }
+    .tab-btn .tab-count {
+      font-family: 'JetBrains Mono', monospace !important; font-size: 10px !important;
+      color: var(--text-3) !important; background: none !important; padding: 0 0 0 5px !important;
+    }
+    .tab-btn.active .tab-count { color: var(--accent) !important; }
+
+    /* ── BRACKET CARDS (compact, flat) ── */
+    .lbf-card {
+      border-radius: 5px !important; border: 1px solid var(--line) !important;
+      background: var(--surface) !important; overflow: visible !important;
+      box-shadow: none !important; transition: border-color .12s, background .12s !important;
+    }
+    .lbf-card:hover { border-color: var(--line2) !important; background: var(--surface2) !important; }
+    .lbf-card.ub-type, .lbf-card.lb-type, .lbf-card.gf-type { border-color: var(--line) !important; box-shadow: none !important; }
+
+    /* time header */
+    .lbf-footer {
+      padding: 5px 9px !important; border-bottom: 1px solid var(--line) !important;
+      border-top: none !important; background: transparent !important;
+    }
+    .lbf-time { font-size: 10px !important; color: var(--text-3) !important; font-weight: 500 !important; }
+    .lbf-stream { font-size: 9px !important; color: #8a7fd0 !important; }
+    .lbf-stream-dot { background: #8a7fd0 !important; }
+
+    /* team rows */
+    .lbf-row { height: 26px !important; }
+    .lbf-row + .lbf-row { border-top: 1px solid var(--line) !important; }
+    .lbf-name { font-size: 12px !important; font-weight: 500 !important; color: var(--text-2) !important; padding: 0 10px !important; }
+    .lbf-score {
+      width: 30px !important; font-size: 12px !important; font-weight: 700 !important;
+      color: var(--text-3) !important; border-left: 1px solid var(--line) !important;
+    }
+    .lbf-row.winner { background: transparent !important; border-left: 2px solid var(--accent) !important; }
+    .lbf-row.winner .lbf-name { color: #fff !important; font-weight: 700 !important; }
+    .lbf-row.winner .lbf-score { color: var(--accent) !important; }
+    .lbf-row.loser .lbf-name { color: var(--text-3) !important; }
+    .lbf-row.loser .lbf-score { color: var(--text-3) !important; }
+    .lbf-card.ub-type .lbf-row.winner, .lbf-card.lb-type .lbf-row.winner, .lbf-card.gf-type .lbf-row.winner {
+      background: transparent !important; border-left-color: var(--accent) !important;
+    }
+    .lbf-card.ub-type .lbf-row.winner .lbf-name, .lbf-card.lb-type .lbf-row.winner .lbf-name, .lbf-card.gf-type .lbf-row.winner .lbf-name { color:#fff !important; }
+    .lbf-card.ub-type .lbf-row.winner .lbf-score, .lbf-card.lb-type .lbf-row.winner .lbf-score, .lbf-card.gf-type .lbf-row.winner .lbf-score { color: var(--accent) !important; }
+    .lbf-row.team-lit { background: rgba(77,124,254,.1) !important; }
+    .lbf-row.team-lit .lbf-name { color: #fff !important; text-decoration: none !important; }
+
+    /* round labels */
+    .round-label {
+      font-family: 'JetBrains Mono', monospace !important; font-size: 10px !important; font-weight: 500 !important;
+      letter-spacing: .1em !important; color: var(--text-3) !important; padding: 2px 8px 16px !important;
+    }
+    .round-label.ub-label, .round-label.lb-label, .round-label.gf-label { color: var(--text-2) !important; }
+
+    /* connectors */
+    .conn-line, .conn-line.ub, .conn-line.lb, .conn-line.gf { stroke: rgba(255,255,255,.13) !important; }
+
+    /* map history toggle + dropdown */
+    .map-toggle {
+      background: transparent !important; border-top: 1px solid var(--line) !important;
+      color: var(--text-3) !important; font-size: 9px !important; letter-spacing: .08em !important; padding: 4px 10px !important;
+    }
+    .map-toggle:hover { color: var(--text) !important; background: rgba(255,255,255,.03) !important; }
+    .map-history {
+      background: var(--surface2) !important; border: 1px solid var(--line2) !important; border-top: none !important;
+      border-radius: 0 0 5px 5px !important; box-shadow: 0 14px 30px rgba(0,0,0,.55) !important;
+    }
+    .map-row { padding: 6px 10px !important; border-top: 1px solid var(--line) !important; border-bottom: none !important; }
+    .map-num { color: var(--text-3) !important; }
+    .map-name { font-size: 12px !important; color: var(--text) !important; }
+    .map-winner { color: var(--accent) !important; font-size: 11px !important; }
+    .map-winner::before { content: '' !important; }
+
+    /* ── SCHEDULE (Расписание матчей) ── */
+    .all-matches-section { margin-top: 64px !important; padding-top: 0 !important; border-top: none !important; }
+    .all-matches-header { margin-bottom: 18px !important; }
+    .all-matches-title {
+      font-family: 'Space Grotesk', sans-serif !important; font-size: 22px !important; font-weight: 700 !important;
+      letter-spacing: -.02em !important; color: #fff !important;
+    }
+    .all-matches-sub {
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-3); margin-top: 6px;
+    }
+    .schedule-blocks { gap: 32px !important; }
+    .schedule-block {
+      border: 1px solid var(--line) !important; border-radius: var(--radius) !important;
+      background: var(--surface) !important; overflow: hidden !important;
+    }
+    .schedule-block-head {
+      padding: 13px 18px !important; border-bottom: 1px solid var(--line) !important; background: transparent !important;
+    }
+    .sb-title { font-size: 13px !important; color: var(--text) !important; letter-spacing: .01em !important; }
+    .schedule-block.ub .sb-title, .schedule-block.lb .sb-title, .schedule-block.gf .sb-title { color: var(--text) !important; }
+    .sb-count {
+      font-family: 'JetBrains Mono', monospace !important; background: var(--surface2) !important;
+      color: var(--text-2) !important; border: 1px solid var(--line) !important; border-radius: 4px !important;
+    }
+    .schedule-block thead th {
+      background: transparent !important; color: var(--text-3) !important; font-size: 9.5px !important;
+      letter-spacing: .1em !important; border-bottom: 1px solid var(--line) !important; padding: 10px 18px !important;
+    }
+    .schedule-block tbody td { padding: 10px 18px !important; font-size: 13px !important; }
+    .schedule-block tbody tr { border-bottom: 1px solid var(--line) !important; }
+    .schedule-block tbody tr:last-child { border-bottom: none !important; }
+    .t-time { color: var(--text-2) !important; font-size: 12px !important; }
+    .t-team-win { color: #fff !important; }
+    .t-team-lose { color: var(--text-3) !important; }
+    .t-score { color: var(--text) !important; }
+    .t-stream a { color: #8a7fd0 !important; }
+
+    /* ── MODAL ── */
+    .modal {
+      background: var(--surface) !important; border: 1px solid var(--line2) !important;
+      border-radius: var(--radius) !important; box-shadow: 0 30px 80px rgba(0,0,0,.7) !important;
+    }
+    .modal-title { color: #fff !important; }
+    .journey-result { color: #fff !important; }
+    .ub-label-j, .lb-label-j { color: var(--accent) !important; }
+    .social-btn.dc svg { fill: var(--accent) !important; }
+    .social-btn.bn svg { fill: var(--text-2) !important; }
+
+    /* ── LIVE button leftover (unused now) ── */
+    .live-btn, #live-wrap { display: none !important; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--line) !important; }
   </style>
 </head>
 <body>
@@ -1312,7 +1558,39 @@
       </div>
     </div>
 
-    <!-- TWO TOURNAMENT BUTTONS (hover to reveal panels) -->
+    <!-- TOURNAMENT INFO BAR -->
+    <div class="tinfo">
+      <div class="tinfo-cell">
+        <span class="ti-label">Призовой фонд</span>
+        <span class="ti-value" style="color:var(--accent)">250 $</span>
+      </div>
+      <div class="tinfo-cell">
+        <span class="ti-label">Участников</span>
+        <span class="ti-value">16 команд</span>
+      </div>
+      <div class="tinfo-cell">
+        <span class="ti-label">Формат матчей</span>
+        <span class="ti-value">Bo3 / Bo5</span>
+      </div>
+      <div class="tinfo-cell">
+        <span class="ti-label">Сетка</span>
+        <span class="ti-value">Double Elim.</span>
+      </div>
+      <div class="tinfo-cell">
+        <span class="ti-label">Мин. ранг</span>
+        <span class="ti-value">Platinum+</span>
+      </div>
+      <div class="tinfo-cell">
+        <span class="ti-label">Статус</span>
+        <span class="ti-value"><span class="ti-dot done"></span>Завершён</span>
+      </div>
+      <a class="tinfo-cell is-link" href="https://twitch.tv/gncow" target="_blank" rel="noopener">
+        <span class="ti-label">Трансляция</span>
+        <span class="ti-value">twitch.tv/gncow</span>
+      </a>
+    </div>
+
+    <!-- (legacy hover buttons — hidden by redesign) -->
     <div class="info-buttons">
 
     <!-- BUTTON 1 -->
@@ -1522,10 +1800,11 @@
     <div id="gf-wrap-full"></div>
   </div>
 
-  <!-- ALL MATCHES — below tabs, always visible -->
+  <!-- SCHEDULE -->
   <div class="all-matches-section">
     <div class="all-matches-header">
-      <div class="all-matches-title">Все матчи</div>
+      <div class="all-matches-title">Расписание матчей</div>
+      <div class="all-matches-sub">Раздельно по верхней и нижней сетке · время МСК</div>
     </div>
     <div class="schedule-blocks" id="schedule-blocks"></div>
   </div>
@@ -2314,7 +2593,7 @@ function enableDragScroll(el) {
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
-const CARD_OPTS = { slot: 116, cardW: 224 };  // rows(56)+footer(24)+map-toggle(28)+borders ≈ 110px, +6px breathing room
+const CARD_OPTS = { slot: 106, cardW: 156 };  // compact card ≈100px + 6px gap
 renderBracket(UB, 'ub-wrap',      'ub-svg',      'ub', CARD_OPTS);
 renderBracket(LB, 'lb-wrap',      'lb-svg',      'lb', CARD_OPTS);
 renderBracket(UB, 'ub-wrap-full', 'ub-svg-full', 'ub', CARD_OPTS);
