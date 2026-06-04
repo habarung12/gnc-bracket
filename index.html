@@ -11,37 +11,36 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #06060b;
-      --bg-2:     #0c0c14;
-      --bg-card:  #0a0a12;
-      --border:   rgba(255,255,255,.06);
-      --border-2: rgba(255,255,255,.03);
-      --text:     #e0e0f0;
-      --text-2:   #7070a0;
-      --text-3:   #383850;
-      --accent:   #00cc88;
-      --accent-d: #009965;
+      --bg:       #05050e;
+      --bg-2:     #0a0a18;
+      --bg-card:  #09091a;
+      --border:   rgba(255,255,255,.07);
+      --border-2: rgba(255,255,255,.04);
+      --text:     #dde0f5;
+      --text-2:   #6868a0;
+      --text-3:   #333360;
+      --accent:   #4a8fff;
+      --accent-d: #2a6fe0;
 
-      --ub:       #00cc88;
-      --ub-dim:   rgba(0,204,136,.1);
-      --ub-line:  rgba(0,204,136,.4);
+      --ub:       #4a8fff;
+      --ub-dim:   rgba(74,143,255,.1);
+      --ub-line:  rgba(74,143,255,.45);
 
       --lb:       #e8970a;
       --lb-dim:   rgba(232,151,10,.1);
-      --lb-line:  rgba(232,151,10,.4);
+      --lb-line:  rgba(232,151,10,.45);
 
       --gf:       #2ab4f0;
       --gf-dim:   rgba(42,180,240,.1);
-      --gf-line:  rgba(42,180,240,.4);
+      --gf-line:  rgba(42,180,240,.45);
 
-      --win-bg:   rgba(0,204,136,.08);
-      --win-text: #a8ffd6;
-      --lose-text:#2e2e44;
+      --win-bg:   rgba(74,143,255,.07);
+      --win-text: #b8d4ff;
+      --lose-text:#282848;
 
-      --row-h:    26px;
-      --card-w:   164px;
-      --col-gap:  44px;
-      --slot:     82px;
+      --row-h:    28px;
+      --card-w:   190px;
+      --col-gap:  48px;
     }
 
     html, body {
@@ -83,8 +82,8 @@
     ══════════════════════════════════ */
     header {
       position: sticky; top: 0; z-index: 50;
-      background: #000;
-      border-bottom: 1px solid rgba(255,255,255,.07);
+      background: #04041c;
+      border-bottom: 1px solid rgba(74,143,255,.15);
     }
     .header-inner {
       max-width: 1540px; margin: 0 auto;
@@ -100,9 +99,8 @@
       border-right: 1px solid rgba(255,255,255,.07);
     }
     .logo img {
-      height: 38px; width: auto;
+      height: 30px; width: auto;
       object-fit: contain; display: block;
-      filter: brightness(1.05);
     }
 
     /* — Nav links — */
@@ -503,86 +501,61 @@
     }
 
     /* ══════════════════════════════════
-       LB FULL-SIZE CARD
+       CHALLONGE-STYLE MATCH CARD
     ══════════════════════════════════ */
     .lbf-card {
-      width: 210px; flex-shrink: 0;
-      border-radius: 6px;
-      border: 1px solid rgba(232,151,10,.35);
-      background: #0c0c10;
+      width: var(--card-w); flex-shrink: 0;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      background: var(--bg-2);
       overflow: hidden;
-      transition: border-color .15s, box-shadow .15s;
+      transition: border-color .12s;
     }
-    .lbf-card:hover {
-      border-color: rgba(232,151,10,.6);
-      box-shadow: 0 4px 20px rgba(232,151,10,.06);
-    }
+    .lbf-card:hover { border-color: rgba(255,255,255,.14); }
 
-    .lbf-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 5px 9px 5px 8px;
-      background: rgba(232,151,10,.06);
-      border-bottom: 1px solid rgba(232,151,10,.12);
-    }
-    .lbf-badge {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 8px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
-      color: rgba(232,151,10,.65);
-    }
-    .lbf-meta { display: flex; align-items: center; gap: 6px; }
-    .lbf-id {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 8.5px; font-weight: 500; color: var(--text-3);
-    }
-    .lbf-bo {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 8.5px; color: var(--text-3);
-    }
+    /* hide old header — not used in new design */
+    .lbf-header { display: none; }
+    .lbf-badge, .lbf-meta, .lbf-id, .lbf-bo { display: none; }
+    .lbf-slot { display: none; }
+    .lbf-ub-src { display: none; }
 
+    /* ── Team rows ── */
     .lbf-row {
-      display: flex; align-items: center; height: 32px;
+      display: flex; align-items: center; height: var(--row-h);
       cursor: pointer; transition: background .1s; position: relative;
     }
-    .lbf-row + .lbf-row { border-top: 1px solid rgba(255,255,255,.03); }
+    .lbf-row + .lbf-row { border-top: 1px solid var(--border-2); }
     .lbf-row:hover { background: rgba(255,255,255,.04); }
     .lbf-row:hover .lbf-name { color: var(--text); }
 
-    .lbf-slot {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 8px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
-      color: var(--text-3); width: 36px; flex-shrink: 0;
-      padding-left: 8px; border-right: 1px solid rgba(255,255,255,.03);
-      height: 100%; display: flex; align-items: center;
-    }
-    .lbf-ub-src {
-      flex-shrink: 0; font-size: 7px; font-weight: 700;
-      padding: 1px 3px; border-radius: 2px; margin: 0 3px;
-      background: rgba(232,151,10,.1); color: rgba(232,151,10,.55);
-      border: 1px solid rgba(232,151,10,.15);
-      font-family: 'Space Grotesk', sans-serif; letter-spacing: .05em;
-    }
     .lbf-name {
-      flex: 1; min-width: 0; padding: 0 5px;
-      font-size: 12px; font-weight: 600; color: var(--text-2);
+      flex: 1; min-width: 0; padding: 0 9px;
+      font-size: 12.5px; font-weight: 600; color: var(--text-2);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
       transition: color .1s;
     }
     .lbf-score {
-      width: 28px; flex-shrink: 0; text-align: center;
+      width: 30px; flex-shrink: 0; text-align: center;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 13px; font-weight: 700; color: var(--text-3);
-      border-left: 1px solid rgba(255,255,255,.04);
+      font-size: 13px; font-weight: 800; color: var(--text-3);
+      border-left: 1px solid var(--border-2);
       height: 100%; display: flex; align-items: center; justify-content: center;
     }
 
-    .lbf-row.winner { background: rgba(232,151,10,.07); }
-    .lbf-row.winner .lbf-name  { color: #fde68a; font-weight: 700; }
-    .lbf-row.winner .lbf-score { color: rgba(232,151,10,.9); }
+    /* ── Winner / Loser / Pending ── */
+    .lbf-row.winner .lbf-name  { color: var(--text); font-weight: 700; }
+    .lbf-row.winner .lbf-score { color: var(--text); }
     .lbf-row.loser  .lbf-name  { color: var(--text-3); }
     .lbf-row.loser  .lbf-score { color: var(--text-3); }
     .lbf-row.pending .lbf-name { color: var(--text-3); font-style: italic; }
 
-    .lbf-row.team-lit { background: rgba(255,255,255,.06) !important; }
+    /* ── Type-specific winner accent (left border) ── */
+    .lbf-row.winner { border-left: 2px solid var(--lb); }
+    .lbf-card.ub-type .lbf-row.winner { border-left-color: var(--ub); }
+    .lbf-card.gf-type .lbf-row.winner { border-left-color: var(--gf); }
+
+    /* ── Team highlight ── */
+    .lbf-row.team-lit { background: rgba(255,255,255,.05) !important; }
     .lbf-row.team-lit .lbf-name {
       color: var(--text) !important;
       text-decoration: underline;
@@ -590,18 +563,26 @@
       text-underline-offset: 2px;
     }
 
-    /* ── type-specific overrides ── */
-    /* LB (default = amber) */
-    .lbf-row.winner { border-left: 2px solid var(--lb); }
-
-    /* UB → green */
-    .lbf-card.ub-type { border-color: rgba(0,204,136,.35); }
-    .lbf-card.ub-type .lbf-header { background: rgba(0,204,136,.06); border-bottom-color: rgba(0,204,136,.1); }
-    .lbf-card.ub-type .lbf-badge  { color: rgba(0,204,136,.75); }
-    .lbf-card.ub-type .lbf-footer { border-top-color: rgba(0,204,136,.07); }
-    .lbf-card.ub-type .lbf-row.winner { background: rgba(0,204,136,.08); border-left-color: var(--ub); }
-    .lbf-card.ub-type .lbf-row.winner .lbf-name  { color: #aaffe0; }
-    .lbf-card.ub-type .lbf-row.winner .lbf-score { color: rgba(0,204,136,.9); }
+    /* ── Footer: time + stream ── */
+    .lbf-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 4px 9px;
+      border-top: 1px solid var(--border-2);
+      background: rgba(0,0,0,.18);
+    }
+    .lbf-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 600;
+      color: #9090c8; letter-spacing: .02em;
+    }
+    .lbf-stream {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 9px; font-weight: 600; color: #9147ff;
+      text-decoration: none; transition: color .12s;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .lbf-stream:hover { color: #bf94ff; }
+    .lbf-stream-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 
     /* GF → sky blue */
     .lbf-card.gf-type { border-color: rgba(42,180,240,.45); box-shadow: 0 0 20px rgba(42,180,240,.08); }
@@ -618,52 +599,8 @@
       border-top: 1px solid rgba(232,151,10,.08);
       background: rgba(0,0,0,.15);
     }
-    /* ── bright time ── */
-    .lbf-time {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; font-weight: 600;
-      color: #7888c8; letter-spacing: .05em;
-    }
-    .lbf-stream {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 8.5px; font-weight: 600; color: #9147ff;
-      text-decoration: none; transition: color .12s;
-      font-family: 'Space Grotesk', sans-serif; letter-spacing: .04em;
-    }
-    .lbf-stream:hover { color: #bf94ff; }
-    .lbf-stream-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
-
-    /* GF winner row */
-    .gf-card .team-row.winner { background: rgba(42,180,240,.08); }
-    .gf-card .team-row.winner .team-name-text { color: #caf0fd; }
-    .gf-card .team-row.winner .score-cell { color: rgba(42,180,240,.8); }
-
-    /* ══════════════════════════════════
-       MATCH META BAR
-    ══════════════════════════════════ */
-    .match-meta {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 3px 7px 3px 8px; border-bottom: 1px solid var(--border-2);
-      background: rgba(0,0,0,.25);
-    }
-    .meta-id {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 8.5px; font-weight: 500;
-      letter-spacing: .06em; color: var(--text-3);
-    }
-    .meta-right { display: flex; align-items: center; gap: 6px; }
-    .meta-bo {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 8.5px; color: var(--text-3);
-    }
-    .meta-stream {
-      display: inline-flex; align-items: center; gap: 3px;
-      font-size: 8.5px; font-weight: 600; color: #9147ff;
-      text-decoration: none; transition: color .12s;
-      font-family: 'Space Grotesk', sans-serif; letter-spacing: .04em;
-    }
-    .meta-stream:hover { color: #bf94ff; }
-    .meta-stream svg { width: 7px; height: 7px; }
+    /* Old meta bar (hidden in new design) */
+    .match-meta, .meta-id, .meta-right, .meta-bo, .meta-stream { display: none; }
 
     /* ══════════════════════════════════
        SVG CONNECTORS
@@ -1250,51 +1187,36 @@ const CARD_META = {
 };
 
 function buildCardAll(m, type) {
-  const w    = winner(m);
-  const stA  = w === 'a' ? 'winner' : w === 'b' ? 'loser' : 'pending';
-  const stB  = w === 'b' ? 'winner' : w === 'a' ? 'loser' : 'pending';
-  const meta = CARD_META[type] || CARD_META.ub;
+  const w   = winner(m);
+  const stA = w === 'a' ? 'winner' : w === 'b' ? 'loser' : 'pending';
+  const stB = w === 'b' ? 'winner' : w === 'a' ? 'loser' : 'pending';
+  const cls = (CARD_META[type] || CARD_META.ub).cls;
 
   const el = document.createElement('div');
-  el.className = `lbf-card ${meta.cls}`;
+  el.className = `lbf-card ${cls}`;
   el.dataset.matchId = m.id;
 
-  // ── Header ──
-  const hdr = document.createElement('div');
-  hdr.className = 'lbf-header';
-  hdr.innerHTML = `
-    <span class="lbf-badge">${meta.badge}</span>
-    <span class="lbf-meta">
-      <span class="lbf-bo">Bo${m.bo}</span>
-      <span class="lbf-id">#${m.id}</span>
-      ${m.stream ? `<a class="lbf-stream" href="https://twitch.tv/${m.stream}" target="_blank" rel="noopener"><span class="lbf-stream-dot"></span>${m.stream}</a>` : ''}
-    </span>`;
-  el.appendChild(hdr);
-
-  // ── Team rows ──
-  [['a', stA, m.a, m.aSrc, m.sa], ['b', stB, m.b, m.bSrc, m.sb]].forEach(([side, state, name, src, score]) => {
+  // ── Team rows (simple Challonge style — no slot labels) ──
+  [['a', stA, m.a, m.sa], ['b', stB, m.b, m.sb]].forEach(([side, state, name, score]) => {
     const row = document.createElement('div');
     row.className = `lbf-row ${state}`;
     row.dataset.team = name || '';
-    const slotLabel = side === 'a' ? 'СЛ А' : 'СЛ Б';
-    const ubBadge   = src === 'ub' ? `<span class="lbf-ub-src">↓UB</span>` : '';
-    row.innerHTML = `
-      <span class="lbf-slot">${slotLabel}</span>
-      ${ubBadge}
-      <span class="lbf-name">${name || 'TBD'}</span>
-      <span class="lbf-score">${w ? score : '·'}</span>`;
+    row.innerHTML = `<span class="lbf-name">${name || 'TBD'}</span><span class="lbf-score">${w ? score : '·'}</span>`;
     row.addEventListener('mouseenter', () => highlightTeam(name, true));
     row.addEventListener('mouseleave', () => highlightTeam(name, false));
     if (name && ROSTERS[name]) row.addEventListener('click', e => { e.stopPropagation(); showRoster(name); });
     el.appendChild(row);
   });
 
-  // ── Footer with bright time ──
+  // ── Footer: time (large, МСК) + stream ──
   const dt = new Date(m.time);
-  const timeStr = dt.toLocaleString('ru-RU', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', timeZone:'Europe/Moscow' }).replace(',', ' |');
+  const d  = dt.toLocaleString('ru-RU', { day:'2-digit', month:'short', timeZone:'Europe/Moscow' });
+  const t  = dt.toLocaleString('ru-RU', { hour:'2-digit', minute:'2-digit', timeZone:'Europe/Moscow' });
   const ftr = document.createElement('div');
   ftr.className = 'lbf-footer';
-  ftr.innerHTML = `<span class="lbf-time">${timeStr}</span>`;
+  ftr.innerHTML = `
+    <span class="lbf-time">${d} · ${t} МСК</span>
+    ${m.stream ? `<a class="lbf-stream" href="https://twitch.tv/${m.stream}" target="_blank" rel="noopener"><span class="lbf-stream-dot"></span>${m.stream}</a>` : ''}`;
   el.appendChild(ftr);
 
   return el;
@@ -1373,72 +1295,108 @@ function renderBracket(rounds, wrapId, svgId, type, opts = {}) {
   const svg  = document.getElementById(svgId);
 
   const roundCount = rounds.length;
-  const r1count = rounds[0].length;
+  const r1count    = rounds[0].length;
 
-  // Position each round column
-  const colPositions = []; // { x, matchEls[] }
+  // ── Challonge-style pair positioning ──
+  // Matches within a pair sit close together; pairs have extra gap between them
+  const CARD_H    = SLOT;          // card height (passed via opts)
+  const INNER_GAP = 4;             // gap between two cards within a pair
+  const PAIR_GAP  = 26;            // extra gap between consecutive pairs
+
+  // Compute top positions for each round
+  // R1: pair-aware formula. R2+: centered on midpoints of previous-round pairs.
+  function computePositions() {
+    const allPos = [];
+
+    // R1 — pair formula
+    const r1pos = [];
+    for (let i = 0; i < r1count; i++) {
+      const pairIdx  = Math.floor(i / 2);
+      const inPair   = i % 2;
+      r1pos.push(pairIdx * (2 * CARD_H + INNER_GAP + PAIR_GAP) + inPair * (CARD_H + INNER_GAP));
+    }
+    allPos.push(r1pos);
+
+    // R2+ — derive from midpoints of previous pairs
+    for (let r = 1; r < roundCount; r++) {
+      const prev = allPos[r - 1];
+      const curr = [];
+      const prevCount = rounds[r - 1].length;
+      const currCount = rounds[r].length;
+
+      if (currCount === prevCount) {
+        // Same count (e.g. LB R1→R2): keep same y-positions (straight connectors)
+        curr.push(...prev);
+      } else {
+        // Halving: center each match at midpoint of its two source matches
+        for (let j = 0; j < currCount; j++) {
+          const cy0 = prev[j * 2]     + CARD_H / 2; // center of top source
+          const cy1 = prev[j * 2 + 1] + CARD_H / 2; // center of bottom source
+          curr.push((cy0 + cy1) / 2 - CARD_H / 2);  // top of new match
+        }
+      }
+      allPos.push(curr);
+    }
+    return allPos;
+  }
+
+  const allPositions = computePositions();
+
+  // Total height = max bottom edge across all rounds
+  let totalColH = 0;
+  allPositions.forEach(rpos => {
+    rpos.forEach(top => { totalColH = Math.max(totalColH, top + CARD_H); });
+  });
+
+  // ── Russian round labels ──
+  const ROUND_LABELS = {
+    ub: ['Раунд 1', 'Раунд 2', 'Полуфиналы', 'Финал верхней'],
+    lb: ['Раунд 1', 'Раунд 2', 'Раунд 3', 'Раунд 4', 'Полуфинал', 'Финал нижней'],
+    gf: ['Гранд-финал'],
+  };
+
+  const colPositions = [];
   let xCursor = 0;
 
   rounds.forEach((matches, ri) => {
-    // LB: rounds pair up (4,4,2,2,1,1) so slot doubles every 2 rounds
-    // UB: rounds halve every round (8,4,2,1) so slot doubles every round
-    const slotH = type === 'lb'
-      ? SLOT * Math.pow(2, Math.floor(ri / 2))
-      : SLOT * Math.pow(2, ri);
-    const colH  = r1count * SLOT;         // total column height stays constant
-    const col   = document.createElement('div');
+    const positions = allPositions[ri];
+    const col = document.createElement('div');
     col.className = 'round-col';
     col.style.width = COL_W + 'px';
 
-    // round label
+    // Round label
     const lbl = document.createElement('div');
     lbl.className = `round-label ${type}-label`;
-    const labels = ['Раунд 1','Раунд 2','Раунд 3','Раунд 4','Раунд 5','Раунд 6'];
-    const special = {
-      ub: { 3: 'UB Полуфинал', 4: 'UB Финал' },
-      lb: { 2: 'LB Раунд 2 (+↓ UB2)', 4: 'LB Раунд 4 (+↓ UB СФ)', 5: 'LB Полуфинал', 6: 'LB Финал (+↓ UB)' },
-      gf: { 1: 'Гранд-финал' },
-    };
-    const s = special[type] && special[type][ri + 1];
-    lbl.textContent = s || `${type === 'lb' ? 'LB ' : type === 'ub' ? 'UB ' : ''}${labels[ri] || `Раунд ${ri + 1}`}`;
+    lbl.textContent = (ROUND_LABELS[type] || [])[ri] || `Раунд ${ri + 1}`;
     col.appendChild(lbl);
 
     const matchesEl = document.createElement('div');
     matchesEl.className = 'round-matches';
-    matchesEl.style.height = colH + 'px';
+    matchesEl.style.height = totalColH + 'px';
     matchesEl.style.position = 'relative';
 
     const matchEls = [];
 
     matches.forEach((m, mi) => {
+      const top  = positions[mi];
       const slot = document.createElement('div');
       slot.className = 'match-slot';
-      slot.style.position = 'absolute';
-      slot.style.width = COL_W + 'px';
-      slot.style.height = slotH + 'px';
-      const top = mi * slotH;
-      slot.style.top = top + 'px';
-      slot.style.left = '0';
-      slot.style.display = 'flex';
-      slot.style.alignItems = 'center';
+      slot.style.cssText = `position:absolute;width:${COL_W}px;height:${CARD_H}px;top:${top}px;left:0;display:flex;align-items:center;`;
 
       const card = buildCardAll(m, type);
       slot.appendChild(card);
       matchesEl.appendChild(slot);
-      matchEls.push({ card, slotTop: top, slotH });
+      matchEls.push({ card, slotTop: top, slotH: CARD_H });
     });
 
     col.appendChild(matchesEl);
     wrap.appendChild(col);
-
     colPositions.push({ x: xCursor, matchEls });
     xCursor += COL_W;
 
-    // gap column (connector space) — except after last round
     if (ri < roundCount - 1) {
       const gap = document.createElement('div');
-      gap.style.width = COL_GAP + 'px';
-      gap.style.flexShrink = '0';
+      gap.style.cssText = `width:${COL_GAP}px;flex-shrink:0;`;
       wrap.appendChild(gap);
       xCursor += COL_GAP;
     }
@@ -1617,7 +1575,7 @@ function enableDragScroll(el) {
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
-const CARD_OPTS = { slot: 122, cardW: 210 };
+const CARD_OPTS = { slot: 76, cardW: 190 };  // slot = card height, cardW = card width
 renderBracket(UB, 'ub-wrap',      'ub-svg',      'ub', CARD_OPTS);
 renderBracket(LB, 'lb-wrap',      'lb-svg',      'lb', CARD_OPTS);
 renderBracket(UB, 'ub-wrap-full', 'ub-svg-full', 'ub', CARD_OPTS);
