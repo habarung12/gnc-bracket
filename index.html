@@ -324,7 +324,42 @@
     }
     .info-popover.pop-1 { width: 720px; }
     .info-popover.pop-2 { width: 560px; }
+    .info-popover.pop-live { width: 320px; }
     .info-btn-wrap:hover .info-popover { opacity: 1; visibility: visible; transform: translateY(0); }
+
+    /* — LIVE button — */
+    .live-btn .live-dot {
+      width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
+    }
+    .live-btn.is-live { border-color: rgba(239,68,68,.45); color: #fff; }
+    .info-btn-wrap:hover .live-btn.is-live { border-color: rgba(239,68,68,.8); background: rgba(239,68,68,.08); }
+    .live-btn.is-live .live-dot { background: #ef4444; box-shadow: 0 0 9px #ef4444; animation: livePulse 1.3s ease-in-out infinite; }
+    .live-btn.off { color: var(--text-2); }
+    .live-btn.off .live-dot { background: var(--text-3); }
+    @keyframes livePulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.65); } }
+
+    /* live streams list (popover) */
+    .live-list { display: flex; flex-direction: column; }
+    .live-row {
+      display: flex; align-items: center; gap: 11px;
+      padding: 12px 15px; text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      transition: background .12s;
+    }
+    .live-row:last-child { border-bottom: none; }
+    .live-row:hover { background: rgba(255,255,255,.03); }
+    .live-row .lr-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .live-row.online .lr-dot { background: #ef4444; box-shadow: 0 0 7px #ef4444; animation: livePulse 1.3s ease-in-out infinite; }
+    .live-row.offline .lr-dot { background: var(--text-3); }
+    .lr-text { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+    .lr-name { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: #fff; }
+    .lr-sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-2); }
+    .lr-badge {
+      font-family: 'Space Grotesk', sans-serif; font-size: 9px; font-weight: 700;
+      letter-spacing: .1em; padding: 3px 8px; border-radius: 3px; flex-shrink: 0;
+    }
+    .live-row.online .lr-badge { background: rgba(239,68,68,.15); color: #f87171; }
+    .live-row.offline .lr-badge { background: rgba(255,255,255,.05); color: var(--text-3); }
 
     .hero-stats-panel {
       width: 100%;
@@ -948,10 +983,24 @@
     /* ── Schedule: 3 separate rounded blocks ── */
     .schedule-blocks { display: flex; flex-direction: column; gap: 28px; }
     .schedule-block {
-      border-radius: 10px; overflow: hidden;
-      border: 1px solid var(--border);
-      background: var(--bg-2);
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: linear-gradient(160deg, rgba(20,22,34,.55) 0%, rgba(9,10,16,.85) 60%);
+      position: relative;
     }
+    /* cyber corner brackets — all 4 corners */
+    .schedule-block > .cb {
+      position: absolute; width: 14px; height: 14px; opacity: .55; pointer-events: none; z-index: 2;
+    }
+    .schedule-block > .cb.tl { top: -1px; left: -1px; border-top: 2px solid; border-left: 2px solid; }
+    .schedule-block > .cb.tr { top: -1px; right: -1px; border-top: 2px solid; border-right: 2px solid; }
+    .schedule-block > .cb.bl { bottom: -1px; left: -1px; border-bottom: 2px solid; border-left: 2px solid; }
+    .schedule-block > .cb.br { bottom: -1px; right: -1px; border-bottom: 2px solid; border-right: 2px solid; }
+    .schedule-block.ub > .cb { border-color: var(--ub); }
+    .schedule-block.lb > .cb { border-color: var(--lb); }
+    .schedule-block.gf > .cb { border-color: var(--gf); }
+    /* keep table corners inside the rectangular frame */
+    .schedule-block table { border-radius: 0 0 4px 4px; overflow: hidden; }
     .schedule-block-head {
       display: flex; align-items: center; gap: 10px;
       padding: 14px 18px;
@@ -1301,6 +1350,23 @@
         </div>
       </div>
     </div>
+      </div>
+    </div>
+
+    <!-- BUTTON 3: LIVE status -->
+    <div class="info-btn-wrap" id="live-wrap">
+      <button class="info-btn live-btn off">
+        <span class="live-dot"></span> <span class="live-label">Не в эфире</span> <span class="ib-caret">▾</span>
+      </button>
+      <div class="info-popover pop-live">
+        <div class="hero-stats-panel">
+          <span class="cb tl"></span><span class="cb tr"></span>
+          <span class="cb bl"></span><span class="cb br"></span>
+          <div class="sp-head">
+            <span class="sp-tag"><span class="sp-tag-mark"></span> Трансляции турнира</span>
+          </div>
+          <div class="live-list" id="live-list"></div>
+        </div>
       </div>
     </div>
 
@@ -2087,6 +2153,7 @@ function renderSchedule() {
     const block = document.createElement('div');
     block.className = `schedule-block ${type}`;
     block.innerHTML = `
+      <span class="cb tl"></span><span class="cb tr"></span><span class="cb bl"></span><span class="cb br"></span>
       <div class="schedule-block-head">
         <span class="sb-title">${label}</span>
         <span class="sb-count">${matches.length} матчей</span>
@@ -2210,6 +2277,45 @@ document.querySelectorAll('.podium-team-name[data-roster]').forEach(el => {
 window.addEventListener('scroll', () => {
   document.getElementById('site-header').classList.toggle('scrolled', window.scrollY > 10);
 }, { passive: true });
+
+// ── LIVE streams status ──
+// flip `live: true/false` per channel; button reflects overall state
+const STREAMS = [
+  { name: 'gncow',       title: 'GNC — главный канал', live: false },
+  { name: 'its_soldeek', title: 'Soldeek',             live: false },
+  { name: 'wispar1an',   title: 'Wisparian',           live: false },
+];
+(function renderLive() {
+  const list = document.getElementById('live-list');
+  const btn  = document.querySelector('.live-btn');
+  const label = btn?.querySelector('.live-label');
+  if (!list || !btn) return;
+
+  const onlineCount = STREAMS.filter(s => s.live).length;
+  if (onlineCount > 0) {
+    btn.classList.remove('off'); btn.classList.add('is-live');
+    label.textContent = `В эфире · ${onlineCount}`;
+  } else {
+    btn.classList.add('off'); btn.classList.remove('is-live');
+    label.textContent = 'Не в эфире';
+  }
+
+  list.innerHTML = '';
+  // online first
+  [...STREAMS].sort((a,b) => b.live - a.live).forEach(s => {
+    const row = document.createElement(s.live ? 'a' : 'div');
+    row.className = `live-row ${s.live ? 'online' : 'offline'}`;
+    if (s.live) { row.href = `https://twitch.tv/${s.name}`; row.target = '_blank'; row.rel = 'noopener'; }
+    row.innerHTML = `
+      <span class="lr-dot"></span>
+      <div class="lr-text">
+        <span class="lr-name">${s.title}</span>
+        <span class="lr-sub">twitch.tv/${s.name}</span>
+      </div>
+      <span class="lr-badge">${s.live ? 'LIVE' : 'OFFLINE'}</span>`;
+    list.appendChild(row);
+  });
+})();
 
 // Language dropdown
 const navLang = document.getElementById('nav-lang');
