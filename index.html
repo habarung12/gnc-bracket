@@ -78,49 +78,96 @@
     /* ══════════════════════════════════
        HEADER
     ══════════════════════════════════ */
+    /* ══════════════════════════════════
+       HEADER — MARATHON STYLE
+    ══════════════════════════════════ */
     header {
       position: sticky; top: 0; z-index: 50;
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      background: rgba(6,6,11,.8);
-      border-bottom: 1px solid transparent;
-      transition: border-color .3s;
+      background: #000;
+      border-bottom: 1px solid rgba(255,255,255,.07);
     }
-    header.scrolled { border-bottom-color: var(--border); }
-
     .header-inner {
       max-width: 1540px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 28px; height: 54px;
+      display: flex; align-items: stretch; justify-content: space-between;
+      padding: 0; height: 60px; gap: 0;
     }
 
+    /* — Logo — */
     .logo {
-      display: flex; align-items: center; gap: 10px;
-      text-decoration: none; color: var(--text);
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700; font-size: 14px; letter-spacing: -.1px;
+      display: flex; align-items: center;
+      padding: 0 24px;
+      text-decoration: none; flex-shrink: 0;
+      border-right: 1px solid rgba(255,255,255,.07);
     }
-    .logo img { height: 24px; width: auto; object-fit: contain; }
-    .logo-gnc { color: var(--text); }
-    .logo-ow  { color: var(--accent); }
-    .logo-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); opacity: .5; }
+    .logo img {
+      height: 38px; width: auto;
+      object-fit: contain; display: block;
+      filter: brightness(1.05);
+    }
 
-    nav { display: flex; align-items: center; gap: 0; }
+    /* — Nav links — */
+    nav {
+      display: flex; align-items: stretch;
+      flex: 1;
+    }
     nav a {
-      padding: 5px 13px; text-decoration: none;
-      font-size: 12px; font-weight: 500; color: var(--text-2);
-      letter-spacing: .02em;
-      transition: color .15s;
+      display: flex; align-items: center; gap: 5px;
+      padding: 0 16px; text-decoration: none;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10.5px; font-weight: 600;
+      color: rgba(255,255,255,.4);
+      letter-spacing: .13em; text-transform: uppercase;
+      border-right: 1px solid rgba(255,255,255,.06);
+      transition: color .15s, background .15s;
+      white-space: nowrap;
       position: relative;
     }
-    nav a::after {
-      content: ''; position: absolute; bottom: -1px; left: 13px; right: 13px;
-      height: 1px; background: var(--accent); transform: scaleX(0);
-      transition: transform .15s; transform-origin: left;
+    nav a .nav-arrow {
+      font-size: 9px; opacity: .45;
+      font-family: monospace; letter-spacing: 0;
     }
-    nav a:hover { color: var(--text); }
-    nav a:hover::after { transform: scaleX(1); }
-    nav a.active { color: var(--text); }
-    nav a.active::after { transform: scaleX(1); }
+    nav a:hover { color: #fff; background: rgba(255,255,255,.04); }
+    nav a:hover .nav-arrow { opacity: .9; }
+    nav a.active { color: #fff; }
+    nav a.active::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px; background: var(--accent);
+    }
+    nav a.active .nav-arrow { opacity: .9; }
+
+    /* — Right side: socials + CTA — */
+    .nav-right {
+      display: flex; align-items: stretch;
+      border-left: 1px solid rgba(255,255,255,.07);
+    }
+    .nav-socials {
+      display: flex; align-items: center; gap: 0;
+      border-right: 1px solid rgba(255,255,255,.07);
+    }
+    .nav-social {
+      display: flex; align-items: center; justify-content: center;
+      width: 48px; height: 100%;
+      color: rgba(255,255,255,.4); text-decoration: none;
+      transition: color .15s, background .15s;
+      border-right: 1px solid rgba(255,255,255,.06);
+    }
+    .nav-social:last-child { border-right: none; }
+    .nav-social:hover { color: #fff; background: rgba(255,255,255,.04); }
+    .nav-social svg { width: 17px; height: 17px; display: block; }
+
+    /* — CTA Button — */
+    .nav-cta {
+      display: flex; align-items: center;
+      padding: 0 24px;
+      background: #c8ff00; color: #000;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: .13em; text-transform: uppercase;
+      text-decoration: none; white-space: nowrap;
+      transition: background .15s, color .15s;
+      border: none; cursor: pointer;
+    }
+    .nav-cta:hover { background: #dfff4f; }
 
     /* ══════════════════════════════════
        MAIN
@@ -817,12 +864,17 @@
     /* ══════════════════════════════════
        RESPONSIVE
     ══════════════════════════════════ */
+    @media (max-width: 900px) {
+      nav a span:not(.nav-arrow) { display: none; }
+      .nav-cta span { display: none; }
+      .nav-cta::after { content: '👤'; }
+    }
     @media (max-width: 600px) {
-      .header-inner { padding: 0 16px; }
       main { padding: 0 16px 60px; }
       .page-hero { padding: 36px 0 32px; }
       .tournament-name { font-size: 28px; }
       nav { display: none; }
+      .nav-socials { display: none; }
     }
   </style>
 </head>
@@ -833,16 +885,57 @@
 <!-- HEADER -->
 <header id="site-header">
   <div class="header-inner">
+
+    <!-- Logo -->
     <a class="logo" href="https://gncow.ru">
       <img src="https://gncow.ru/uploads/ca6ddceb-4dca-403b-87f6-58e982a83936.png" alt="GNC" onerror="this.style.display='none'" />
-      <span class="logo-gnc">GNC</span><div class="logo-dot"></div><span class="logo-ow">OW</span>
     </a>
+
+    <!-- Nav -->
     <nav>
-      <a href="https://gncow.ru/bracket" class="active">Сетка</a>
-      <a href="https://gncow.ru/teams">Команды</a>
-      <a href="https://gncow.ru/hall-of-fame">Зал славы</a>
-      <a href="https://gncow.ru/rules">Правила</a>
+      <a href="https://gncow.ru/bracket" class="active">
+        <span>Сетка</span><span class="nav-arrow">[↗]</span>
+      </a>
+      <a href="https://gncow.ru/teams">
+        <span>Команды</span><span class="nav-arrow">[↗]</span>
+      </a>
+      <a href="https://gncow.ru/hall-of-fame">
+        <span>Зал славы</span><span class="nav-arrow">[↗]</span>
+      </a>
+      <a href="https://gncow.ru/rules">
+        <span>Правила</span><span class="nav-arrow">[↗]</span>
+      </a>
     </nav>
+
+    <!-- Right side -->
+    <div class="nav-right">
+      <div class="nav-socials">
+        <!-- Boosty -->
+        <a class="nav-social" href="https://boosty.to/gncow" target="_blank" rel="noopener" title="Boosty">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4.5 2h7.8c2.07 0 3.75.56 4.94 1.68C18.4 4.8 19 6.28 19 8.1c0 1.25-.3 2.33-.9 3.22-.44.65-1.04 1.18-1.8 1.58.97.35 1.74.93 2.3 1.72.63.88.95 1.96.95 3.22 0 1.95-.65 3.51-1.94 4.65C16.32 23.5 14.53 24 12.24 24H4.5V2zm3.8 8.4h3.6c.87 0 1.53-.21 1.98-.62.44-.4.66-.98.66-1.72 0-.72-.22-1.28-.67-1.67-.44-.4-1.09-.59-1.95-.59H8.3v4.6zm0 7.8h4c.95 0 1.66-.22 2.13-.67.47-.44.7-1.06.7-1.86 0-.78-.24-1.39-.72-1.83-.48-.44-1.2-.66-2.15-.66H8.3v5.02z"/>
+          </svg>
+        </a>
+        <!-- Discord -->
+        <a class="nav-social" href="https://discord.gg/Z5VADtEhJc" target="_blank" rel="noopener" title="Discord">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.012.07.052.135.112.166a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+          </svg>
+        </a>
+        <!-- Twitch -->
+        <a class="nav-social" href="https://twitch.tv/gncow" target="_blank" rel="noopener" title="Twitch">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- CTA -->
+      <a class="nav-cta" href="https://gncow.ru/profile">
+        <span>Мой профиль</span>
+      </a>
+    </div>
+
   </div>
 </header>
 
