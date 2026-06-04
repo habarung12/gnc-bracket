@@ -157,6 +157,42 @@
     .nav-social:hover { color: #fff; background: rgba(255,255,255,.04); }
     .nav-social svg { width: 17px; height: 17px; display: block; }
 
+    /* — Language dropdown — */
+    .nav-lang { position: relative; display: flex; }
+    .nav-lang .lang-btn {
+      background: none; cursor: pointer;
+      border: none; border-right: 1px solid rgba(255,255,255,.06);
+      width: auto; padding: 0 13px; gap: 4px;
+    }
+    .nav-lang .lang-caret { font-size: 8px; transition: transform .15s; opacity: .6; }
+    .nav-lang.open .lang-caret { transform: rotate(180deg); }
+    .lang-menu {
+      position: absolute; top: 100%; right: 0;
+      min-width: 150px;
+      background: #0e0e1a;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 4px;
+      box-shadow: 0 14px 32px rgba(0,0,0,.6);
+      opacity: 0; visibility: hidden; transform: translateY(-6px);
+      transition: opacity .15s, transform .15s, visibility .15s;
+      z-index: 90; overflow: hidden;
+    }
+    .nav-lang.open .lang-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .lang-menu a {
+      display: flex; align-items: center; gap: 9px;
+      padding: 11px 14px; text-decoration: none;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px; font-weight: 500; color: var(--text-2);
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      transition: background .12s, color .12s;
+    }
+    .lang-menu a:last-child { border-bottom: none; }
+    .lang-menu a:hover { background: rgba(255,255,255,.05); color: var(--text); }
+    .lang-menu a.active { color: var(--accent); }
+    .lang-menu a .lang-flag { font-size: 15px; }
+    .lang-menu a .lang-check { margin-left: auto; opacity: 0; color: var(--accent); }
+    .lang-menu a.active .lang-check { opacity: 1; }
+
     /* — CTA Button — */
     .nav-cta {
       display: flex; align-items: center;
@@ -254,19 +290,57 @@
     /* ══════════════════════════════════
        TOURNAMENT INFO PANEL (horizontal)
     ══════════════════════════════════ */
-    .hero-panels {
-      display: flex; gap: 14px; flex-wrap: wrap; margin-top: 20px;
-      align-items: stretch;
+    /* — Info buttons (hover to reveal panels) — */
+    .info-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+    .info-btn-wrap { position: relative; }
+    .info-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 13px 20px;
+      background: linear-gradient(150deg, rgba(22,24,36,.6), rgba(9,10,16,.85));
+      border: 1px solid rgba(255,255,255,.1); border-radius: 4px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--text);
+      cursor: pointer; position: relative;
+      transition: border-color .15s, background .15s;
     }
+    .info-btn-wrap:hover .info-btn { border-color: rgba(74,143,255,.5); background: rgba(74,143,255,.06); }
+    .info-btn .ib-mark {
+      width: 11px; height: 11px; flex-shrink: 0;
+      border: 1.5px solid var(--accent); border-radius: 1px;
+      display: flex; align-items: center; justify-content: center; position: relative;
+    }
+    .info-btn .ib-mark::after { content: ''; width: 4px; height: 4px; background: var(--accent); opacity: .8; }
+    .info-btn .ib-caret { font-size: 8px; opacity: .55; transition: transform .15s; }
+    .info-btn-wrap:hover .ib-caret { transform: rotate(180deg); opacity: .9; }
+
+    /* popover */
+    .info-popover {
+      position: absolute; top: 100%; left: 0;
+      padding-top: 10px;            /* invisible hover bridge */
+      opacity: 0; visibility: hidden; transform: translateY(-6px);
+      transition: opacity .18s, transform .18s, visibility .18s;
+      z-index: 80;
+    }
+    .info-popover.pop-1 { width: 720px; }
+    .info-popover.pop-2 { width: 560px; }
+    .info-btn-wrap:hover .info-popover { opacity: 1; visibility: visible; transform: translateY(0); }
+
     .hero-stats-panel {
-      flex: 1 1 440px; min-width: 300px;
+      width: 100%;
       position: relative;
       display: flex; flex-direction: column;
-      background: linear-gradient(150deg, rgba(22,24,36,.6) 0%, rgba(9,10,16,.85) 70%);
-      border: 1px solid rgba(255,255,255,.1);
+      background: linear-gradient(150deg, rgba(20,22,34,.96) 0%, rgba(8,9,15,.99) 70%);
+      border: 1px solid rgba(255,255,255,.12);
       border-radius: 4px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.55);
     }
     .hero-stats-panel .sp-grid { flex: 1; }
+
+    @media (max-width: 760px) {
+      .info-popover { position: static; padding-top: 8px; opacity: 1; visibility: visible; transform: none; width: 100% !important; }
+      .info-popover.pop-1, .info-popover.pop-2 { width: 100% !important; }
+    }
     /* cyber corner brackets — all 4 corners */
     .hero-stats-panel > .cb {
       position: absolute; width: 14px; height: 14px;
@@ -1085,6 +1159,17 @@
     <!-- Right side -->
     <div class="nav-right">
       <div class="nav-socials">
+        <!-- Language -->
+        <div class="nav-lang" id="nav-lang">
+          <button class="nav-social lang-btn" title="Язык" aria-label="Язык">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span class="lang-caret">▾</span>
+          </button>
+          <div class="lang-menu">
+            <a href="#" class="active" data-lang="ru"><span class="lang-flag">🇷🇺</span> Русский <span class="lang-check">✓</span></a>
+            <a href="#" data-lang="en"><span class="lang-flag">🇬🇧</span> English <span class="lang-check">✓</span></a>
+          </div>
+        </div>
         <!-- Boosty -->
         <a class="nav-social" href="https://boosty.to/gncow" target="_blank" rel="noopener" title="Boosty">
           <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -1133,9 +1218,13 @@
       </div>
     </div>
 
-    <!-- TWO TOURNAMENT PANELS -->
-    <div class="hero-panels">
+    <!-- TWO TOURNAMENT BUTTONS (hover to reveal panels) -->
+    <div class="info-buttons">
 
+    <!-- BUTTON 1 -->
+    <div class="info-btn-wrap">
+      <button class="info-btn"><span class="ib-mark"></span> Информация о турнире <span class="ib-caret">▾</span></button>
+      <div class="info-popover pop-1">
     <!-- PANEL 1: tournament info -->
     <div class="hero-stats-panel">
       <span class="cb tl"></span><span class="cb tr"></span>
@@ -1174,7 +1263,13 @@
         </a>
       </div>
     </div>
+      </div>
+    </div>
 
+    <!-- BUTTON 2 -->
+    <div class="info-btn-wrap">
+      <button class="info-btn"><span class="ib-mark"></span> Условия и статус <span class="ib-caret">▾</span></button>
+      <div class="info-popover pop-2">
     <!-- PANEL 2: schedule / status -->
     <div class="hero-stats-panel">
       <span class="cb tl"></span><span class="cb tr"></span>
@@ -1204,6 +1299,8 @@
             <span class="sp-value done">Завершён</span>
           </div>
         </div>
+      </div>
+    </div>
       </div>
     </div>
 
@@ -2113,6 +2210,26 @@ document.querySelectorAll('.podium-team-name[data-roster]').forEach(el => {
 window.addEventListener('scroll', () => {
   document.getElementById('site-header').classList.toggle('scrolled', window.scrollY > 10);
 }, { passive: true });
+
+// Language dropdown
+const navLang = document.getElementById('nav-lang');
+if (navLang) {
+  navLang.querySelector('.lang-btn').addEventListener('click', e => {
+    e.stopPropagation();
+    navLang.classList.toggle('open');
+  });
+  navLang.querySelectorAll('.lang-menu a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      navLang.querySelectorAll('.lang-menu a').forEach(x => x.classList.remove('active'));
+      a.classList.add('active');
+      navLang.classList.remove('open');
+    });
+  });
+  document.addEventListener('click', e => {
+    if (!navLang.contains(e.target)) navLang.classList.remove('open');
+  });
+}
 </script>
 </body>
 </html>
