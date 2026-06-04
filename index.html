@@ -99,16 +99,18 @@
       text-decoration: none; flex-shrink: 0;
       border-right: 1px solid rgba(255,255,255,.07);
     }
-    /* Wrapper with padding forces image to render smaller than its box */
+    /* transform: scale shrinks visual size without affecting layout —
+       guaranteed breathing room on all sides regardless of PNG content */
     .logo-img-wrap {
-      width: 50px; height: 50px;
-      padding: 7px;               /* actual logo content = 50-14 = 36px */
-      box-sizing: border-box;
+      width: 46px; height: 46px;
       display: flex; align-items: center; justify-content: center;
+      overflow: visible;
     }
     .logo img {
-      width: 100%; height: 100%;
+      width: 46px; height: 46px;
       object-fit: contain; display: block;
+      transform: scale(0.70);   /* visually ~32px, ~7px gap each side */
+      transform-origin: center;
     }
 
     /* — Nav links — */
@@ -910,9 +912,9 @@
     <div class="hero-top">
       <div class="hero-name-block">
         <div style="display:flex;align-items:center;gap:16px;">
-          <div style="width:72px;height:72px;padding:9px;box-sizing:border-box;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+          <div style="width:72px;height:72px;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:visible;">
             <img src="https://gncow.ru/uploads/ca6ddceb-4dca-403b-87f6-58e982a83936.png"
-                 alt="GNC" style="width:100%;height:100%;object-fit:contain;display:block;"
+                 alt="GNC" style="width:72px;height:72px;object-fit:contain;display:block;transform:scale(0.72);transform-origin:center;"
                  onerror="this.parentElement.style.display='none'" />
           </div>
           <h1 class="tournament-name">GNC: ВЕСЕННИЙ СЕЗОН</h1>
