@@ -534,6 +534,53 @@
     .podium-record .pr-w { color: #4ade80; }
     .podium-record .pr-l { color: #f87171; }
 
+    /* ── Podium hover roster dropdown ── */
+    .podium-cell { position: relative; }
+    .podium-cell .podium-card { cursor: default; }
+    .podium-pop {
+      position: absolute; top: 100%; left: 0; right: 0; z-index: 70;
+      background: linear-gradient(160deg, rgba(20,22,34,.98), rgba(8,9,15,.99));
+      border: 1px solid rgba(255,255,255,.12); border-top: none;
+      box-shadow: 0 22px 44px rgba(0,0,0,.6);
+      opacity: 0; visibility: hidden; transform: translateY(-6px);
+      transition: opacity .16s, transform .16s, visibility .16s;
+    }
+    .podium-cell:hover .podium-pop { opacity: 1; visibility: visible; transform: translateY(0); }
+    /* frame continues: hide card's bottom brackets + bottom border on hover */
+    .podium-cell:hover .podium-card { border-bottom-color: transparent; }
+    .podium-cell:hover .podium-card > .cb.bl,
+    .podium-cell:hover .podium-card > .cb.br { opacity: 0; }
+    /* dropdown gets the bottom brackets, colored per place */
+    .podium-pop > .cb { position: absolute; width: 13px; height: 13px; opacity: .6; pointer-events: none; }
+    .podium-pop > .cb.bl { bottom: -1px; left: -1px; border-bottom: 2px solid; border-left: 2px solid; }
+    .podium-pop > .cb.br { bottom: -1px; right: -1px; border-bottom: 2px solid; border-right: 2px solid; }
+    .podium-cell.p1 .podium-pop > .cb { border-color: #f5a623; }
+    .podium-cell.p2 .podium-pop > .cb { border-color: #9aa3b8; }
+    .podium-cell.p3 .podium-pop > .cb { border-color: #c2622f; }
+
+    .pp-head {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--text-3);
+      padding: 12px 18px 8px;
+    }
+    .pp-row {
+      display: flex; align-items: center; gap: 11px;
+      padding: 9px 18px; border-top: 1px solid rgba(255,255,255,.05);
+    }
+    .pp-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; font-weight: 700; color: var(--text-3);
+      width: 14px; flex-shrink: 0;
+    }
+    .pp-name {
+      flex: 1; min-width: 0;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px; font-weight: 600; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .pp-socials { display: flex; gap: 5px; flex-shrink: 0; }
+
     /* ══════════════════════════════════
        TABS
     ══════════════════════════════════ */
@@ -615,7 +662,7 @@
       text-align: center; padding: 4px 8px 14px; white-space: nowrap;
       color: var(--text-3);
     }
-    .round-label.ub-label { color: rgba(0,204,136,.55); }
+    .round-label.ub-label { color: rgba(255,255,255,.85); }
     .round-label.lb-label { color: rgba(232,151,10,.55); }
     .round-label.gf-label { color: rgba(42,180,240,.55); }
     .round-matches { position: relative; display: flex; flex-direction: column; }
@@ -793,9 +840,9 @@
     /* ── Footer: time + stream ── */
     .lbf-footer {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 4px 9px; gap: 6px;
-      border-top: 1px solid var(--border-2);
-      background: rgba(0,0,0,.18);
+      padding: 5px 9px; gap: 6px;
+      border-bottom: 1px solid var(--border-2);
+      background: rgba(0,0,0,.22);
       overflow: hidden; /* prevent wrapping */
     }
     .lbf-time {
@@ -819,17 +866,11 @@
     .lbf-card.gf-type { border-color: rgba(42,180,240,.45); box-shadow: 0 0 20px rgba(42,180,240,.08); }
     .lbf-card.gf-type .lbf-header { background: rgba(42,180,240,.07); border-bottom-color: rgba(42,180,240,.12); }
     .lbf-card.gf-type .lbf-badge  { color: rgba(42,180,240,.85); }
-    .lbf-card.gf-type .lbf-footer { border-top-color: rgba(42,180,240,.08); }
+    .lbf-card.gf-type .lbf-footer { border-bottom-color: rgba(42,180,240,.12); }
     .lbf-card.gf-type .lbf-row.winner { background: rgba(42,180,240,.09); border-left-color: var(--gf); }
     .lbf-card.gf-type .lbf-row.winner .lbf-name  { color: #caf0fd; }
     .lbf-card.gf-type .lbf-row.winner .lbf-score { color: rgba(42,180,240,.9); }
 
-    .lbf-footer {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 4px 9px 4px 8px;
-      border-top: 1px solid rgba(232,151,10,.08);
-      background: rgba(0,0,0,.15);
-    }
     /* Old meta bar (hidden in new design) */
     .match-meta, .meta-id, .meta-right, .meta-bo, .meta-stream { display: none; }
 
@@ -1389,29 +1430,38 @@
   <div class="podium-section">
     <div class="podium-title">Финальный пьедестал</div>
     <div class="podium">
-      <div class="podium-card p1">
-        <span class="cb tl"></span><span class="cb tr"></span><span class="cb bl"></span><span class="cb br"></span>
-        <div class="podium-medal">1ST</div>
-        <div class="podium-info">
-          <span class="podium-team-name" data-roster="SirGay">SirGay</span>
-          <span class="podium-record"><span class="pr-w">5</span> – <span class="pr-l">1</span></span>
+      <div class="podium-cell p1">
+        <div class="podium-card p1">
+          <span class="cb tl"></span><span class="cb tr"></span><span class="cb bl"></span><span class="cb br"></span>
+          <div class="podium-medal">1ST</div>
+          <div class="podium-info">
+            <span class="podium-team-name" data-roster="SirGay">SirGay</span>
+            <span class="podium-record"><span class="pr-w">5</span> – <span class="pr-l">1</span></span>
+          </div>
         </div>
+        <div class="podium-pop" data-team="SirGay"></div>
       </div>
-      <div class="podium-card p2">
-        <span class="cb tl"></span><span class="cb tr"></span><span class="cb bl"></span><span class="cb br"></span>
-        <div class="podium-medal">2ND</div>
-        <div class="podium-info">
-          <span class="podium-team-name" data-roster="Anuiel">Anuiel</span>
-          <span class="podium-record"><span class="pr-w">4</span> – <span class="pr-l">1</span></span>
+      <div class="podium-cell p2">
+        <div class="podium-card p2">
+          <span class="cb tl"></span><span class="cb tr"></span><span class="cb bl"></span><span class="cb br"></span>
+          <div class="podium-medal">2ND</div>
+          <div class="podium-info">
+            <span class="podium-team-name" data-roster="Anuiel">Anuiel</span>
+            <span class="podium-record"><span class="pr-w">4</span> – <span class="pr-l">1</span></span>
+          </div>
         </div>
+        <div class="podium-pop" data-team="Anuiel"></div>
       </div>
-      <div class="podium-card p3">
-        <span class="cb tl"></span><span class="cb tr"></span><span class="cb bl"></span><span class="cb br"></span>
-        <div class="podium-medal">3RD</div>
-        <div class="podium-info">
-          <span class="podium-team-name" data-roster="Soldeek">Soldeek</span>
-          <span class="podium-record"><span class="pr-w">5</span> – <span class="pr-l">2</span></span>
+      <div class="podium-cell p3">
+        <div class="podium-card p3">
+          <span class="cb tl"></span><span class="cb tr"></span><span class="cb bl"></span><span class="cb br"></span>
+          <div class="podium-medal">3RD</div>
+          <div class="podium-info">
+            <span class="podium-team-name" data-roster="Soldeek">Soldeek</span>
+            <span class="podium-record"><span class="pr-w">5</span> – <span class="pr-l">2</span></span>
+          </div>
         </div>
+        <div class="podium-pop" data-team="Soldeek"></div>
       </div>
     </div>
   </div>
@@ -1794,6 +1844,17 @@ function buildCardAll(m, type) {
   // corner brackets
   el.innerHTML = '<span class="cb tl"></span><span class="cb tr"></span><span class="cb bl"></span><span class="cb br"></span>';
 
+  // ── Header (top): time + stream ──
+  const dt = new Date(m.time);
+  const d  = dt.toLocaleString('ru-RU', { day:'2-digit', month:'short', timeZone:'Europe/Moscow' });
+  const t  = dt.toLocaleString('ru-RU', { hour:'2-digit', minute:'2-digit', timeZone:'Europe/Moscow' });
+  const ftr = document.createElement('div');
+  ftr.className = 'lbf-footer';
+  ftr.innerHTML = `
+    <span class="lbf-time">${d} · ${t} МСК</span>
+    ${m.stream ? `<a class="lbf-stream" href="https://twitch.tv/${m.stream}" target="_blank" rel="noopener"><span class="lbf-stream-dot"></span>${m.stream}</a>` : ''}`;
+  el.appendChild(ftr);
+
   // ── Team rows (simple Challonge style — no slot labels) ──
   [['a', stA, m.a, m.sa], ['b', stB, m.b, m.sb]].forEach(([side, state, name, score]) => {
     const row = document.createElement('div');
@@ -1805,17 +1866,6 @@ function buildCardAll(m, type) {
     if (name && ROSTERS[name]) row.addEventListener('click', e => { e.stopPropagation(); showRoster(name); });
     el.appendChild(row);
   });
-
-  // ── Footer: time + stream ──
-  const dt = new Date(m.time);
-  const d  = dt.toLocaleString('ru-RU', { day:'2-digit', month:'short', timeZone:'Europe/Moscow' });
-  const t  = dt.toLocaleString('ru-RU', { hour:'2-digit', minute:'2-digit', timeZone:'Europe/Moscow' });
-  const ftr = document.createElement('div');
-  ftr.className = 'lbf-footer';
-  ftr.innerHTML = `
-    <span class="lbf-time">${d} · ${t} МСК</span>
-    ${m.stream ? `<a class="lbf-stream" href="https://twitch.tv/${m.stream}" target="_blank" rel="noopener"><span class="lbf-stream-dot"></span>${m.stream}</a>` : ''}`;
-  el.appendChild(ftr);
 
   // ── Map history toggle ──
   const maps = MATCH_MAPS[m.id];
@@ -2284,9 +2334,27 @@ renderSchedule();
 // Enable drag-to-pan on all bracket scroll areas
 document.querySelectorAll('.bracket-scroll').forEach(enableDragScroll);
 
-// Podium team names → open roster modal
-document.querySelectorAll('.podium-team-name[data-roster]').forEach(el => {
-  el.addEventListener('click', () => showRoster(el.dataset.roster));
+// Podium hover dropdown — roster with Discord + BattleTag
+document.querySelectorAll('.podium-pop').forEach(pop => {
+  const team = pop.dataset.team;
+  const players = ROSTERS[team];
+  if (!players) return;
+  let html = `<span class="cb bl"></span><span class="cb br"></span>
+    <div class="pp-head">Состав команды</div>`;
+  players.forEach((p, i) => {
+    const soc = PLAYER_SOCIALS[p];
+    html += `
+      <div class="pp-row">
+        <span class="pp-num">${i + 1}</span>
+        <span class="pp-name">${p}</span>
+        <div class="pp-socials">
+          ${soc ? `
+            <span class="social-btn dc" data-tip="${soc.dc}">${DC_ICON}</span>
+            <span class="social-btn bn" data-tip="${soc.bn}">${BN_ICON}</span>` : ''}
+        </div>
+      </div>`;
+  });
+  pop.innerHTML = html;
 });
 
 // Sticky header border on scroll
